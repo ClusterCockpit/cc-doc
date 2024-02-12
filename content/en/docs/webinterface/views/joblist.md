@@ -52,7 +52,7 @@ Lastly, the optional "Footprint" Column can be activated (and deactivated) here.
 
 ### Job Count
 
-The total number of jobs returned by the backend.
+The total number of jobs returned by the backend for the given set of filters.
 
 ### Filters
 
@@ -102,7 +102,7 @@ The optional footprint column will show base metrics for job performance at a gl
 |-----|-----------|----|
 |cpu_load|Average CPU utilization|-|
 |flops_any|Floprate calculated  as `f_any = (f_double x 2) + f_single`|-|
-|mem_bw|Average memory bandwidth used|-|
+|mem_bw|Average memory bandwidth used|Non-GPU Cluster only|
 |mem_used|Maximum memory used|Non-GPU Cluster only|
 |acc_utilization|Average accelerator utilization|GPU Cluster Only|
 

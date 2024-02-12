@@ -33,7 +33,7 @@ Select a configured cluster, or a specified partition of a given cluster, and di
 
 *Options:* All cluster names, and nested partition names, configured in `config.json`
 
-*Default:* Disabled
+*Default:* Any Cluster (Any Partition)
 
 ### Job States
 
@@ -53,7 +53,9 @@ Select the timeframe in which jobs were started, and display only jobs matching 
 
 *Options:* Free selection of date `dd.mm.YYYY` and time `hh:mm` for `from` and `to` limits.
 
-*Default:* Jobs started one month ago until `$now`
+*Default:* All Starttimes
+
+*Preset:* Jobs started one month ago until `$now`
 
 ### Duration
 
@@ -63,7 +65,7 @@ Select the duration of jobs, and display only jobs matching the selected criteri
 
 *Options:* Duration less than `hh:mm`, duration more than `hh:mm`, duration between two duration selections. Only **one** of the three options can be used at a time.
 
-*Default:* No selection
+*Default:* All Durations
 
 ### Tags
 
@@ -97,7 +99,7 @@ Select a named node or specify an amount of used resources, and display only job
 
 Specify ranges of metric statistics, and display only jobs matching the selected criteria.
 
-*Options:* 
+*Options:*
 
 * FLOPs (Avg.): Select Range `From-To` by dragging the slider or entering values directly.
 * Memory Bandwith (Avg.): Select Range `From-To` by dragging the slider or entering values directly.

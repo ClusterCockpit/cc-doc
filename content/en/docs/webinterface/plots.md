@@ -67,12 +67,12 @@ In the job list views, high amounts of data are by default rendered as a statist
 
 ## Histograms
 
-Histrograms display (binned) data allowing distributions of the repective data source to be visualized. Data highlighting, zooming, and resetting zoom work identical to the metric plots.
+Histograms display (binned) data allowing distributions of the repective data source to be visualized. Data highlighting, zooming, and resetting the zoom work as described for metric plots.
 
 #### Example
 
 {{< figure src="../figures/histogram.png" alt="Histogram Example" width="100%" class="ccfigure mw-xs"
-    caption="Duration distribution of selected jobs. The legends will display the X-Axis value label first, then the Y-Axis value label. The currently inspected bar is highlighted by a white dot and also the selection crosshair."
+    caption="Duration distribution of selected jobs. The legends will display the X-Axis value label first, then the Y-Axis value label. The legend is shown for each bar individually when hovering the selection crosshair over the inspected bar. A highlight will show as white dot at the top."
 >}}
 
 ## Roofline Plot
