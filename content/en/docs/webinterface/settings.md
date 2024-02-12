@@ -7,9 +7,9 @@ tags: [Frontend, General, Admin]
 weight: 1
 ---
 
-The settings view allows [non-privileged users]({{< ref "roles#user" >}} "User Role") to customize how metric plots are rendered. This includes line width, number of plots per row (where applicable), whether backgrounds should be colored, and the color scheme of multi-line metric plots.
+The settings view allows [non-privileged users]({{< ref "roles#user-role" >}} "User Role") to customize how metric plots are rendered. This includes line width, number of plots per row (where applicable), whether backgrounds should be colored, and the color scheme of multi-line metric plots.
 
-[Privileged users]({{< ref "roles#administrator" >}} "Admin Role") will also find an [administrative interface]({{< ref "#administration-options" >}} "Administration Options") for handling local user accounts. This includes creating local accounts from the interface, editing user roles, listing and deleting existing users, generating JSON Web Tokens for API usage, and delegating managed projects for [manager role]({{< ref "roles#manager" >}} "Manager Role") users.
+[Privileged users]({{< ref "roles#administrator-role" >}} "Admin Role") will also find an [administrative interface]({{< ref "#administration-options" >}} "Administration Options") for handling local user accounts. This includes creating local accounts from the interface, editing user roles, listing and deleting existing users, generating JSON Web Tokens for API usage, and delegating managed projects for [manager role]({{< ref "roles#manager-role" >}} "Manager Role") users.
 
 ## Plotting Options
 
@@ -87,9 +87,9 @@ The settings view allows [non-privileged users]({{< ref "roles#user" >}} "User R
 
 ### Create User
 
-New users can be created directly via the web interface. On successful creation a green respons message will be returned, and the user is directly visible in the "Special Users" table - If the user has at least two roles, or a single role other than `user`.
+New users can be created directly via the web interface. On successful creation a green response message will be returned, and the user is directly visible in the "Special Users" table - If the user has at least two roles, or a single role other than `user`.
 
-Error messages will also be displayd if the user creation process failed. No user account is saved to the database in this case.
+Error messages will also be displayed if the user creation process failed. No user account is saved to the database in this case.
 
 {{< alert >}} *Please note:* Users are usually imported via LDAP on ClusterCockpit startup.{{< /alert >}}
 
@@ -143,4 +143,4 @@ On creation, users can only have one managed project. However, it is allowed to 
 
 Enter an existing `username` and select an existing (for removal) or new (for addition) project by entering the respective `projectId`.
 
-Then press the respective button to remove or add the selected project from the manager account. Errors will be displayed if existing projects are added, non-existing projects are removed, or the user account does not posess the authority to manage projects at all.
+Then press the respective button to remove or add the selected project from the manager account. Errors will be displayed if existing projects are added, non-existing projects are removed, or if the user account is not authorized to manage projects at all.

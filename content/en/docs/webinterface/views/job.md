@@ -77,11 +77,11 @@ Metric values colored in blue, however, usually report performance above the exp
 
 ### Concurrent Jobs
 
-In the case of a shared job, this component will display all jobs, which were run on the same hardware at the same time. "At the same time" is defined as "has a starting or ending time, which lies between the starting and ending time of this job" for this purpose.
+In the case of a shared job, this component will display all jobs, which were run on the same hardware at the same time. "At the same time" is defined as "has a starting or ending time which lies between the starting and ending time of the reference job" for this purpose.
 
 A cautious period of five minutes is applied to both limits, in order to restrict display of jobs which have too little overlap, and would just clutter the resulting list of jobs.
 
-Each overlapping job is listed with its jobId as a link leading to this jobs detailed job view.
+Each overlapping job is listed with its `jobId` as a link leading to this jobs detailed job view.
 
 ### Polar Representation
 

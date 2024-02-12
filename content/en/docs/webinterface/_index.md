@@ -20,13 +20,15 @@ The entrypoint for each login via the login mask is a table containing each conf
 * **Total Jobs**: Number of Jobs in the respective job-archive
   * Clicking the Link will forward to the [job list]({{< ref "views/joblist" >}} "Job List") with preset filter for cluster
 * **Status View**: Link to the [status view]({{< ref "views/status" >}} "Status View") of the respective cluster
+  * This column is only shown for users with [admin]({{< ref "roles#administrator-role" >}} "Nodes View") authority.
 * **Systems View**: Link to the [nodes view]({{< ref "views/nodes" >}} "Nodes View") view of the respective cluster
+  * This column is only shown for users with [admin]({{< ref "roles#administrator-role" >}} "Nodes View") authority.
 
 ## Navigation Bar
 
 The navigation bar allows direct access to ClusterCockpits' different views and functions. Depending on the users' authorization, the selectable views can differ.
 
-For most viewports, the navigation bar is rendered fully expanded
+For most viewports, the navigation bar is rendered fully expanded:
 
 {{< figure src="figures/navbar.png" alt="ClusterCockpit Expanded Navbar" width="100%" class="ccfigure mw-xl" >}}
 
@@ -43,7 +45,7 @@ For most viewports, the navigation bar is rendered fully expanded
 On smaller viewports, the navigation bar will be rendered in one of two collapsed states: 
 
 {{< figure src="figures/navbar_views_collapsed.png" alt="ClusterCockpit Collapsed Navbar" width="100%" class="ccfigure mw-sm"
-    caption="Partially collapsed navigation bar. 'Groups' will expand to show links for Users, Projects, Tags, and Nodes views. 'Stats' will expand to show links for Analysis and Status views. Searchbar, Logout and Settings not shown here, but are still rendered in this case."
+    caption="Partially collapsed navigation bar. 'Groups' will expand to show links for Users, Projects, Tags, and Nodes views. 'Stats' will expand to show links for Analysis and Status views. Searchbar, Logout and Settings not shown here, but are still rendered explicitly in this case."
 >}}
 
 {{< figure src="figures/navbar_burger.png" alt="ClusterCockpit Burger Navbar" width="100%" class="ccfigure mw-sm"
