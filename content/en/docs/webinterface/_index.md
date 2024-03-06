@@ -37,8 +37,9 @@ For most viewports, the navigation bar is rendered fully expanded:
 |**1**|Home Button|Leads back to the [home table]({{< ref "#home" >}} "Home Table")|
 |**2**|Views|Leads to ClusterCockpits' different [views]({{< ref "views" >}} "Views"), will change dependent on user authority|
 |**3**|Searchbar|Top-Level Searchbar, see full usage information [here]({{< ref "searchbar" >}} "Searchbar")|
-|**4**|Logout|Logs out the active user|
+|**4**|Documentation|Leads to this Documentation|
 |**5**|Settings|Leads to ClusterCockpit [settings]({{< ref "settings" >}} "Settings") page|
+|**6**|Logout|Logs out the active user|
 
 ### Adaptive Render Versions
 
