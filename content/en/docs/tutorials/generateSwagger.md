@@ -10,6 +10,12 @@ This project integrates [swagger ui](https://swagger.io/tools/swagger-ui/) to
 document and test its REST API. The swagger documentation files can be found in
 `./api/`.
 
+{{% alert title="Note" color="error" %}}
+To regenerate the Swagger UI files is only required if you change the files
+`./internal/api/rest.go`. Otherwise the Swagger UI will already be correctly
+build and is ready to use.
+{{% /alert %}}
+
 ## Generate Swagger UI files
 
 You can generate the swagger-ui configuration by running the following command
