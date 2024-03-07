@@ -22,6 +22,8 @@ To build `cc-backend` you need:
 
 ## Try it out!
 
+{{< youtube id="INPU1d-TGJ0" title="How to get the ClusterCockpit demo up and running" >}}
+
 All ClusterCockpit components are available within the [GitHub ClusterCockpit project](https://github.com/ClusterCockpit).
 
 Clone `cc-backend` and change directory into the repository:
