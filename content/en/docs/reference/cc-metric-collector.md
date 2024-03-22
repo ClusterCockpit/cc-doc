@@ -2,7 +2,6 @@
 title: Metric Collector
 description: ClusterCockpit Metric Collector References
 categories: [cc-metric-collector]
-tags: [Backend]
 weight: 3
 ---
 
