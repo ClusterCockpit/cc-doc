@@ -1,7 +1,7 @@
 ---
 title: JSON Web Token
 description: >
- JSON Web Token (JWT) support in ClusterCockpit
+ JSON Web Token (JWT) usage in ClusterCockpit
 categories: [cc-backend, cc-metric-store]
 tags: [Developer, Admin]
 ---
@@ -28,56 +28,6 @@ Currently ClusterCockpit sets the following claims:
 * `exp`: Expiration date of the token (only if explicitly configured)
 
 It is important to know that JWTs are not encrypted, only signed. This means that outsiders cannot create new JWTs or modify existing ones, but they are able to read out the username.
-
-## Workflow
-
-1. Create a new ECDSA Public/private keypair:
-
-```bash
-> go build ./cmd/gen-keypair/
-> ./gen-keypair
-```
-
-2. Add keypair in your `.env` file. A template can be found in `./configs`.
-
-When a user logs in via the `/login` page using a browser, a session cookie (secured using the random bytes in the `SESSION_KEY` env. variable you shoud change as well) is used for all requests after the successfull login. The JWTs make it easier to use the APIs of ClusterCockpit using scripts or other external programs. The token is specified n the `Authorization` HTTP header using the [Bearer schema](https://datatracker.ietf.org/doc/html/rfc6750) (there is an example below). Tokens can be issued to users from the configuration view in the Web-UI or the command line. In order to use the token for API endpoints such as `/api/jobs/start_job/`, the user that executes it needs to have the `api` role. Regular users can only perform read-only queries and only look at data connected to jobs they started themselves.
-
-There are two usage scenarios:
-
-* The APIs are used during a browser session. API accesses are authorized with
-  the active session.
-* The REST API is used outside a browser session, e.g. by scripts. In this case
-  you have to issue a token manually. This possible from within the
-  configuration view or on the command line. It is recommended to issue a JWT
-  token in this case for a special user that only has the `api` role. By using
-  different users for different purposes a fine grained access control and
-  access revocation management is possible.
-
-The token is commonly specified in the Authorization HTTP header using the Bearer schema.
-
-## cc-metric-store
-
-The [cc-metric-store](https://github.com/ClusterCockpit/cc-metric-store) also uses JWTs for authentication. As it does not issue new tokens, it does not need to kown the private key. The public key of the keypair that is used to generate the JWTs that grant access to the `cc-metric-store` can be specified in its `config.json`. When configuring the `metricDataRepository` object in the `cluster.json` file, you can put a token issued by ClusterCockpit itself.
-
-## Setup user and JWT token for REST API authorization
-
-1. Create user:
-
-```bash
-> ./cc-backend --add-user <username>:api:<password> --no-server
-```
-
-2. Issue token for user:
-
-```bash
-> ./cc-backend --jwt <username> --no-server
-```
-
-3. Use issued token token on client side:
-
-```bash
-> curl -X GET "<API ENDPOINT>" -H "accept: application/json" -H "Content-Type: application/json" -H "Authorization: Bearer <JWT TOKEN>"
-```
 
 ## Accept externally generated JWTs provided via cookie
 
