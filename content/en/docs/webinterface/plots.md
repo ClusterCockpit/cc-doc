@@ -19,6 +19,8 @@ A selector crosshair is shown when hovering over the rendered data, data points 
 
 It is possible to zoom in by dragging a selection square with your mouse. Double-Clicking into the plot will reset the zoom.
 
+{{< alert >}}*Please note:* Metric plots will be rendered with regard to the configured `normal` metric threshold at first, i.e. the threshold will either be the highest rendered value (spaced line), or will be used to cut-off outliers (10 x normal threshold). Resetting by double-clicking will re-render the plot with regard to the highest value *of the dataset*, i.e. adapt the Y-axis to match said maximum value.{{< /alert >}}
+
 ### Conditional Legends
 
 Hovering over the rendered data will display a legend as hovering box colored in yellow. Depending on the amount of data shown, this legend will render differently:
