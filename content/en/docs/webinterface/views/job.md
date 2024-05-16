@@ -95,9 +95,11 @@ A [roofline plot]({{< ref "plots#roofline-plot" >}} "Roofline Plot") representin
 
 The views' middle section consists of [metric plots]({{< ref "plots#metric-plots" >}} "Metric Plot") for each metric selected in the "Metrics" selector, which defaults to all configured metrics.
 
-The data shown per metric defaults to the *smallest* available granularity of the metric with data of *all* nodes, but can be changed at will by using the drop down selectors above each plot. 
+The data shown per metric defaults to the *smallest* available granularity of the metric with data of *all* nodes, but can be changed at will by using the drop down selectors above each plot.
 
-{{< alert >}}*Please note:* The [statistical representation]({{< ref "plots#statistics-variant" >}} "Metric Statistics Plot") is not yet available for metric plots in this view. Jobs with high allocated node counts will be showing one line for *each core* if switched to this granilarity!{{< /alert >}}
+If available, the [statistical representation]({{< ref "plots#statistics-variant" >}} "Metric Statistics Plot") can be selected as well, by scope (e.g. `stats series (node)`).
+
+{{< alert >}}*Please note:* The backend will calculate and return a statistical data series if the underlying metric dataset has at least 15 data series, e.g. a job utilizing 15 or more cores.{{< /alert >}}
 
 ### Tagging
 
