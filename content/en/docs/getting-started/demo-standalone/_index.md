@@ -21,7 +21,7 @@ mkdir ./demo
 ```
 
 ```shell
-cp cc-backend ~/demo
+cp cc-backend ./demo
 ```
 
 Change to the demo folder and run the following command to setup the required `var`
@@ -41,6 +41,9 @@ should look as below afterwards:
     "archive": {
         "kind": "file",
         "path": "./var/job-archive"
+    },
+    "jwts": {
+        "session-max-age": "24h",
     },
     "clusters": [
         {
