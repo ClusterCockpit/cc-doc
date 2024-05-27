@@ -72,7 +72,17 @@ Each filter and its default value is described in detail [here]({{< ref "filters
 
 ### Search and Reload
 
-Search for specific username or project using the searchbox, force a complete reload of the table data, or set a timed periodic reload (30, 60, 120, 300 Seconds).
+Search for specific jobname, project or username (privileged only) using the searchbox by selecting from the dropdown and entering the query.
+
+Force a complete reload of the table data, or set a timed periodic reload (30, 60, 120, 300 Seconds).
+
+#### Search for specific project
+
+{{< figure src="../../figures/project_searchbar.png" alt="Job View" width="100%" class="ccfigure mw-lg">}}
+
+If the Job-List was opened via [a ProjectId-Link]({{< ref "#filters" >}} "Job List") or the [Projects List]({{< ref "#projects" >}} "Projects"), the text search will be fixed to the selected project, and allows for filtering jobnames and users in that project, as indicated by the placeholder text.
+
+If desired, the fixed project can be removed by pressing the button right of the input field, returning the joblist to its default state.
 
 ## Job List Table
 
