@@ -23,8 +23,8 @@ Unprocessable queries will return a message detailing the cause of the error.
 |---|-------------|-----------|----|
 |No Keyword Used | `abcd100`           | [Joblist]({{< ref "views/joblist" >}} "Joblist") or [User Joblist]({{< ref "views/userjobs" >}} "User Joblist") | Performs hierarchical search `jobId -> username -> name -> projectId -> jobName` |
 |JobId       | `jobId:123456`      | [Joblist]({{< ref "views/joblist" >}} "Joblist")         | Allows multiple identical matches, e.g. JobIds from different clusters |
-|JobName     | `jobName:myJobName` | [Joblist]({{< ref "views/joblist" >}} "Joblist")         | Works with partial queries. Allows multiple identical matches, e.g. JobNames from different clusters |
+|JobName     | `jobName:myJobName` | [Joblist]({{< ref "views/joblist" >}} "Joblist")         | Works with partial queries. Allows multiple identical matches, e.g. JobNames from different clusters. An additional `Last 30 Days` filter is active by default. |
 |ProjectId   | `projectId:abcd100` | [Joblist]({{< ref "views/joblist" >}} "Joblist")         | All Jobs of the given project |
-|Username    | `username:abcd100a` | [Users Table]({{< ref "views/users" >}} "Users Table")   | Only active users are returned; Users without jobs are not shown. Also, a `Last 30 Days` is active by default and might filter out expected users. **Admin Only**|
-|Name        | `name:Paul`         | [Users Table]({{< ref "views/users" >}} "Users Table")   | Works with partial queries. Only active users are returned; Users without jobs are not shown. Also, a `Last 30 Days` is active by default and might filter out expected users. **Admin Only**|
-|ArrayJobId  | `arrayJobId:891011` | [Joblist]({{< ref "views/joblist" >}} "Joblist")         | All Jobs of the given arrayJobId|
+|Username    | `username:abcd100a` | [Users Table]({{< ref "views/users" >}} "Users Table")   | Only active users are returned. Users without jobs are not shown. An additional `Last 30 Days` filter is active by default. **Admin Only**|
+|Name        | `name:Paul`         | [Users Table]({{< ref "views/users" >}} "Users Table")   | Works with partial queries. Only active users are returned. Users without jobs are not shown.  An additional `Last 30 Days` filter is active by default. **Admin Only**|
+|ArrayJobId  | `arrayJobId:891011` | [Joblist]({{< ref "views/joblist" >}} "Joblist")         | All Jobs of the given arrayJobId. An additional `Last 30 Days` filter is active by default. |
