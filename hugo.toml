@@ -138,7 +138,7 @@ url = "https://v1-2-2.clustercockpit.org"
 #  Set to true to disable breadcrumb navigation.
 breadcrumb_disable = false
 # Set to true to disable the About link in the site footer
-footer_about_disable = false
+footer_about_enable = true
 # Set to false if you don't want to display a logo (/assets/icons/logo.svg) in the top navbar
 navbar_logo = false
 # Set to true if you don't want the top navbar to be translucent when over a `block/cover`, like on the homepage.
@@ -192,7 +192,10 @@ desc = "Chat with other project developers"
 [module]
 [module.hugoVersion]
 extended = true
-min = "0.110.0"
+min = "0.130.0"
 [[module.imports]]
 path = "github.com/google/docsy"
+disable = false
+[[module.imports]]
+path = "github.com/hugomods/swagger-ui"
 disable = false

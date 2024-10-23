@@ -8,6 +8,7 @@ tags: [Backend]
 weight: 4
 ---
 ## REST API Authorization
+
 In ClusterCockpit JWTs are signed using a public/private key pair using ED25519.
 Because tokens are signed using public/private key pairs, the signature also
 certifies that only the party holding the private key is the one that signed it.
@@ -20,7 +21,6 @@ the `max-age` option in the jwts object. Example:
     "max-age": "168h"
 },
 ```
-
 
 The party that generates and signs JWT tokens has to be in possession of the
 private key and any party that accepts JWT tokens must possess the public key to
@@ -57,4 +57,4 @@ This reference is rendered using the `swaggerui` plugin based on the original de
 This means that all interactivity ("Try It Out") will not return actual data. However, a `Curl` call and a compiled `Request URL` will still be displayed, if an API endpoint is executed.
 {{< /alert >}}
 
-{{< swaggerui src="https://raw.githubusercontent.com/ClusterCockpit/cc-backend/master/api/swagger.json" >}}
+{{< swagger-ui "https://raw.githubusercontent.com/ClusterCockpit/cc-backend/refs/heads/master/api/swagger.json" >}}
