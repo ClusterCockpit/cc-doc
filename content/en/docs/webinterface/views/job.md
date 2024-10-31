@@ -35,9 +35,23 @@ Identical to the job list equivalent, this component displays meta data containi
 |Duration|`0:21:10`|The runtime of the job, will be updated for running jobs on reload. Additionally indicates the [state]({{< ref "filters#job-states" >}} "Job State") of the job as colored pill|-|
 |Walltime|`24:00:00`|The allocated walltime for the job as per job submission script|-|
 
+At the bottom, all tags attached to the job are listed. Users can [manage]({{< ref "#tagging" >}} "Tagging") attachted tags via the "manage X Tag(s)" button.
+
+### Concurrent Jobs
+
+In the case of a shared job, a second tab next to the job info will display all jobs which were run on the same hardware at the same time. "At the same time" is defined as "has a starting or ending time which lies between the starting and ending time of the reference job" for this purpose.
+
+A cautious period of five minutes is applied to both limits, in order to restrict display of jobs which have too little overlap, and would just clutter the resulting list of jobs.
+
+Each overlapping job is listed with its `jobId` as a link leading to this jobs detailed job view.
+
 ### Footprint
 
 Identical to the job list equivalent, this component will show base metrics for job performance at a glance, and will hint to job quality and problems in regard to configurable metric thresholds. In contrast to the job list, it is always active and shown in the detailed job view.
+
+{{< alert >}}*Please note:* Metric statistics displayed here are configured. All metrics, for which the `footprint` flag is set in the respective metrics' configuration will be shown in this view.{{< /alert >}}
+
+*Examples:*
 
 |Field|Description|Note|
 |-----|-----------|----|
@@ -75,17 +89,9 @@ Metric values colored in blue, however, usually report performance above the exp
     caption="Footprint of a job with performance averages way above the expected maxima - Look for artifacts!"
 >}}
 
-### Concurrent Jobs
-
-In the case of a shared job, this component will display all jobs, which were run on the same hardware at the same time. "At the same time" is defined as "has a starting or ending time which lies between the starting and ending time of the reference job" for this purpose.
-
-A cautious period of five minutes is applied to both limits, in order to restrict display of jobs which have too little overlap, and would just clutter the resulting list of jobs.
-
-Each overlapping job is listed with its `jobId` as a link leading to this jobs detailed job view.
-
 ### Polar Representation
 
-A [polar plot]({{< ref "plots#polar-plots" >}} "Polar Plot") representing the utilization of three key metrics: `flops_any`, `mem_used`, and `mem_bw`. Both the maximum and the average are rendered. In principle, this is a graphic representation of data also shown in the footprint component.
+Next to the footprints, a second tab will render the [polar plot]({{< ref "plots#polar-plots" >}} "Polar Plot") representation of the configured footprint metrics. Both the maximum and the average are rendered.
 
 ### Roofline Representation
 
@@ -107,11 +113,17 @@ If available, the [statistical representation]({{< ref "plots#statistics-variant
 
 Manual tagging of jobs is performed by using the "Manage Tags" option.
 
-Existing tags are listed, and can be added to the jobs' database entry simply by pressing the respective button.
+Tags are categorized into three "Scopes" of visibility:
+
+* Admin: Only administrators can create and attach these tags. Only visible for administrators and support personnel.
+* Global: Administrators and support personnel can create and attach these tags. Visible for everyone.
+* Private: Everyone can create and attach private tags, only visible to the creator.
+
+Available tags are listed, colored by scope, and can be added to the jobs' database entry simply by pressing the respective button.
 
 The list can be filtered for specific tags by using the "Search Tags" prompt.
 
-New tags can be created by entering a new `type:name` combination in the search prompt, which will display a button for creating this new tag.
+New tags can be created by entering a new `type:name` combination in the search prompt, which will display a button for creating this new tag. Privileged users]({{< ref "roles#administrator-role" >}} "Admin Role") will additionally be able to select the "Scope" (see above) of the new tag.
 
 ## Statistics and Meta Data
 

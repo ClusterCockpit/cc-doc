@@ -31,10 +31,13 @@ Basic selection of sorting parameter and direction. By default, jobs are sorted 
 
 * Duration
 * Number of Nodes
-* Maximum Memory Used
-* Average FLOPs
-* Average Memory Bandwidth
-* Average Network Bandwidth
+* Number of Hardware-Threads
+* Number of Accelerators
+* Total Energy Consumed
+* *Additional configured Metric Statistics*
+* ...
+
+{{< alert >}}*Please note:* Additional metrics statistics are configured. All metrics, for which the `footprint` flag is set in the respective metrics' configuration will be available as additional sorting options.{{< /alert >}}
 
 Switching of the sort direction is achieved by clicking on the arrow icon next to the desired sorting parameter.
 
@@ -49,10 +52,6 @@ In addition to the metric names themselves, the availability by cluster is indic
 It is furthermore possible to edit the order of the selected metrics. This can be achieved by dragging and dropping the metric selectors to the desired order, where the topmost metric will be displayed next to the "Job Info" column, and additional metrics will be added on the right side.
 
 Lastly, the optional "Footprint" Column can be activated (and deactivated) here. It will always be rendered next to the "Job Info" column, while metrics start right of the "Footprint" column, if activated.
-
-### Job Count
-
-The total number of jobs returned by the backend for the given set of filters.
 
 ### Filters
 
@@ -69,6 +68,10 @@ Possible options are:
 * Statistics: Filter by average usage of defined metrics
 
 Each filter and its default value is described in detail [here]({{< ref "filters" >}} "Job Filters").
+
+### Job Count
+
+The total number of jobs returned by the backend for the given set of filters.
 
 ### Search and Reload
 
@@ -107,6 +110,10 @@ The meta data containing general information about the job is represented in the
 ### Footprint
 
 The optional footprint column will show base metrics for job performance at a glance, and will hint to performance (and performance problems) in regard to configurable metric thresholds.
+
+{{< alert >}}*Please note:* Metric statistics displayed here are configured. All metrics, for which the `footprint` flag is set in the respective metrics' configuration will be shown in this view.{{< /alert >}}
+
+*Examples:*
 
 |Field|Description|Note|
 |-----|-----------|----|

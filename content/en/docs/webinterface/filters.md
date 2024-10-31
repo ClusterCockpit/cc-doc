@@ -93,13 +93,23 @@ Select a named node or specify an amount of used resources, and display only job
 
 *Default:* No named node, full resource ranges of all configured clusters
 
+### Energy
+
+Specify total consumed energy, and display only jobs matching the selected range.
+
+*Options:* "Total Job Energy" in kWh.
+
+*Default:* No selection
+
 ### Statistics
 
 {{< figure src="../figures/filter_statistics.png" alt="Statistics Filter" width="100%" class="ccfigure mw-xxs">}}
 
 Specify ranges of metric statistics, and display only jobs matching the selected criteria.
 
-*Options:*
+{{< alert >}}*Please note:* Metric statistics listed here for selection are configured. All metrics, for which the `footprint` flag is set in the respective metrics' configuration will be available here.{{< /alert >}}
+
+*Example Options:*
 
 * FLOPs (Avg.): Select Range `From-To` by dragging the slider or entering values directly.
 * Memory Bandwith (Avg.): Select Range `From-To` by dragging the slider or entering values directly.
@@ -113,6 +123,8 @@ Specify ranges of metric statistics, and display only jobs matching the selected
 {{< alert >}}*Please note:* Not available in all views!{{< /alert >}}
 
 Quickly select a preconfigured range of job start times. Will display as named [start time filter]({{< ref "#starttime" >}} "Starttime Filter").
+
+When the returned URL is copied and shared, and the named filter value will transfer over.
 
 *Options:* `Last 6 hours, Last 24 hours, Last 7 Days, Last 30 Days`
 

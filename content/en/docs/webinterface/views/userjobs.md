@@ -33,9 +33,9 @@ Information displayed:
 
 ## Selectable Histograms
 
-Histograms depicting the distribution of the selected jobs' statistics can be selected from the top navbar "Select Histograms" button. The displayed data is based on the jobs returned from active filters, and will be pulled from the database, or in case of running jobs, calculated from the available metric data directly.
+Histograms depicting the distribution of the selected jobs' statistics can be selected from the top navbar "Select Histograms" button. The displayed data is based on the jobs returned from active filters, and will be pulled from the database.
 
-*Available Metrics for Histograms:* `cpu_load, flops_any, mem_used, mem_bw, net_bw, file_bw`
+{{< alert >}}*Please note:* Metrics statistics listed here for selection are configured. All metrics, for which the `footprint` flag is set in the respective metrics' configuration will be available here.{{< /alert >}}
 
 ## Job List
 
