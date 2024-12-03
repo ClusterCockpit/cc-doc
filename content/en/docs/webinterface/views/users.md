@@ -27,7 +27,8 @@ The table can be sorted by clicking the respective icon next to the column heade
 
 |Column|Description|Note|
 |-----|-----------|----|
-|User Name|The user jobs are associated with|Links to the users' [job list]({{< ref "userjobs" >}} "User Job List") with preset filter returning only jobs of this user and additional histograms|
+|User Name|The user account jobs are associated with|Links to the users' [job list]({{< ref "userjobs" >}} "User Job List") with preset filter returning only jobs of this user and additional histograms|
+|Name|The name of user||
 |Total Jobs|Users' total of all started jobs||
 |Total Walltime|Users' total requested walltime||
 |Total Core Hours|Users' total of all used core hours||
