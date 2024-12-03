@@ -160,4 +160,12 @@ Activating this switch will replace all user names, person names, and project na
 
 If "Resampling" of metric plots is enabled in the configuration file (`config.json`), and read correctly on start-up, this informational display will list both the amount of data points on whichthe next resolution will be requested ("Trigger") as well as the applicable resolutions themselves.
 
-*Note*: Changes to the resampling options have to be perfofmed by changing the configuration file.
+*Note*: Changes to the resampling options have to be perfofmed by changing the configuration file and restarting the application.
+
+### Edit Notice Shown On Homepage
+
+The contents of the text form field will be written into `$CCPATH/var/notice.txt` on submission. If this file does not exist, it will be created.
+
+If any content is found, an informational card will be rendered above the home site table. The content will also be mirrored within the form field itself.
+
+Removing any content from the form field, and submitting, will clear the file and remove the rendered card from the homepage. This state is indicated by the placeholder text "No Content." being shown in the form field.

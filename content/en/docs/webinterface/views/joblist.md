@@ -65,6 +65,7 @@ Possible options are:
 * Duration: Filter by job duration
 * Tags: Filter by tags assigned to jobs
 * Resources: Filter by allocated resources or named node
+* Energy: Filter by consumed total energy (for completed jobs only)
 * Statistics: Filter by average usage of defined metrics
 
 Each filter and its default value is described in detail [here]({{< ref "filters" >}} "Job Filters").

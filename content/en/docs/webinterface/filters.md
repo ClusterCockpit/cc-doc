@@ -101,6 +101,8 @@ Specify total consumed energy, and display only jobs matching the selected range
 
 *Default:* No selection
 
+{{< alert >}}*Please note:* Consumed energy will be written during archiving *after* a job has finished. Thus, this filter only works on jobs which are not marked as `running`.{{< /alert >}}
+
 ### Statistics
 
 {{< figure src="../figures/filter_statistics.png" alt="Statistics Filter" width="100%" class="ccfigure mw-xxs">}}
