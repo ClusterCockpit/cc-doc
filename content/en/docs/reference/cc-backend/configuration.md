@@ -27,10 +27,10 @@ To override the default, specify the location of a JSON configuration file with 
   * `path`: Type string. Path to the job-archive. Default: `./var/job-archive`.
   * `compression`: Type integer. Setup automatic compression for jobs older than number of days.
   * `retention`: Type object.
-  * `policy`: Type string (required). Retention policy. Possible values none, delete, move.
-  * `includeDB`: Type bool. Also remove jobs from database.
-  * `age`: Type integer. Act on jobs with startTime older than age (in days).
-  * `location`: Type string. The target directory for retention. Only applicable for retention policy move.
+    * `policy`: Type string (required). Retention policy. Possible values none, delete, move.
+    * `includeDB`: Type bool. Also remove jobs from database.
+    * `age`: Type integer. Act on jobs with startTime older than age (in days).
+    * `location`: Type string. The target directory for retention. Only applicable for retention policy move.
 * `disable-archive`: Type bool. Keep all metric data in the metric data repositories, do not write to the job-archive. Default `false`.
 * `validate`: Type bool. Validate all input json documents against json schema.
 * `ldap`: Type object. For LDAP Authentication and user synchronisation. Default `nil`.
