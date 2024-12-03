@@ -54,7 +54,7 @@ Hovering over one of the pie chart fractions will display a legend featuring the
 
 ## Statistic Histograms
 
-Several [histrograms]({{< ref "plots#histograms" >}} "Histograms") depicting the utilization of the clusters resources, based on all currently running jobs are rendered here:
+Several [histograms]({{< ref "plots#histograms" >}} "Histograms") depicting the utilization of the clusters resources, based on all currently running jobs are rendered here:
 
 * Duration Distribution
 * Number of Nodes Distribution
