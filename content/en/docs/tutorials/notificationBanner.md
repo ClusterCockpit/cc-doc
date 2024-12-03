@@ -14,4 +14,4 @@ in this file is shown in an info banner on the homepage.
 ## Add notification banner in web interface
 
 As an alternative the `admin` role can also add and edit the notification banner
-from the settings view.
+from the [settings view]({{< ref "webinterface/settings" >}} "Settings").
