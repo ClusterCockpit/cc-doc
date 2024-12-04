@@ -18,7 +18,6 @@ to our `config.json`
         "analysis_view_histogramMetrics":         ["flops_any", "mem_bw", "mem_used"],
         "analysis_view_scatterPlotMetrics":       [["flops_any", "mem_bw"], ["flops_any", "cpu_load"], ["cpu_load", "mem_bw"]],
         "job_view_nodestats_selectedMetrics":     ["flops_any", "mem_bw", "mem_used"],
-        "job_view_polarPlotMetrics":              ["flops_any", "mem_bw", "mem_used"],
         "job_view_selectedMetrics":               ["flops_any", "mem_bw", "mem_used"],
         "job_view_showFootprint":                 true,
         "job_list_usePaging":                     false,
