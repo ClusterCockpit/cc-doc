@@ -206,3 +206,11 @@ replacing the previous paging ui. Continuous scroll is now the default and you
 can remove the `ui-defaults` block in case you added it just for enabling
 continuous scroll. Every user can overwrite the scrolling option in his
 configuration.
+
+## Known issues
+
+- Currently energy footprint metrics of type energy are ignored for calculating
+  total energy.
+- Resampling for running jobs only works with cc-metric-store
+- With energy footprint metrics of type power the unit is ignored and it is
+  assumed the metric has the unit Watt.
