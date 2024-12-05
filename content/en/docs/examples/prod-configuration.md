@@ -1,8 +1,10 @@
 ---
-title: Production configuration
+title: Deployment workflow
+description: How to start, deploy and update ClusterCockpit
 categories: [cc-backend]
 tags: [Admin]
 ---
+
 ## Recommended workflow for deployment
 
 {{< alert color="danger" title="Why we do not provide a docker container" >}}
@@ -14,13 +16,14 @@ done one time. We therefore think that setting up docker, securing and
 maintaining it is not worth the effort.
 {{< /alert >}}
 
-It is recommended to install all ClusterCockpit components in a common directory, e.g. `/opt/monitoring`, `var/monitoring` or `var/clustercockpit`.
-In the following we use `/opt/monitoring`.
+It is recommended to install all ClusterCockpit components in a common
+directory, e.g. `/opt/monitoring`, `var/monitoring` or `var/clustercockpit`. In
+the following we use `/opt/monitoring`.
 
 Two systemd services run on the central monitoring server:
 
-* clustercockpit : binary cc-backend in `/opt/monitoring/cc-backend`.
-* cc-metric-store : Binary cc-metric-store in `/opt/monitoring/cc-metric-store`.
+- clustercockpit : binary cc-backend in `/opt/monitoring/cc-backend`.
+- cc-metric-store : Binary cc-metric-store in `/opt/monitoring/cc-metric-store`.
 
 ClusterCockpit is deployed as a single binary that embeds all static assets.
 We recommend keeping all `cc-backend` binary versions in a folder `archive` and
@@ -39,42 +42,42 @@ its contents are set accordingly.
 
 This example assumes the DB and job archive versions did not change.
 
-* Stop systemd service:
+- Stop systemd service:
 
 ```sh
 sudo systemctl stop clustercockpit.service
 ```
 
-* Backup the sqlite DB file! This is as simple as to copy it.
-* Copy new `cc-backend` binary to `/opt/monitoring/cc-backend/archive` (Tip: Use a
-date tag like `YYYYMMDD-cc-backend`). Here is an example:
+- Backup the sqlite DB file! This is as simple as to copy it.
+- Copy new `cc-backend` binary to `/opt/monitoring/cc-backend/archive` (Tip: Use a
+  date tag like `YYYYMMDD-cc-backend`). Here is an example:
 
 ```sh
 cp ~/cc-backend /opt/monitoring/cc-backend/archive/20231124-cc-backend
 ```
 
-* Link from  `cc-backend` root to current version
+- Link from `cc-backend` root to current version
 
 ```sh
 ln -s  /opt/monitoring/cc-backend/archive/20231124-cc-backend /opt/monitoring/cc-backend/cc-backend
 ```
 
-* Start systemd service:
+- Start systemd service:
 
 ```sh
 sudo systemctl start clustercockpit.service
 ```
 
-* Check if everything is ok:
+- Check if everything is ok:
 
 ```sh
 sudo systemctl status clustercockpit.service
 ```
 
-* Check log for issues:
+- Check log for issues:
 
 ```sh
 sudo journalctl -u clustercockpit.service
 ```
 
-* Check the ClusterCockpit web frontend and your Slurm adapters if anything is broken!
+- Check the ClusterCockpit web frontend and your Slurm adapters if anything is broken!

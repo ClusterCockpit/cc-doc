@@ -1,5 +1,5 @@
 ---
-title: Example Setups
+title: Overall Setup
 weight: 7
-description: Real world setups and example configurations.
+description: Production setup and example configurations
 ---

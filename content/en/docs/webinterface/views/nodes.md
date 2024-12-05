@@ -21,13 +21,13 @@ The nodes view, or systems view, is always called in respect to one specified cl
 
 Selections regarding the display, and update, of the plots rendered in the node table can be performed here:
 
-* *(Periodic) Reload:* Force reload of fresh data from the backend or set a periodic reload in specified intervals
-  * `30 Seconds, 60 Seconds, 120 Seconds, 5 Minutes`
-* *Displayed Time:* Select the timeframe to be rendered in the node table
+* *Find Node:*: Filter the node table by hostname. Partial queries are possible.
+* *Displayed Timerange:* Select the timeframe to be rendered in the node table
   * `Custom`: Select timestamp `from` and `to` in which the data should be fetched. It is possible to select date and time.
   * `15 Minutes, 30 Minutes, 1 Hour, 2 Hours, 4 Hours, 12 Hours, 24 Hours`
 * *Metric:*: Select the metric to be fetched for *all* nodes. If no data can be fetched, messages are displayed per node.
-* *Find Node:*: Filter the node table by hostname. Partial queries are possible.
+* *(Periodic) Reload:* Force reload of fresh data from the backend or set a periodic reload in specified intervals
+  * `30 Seconds, 60 Seconds, 120 Seconds, 5 Minutes`
 
 ### Node Table
 

@@ -54,9 +54,13 @@ Hovering over one of the pie chart fractions will display a legend featuring the
 
 ## Statistic Histograms
 
-Several [histrograms]({{< ref "plots#histograms" >}} "Histograms") depicting the utilization of the clusters resources, based on all currently running jobs are rendered here:
+Several [histograms]({{< ref "plots#histograms" >}} "Histograms") depicting the utilization of the clusters resources, based on all currently running jobs are rendered here:
 
 * Duration Distribution
 * Number of Nodes Distribution
 * Number of Cores Distribution
 * Number of Accelerators Distribution
+
+Additional Histograms showing specified footprint metrics across all systems can be selected via the "Select histograms" menu next to the refresher tool.
+
+{{< alert >}}*Please note:* Metric statistics available here for selection are configured. All metrics, for which the `footprint` flag is set in the respective metrics' configuration will be shown.{{< /alert >}}

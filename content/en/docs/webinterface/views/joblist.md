@@ -31,10 +31,13 @@ Basic selection of sorting parameter and direction. By default, jobs are sorted 
 
 * Duration
 * Number of Nodes
-* Maximum Memory Used
-* Average FLOPs
-* Average Memory Bandwidth
-* Average Network Bandwidth
+* Number of Hardware-Threads
+* Number of Accelerators
+* Total Energy Consumed
+* *Additional configured Metric Statistics*
+* ...
+
+{{< alert >}}*Please note:* Additional metrics statistics are configured. All metrics, for which the `footprint` flag is set in the respective metrics' configuration will be available as additional sorting options.{{< /alert >}}
 
 Switching of the sort direction is achieved by clicking on the arrow icon next to the desired sorting parameter.
 
@@ -50,10 +53,6 @@ It is furthermore possible to edit the order of the selected metrics. This can b
 
 Lastly, the optional "Footprint" Column can be activated (and deactivated) here. It will always be rendered next to the "Job Info" column, while metrics start right of the "Footprint" column, if activated.
 
-### Job Count
-
-The total number of jobs returned by the backend for the given set of filters.
-
 ### Filters
 
 Selection of filters applied to the queried jobs. By default, no filters are activated if the view was opened via the navigation bar. At multiple location throughout the web-interface, direct links will lead to this view with one or more preset filters active, e.g. selecting a clusters' "running jobs" from the [home page]({{< ref "webinterface" >}} "ClusterCockpit Home") will open this view displaying only running jobs of that cluster.
@@ -66,9 +65,14 @@ Possible options are:
 * Duration: Filter by job duration
 * Tags: Filter by tags assigned to jobs
 * Resources: Filter by allocated resources or named node
+* Energy: Filter by consumed total energy (for completed jobs only)
 * Statistics: Filter by average usage of defined metrics
 
 Each filter and its default value is described in detail [here]({{< ref "filters" >}} "Job Filters").
+
+### Job Count
+
+The total number of jobs returned by the backend for the given set of filters.
 
 ### Search and Reload
 
@@ -107,6 +111,10 @@ The meta data containing general information about the job is represented in the
 ### Footprint
 
 The optional footprint column will show base metrics for job performance at a glance, and will hint to performance (and performance problems) in regard to configurable metric thresholds.
+
+{{< alert >}}*Please note:* Metric statistics displayed here are configured. All metrics, for which the `footprint` flag is set in the respective metrics' configuration will be shown in this view.{{< /alert >}}
+
+*Examples:*
 
 |Field|Description|Note|
 |-----|-----------|----|

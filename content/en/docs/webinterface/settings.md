@@ -7,18 +7,25 @@ tags: [Frontend, General, Admin]
 weight: 1
 ---
 
-The settings view allows [non-privileged users]({{< ref "roles#user-role" >}} "User Role") to customize how metric plots are rendered. This includes line width, number of plots per row (where applicable), whether backgrounds should be colored, and the color scheme of multi-line metric plots.
+The settings view allows [non-privileged users]({{< ref "roles#user-role" >}} "User Role") to choose their preferred paging style, to customize how metric plots are rendered, and to generate personalized tokes for use with the [API]({{< ref "rest-api" >}} "CC-Backend API"). Customization options include line width, number of plots per row (where applicable), whether backgrounds should be colored, and the color scheme of multi-line metric plots.
 
 [Privileged users]({{< ref "roles#administrator-role" >}} "Admin Role") will also find an [administrative interface]({{< ref "#administration-options" >}} "Administration Options") for handling local user accounts. This includes creating local accounts from the interface, editing user roles, listing and deleting existing users, generating JSON Web Tokens for API usage, and delegating managed projects for [manager role]({{< ref "roles#manager-role" >}} "Manager Role") users.
 
-## Plotting Options
+## User Options
 
 |Field|Options|Note|
 |---|---|---|
+|Paging Type|Classic / Continuous|Style of paging in job lists|
 |Line Width|# Pixels|Width of the lines in the timeseries plots|
 |Plots Per Row|# Plots|How many plots to show next to each other on pages such as the [job]({{< ref "job" >}} "Job View") or [nodes]({{< ref "nodes" >}} "Nodes View") views|
 |Colored Backgrounds|Yes / No|Color plot backgrounds indicating mean values within warning thresholds|
 |Color Scheme|See Below|Render multi-line metric plots in different color ranges|
+
+### Generate JWT
+
+This function will generate and return a personalized JWT, printed into the "Display JWT" field.
+
+If working with the [ClusterCockpit API]({{< ref "rest-api" >}} "CC-Backend API"), this token is required to authorize the user against the REST API endpoints.
 
 ### Color Schemes
 
@@ -83,7 +90,7 @@ The settings view allows [non-privileged users]({{< ref "roles#user-role" >}} "U
   </tr>
 </table>
 
-## Administration Options
+## Admin Options
 
 ### Create User
 
@@ -144,3 +151,21 @@ On creation, users can only have one managed project. However, it is allowed to 
 Enter an existing `username` and select an existing (for removal) or new (for addition) project by entering the respective `projectId`.
 
 Then press the respective button to remove or add the selected project from the manager account. Errors will be displayed if existing projects are added, non-existing projects are removed, or if the user account is not authorized to manage projects at all.
+
+### Scramble Names (Presentation Mode)
+
+Activating this switch will replace all user names, person names, and project names with random strings. Intended for presentations on a production system while retaining critical information from a publc audience.
+
+### Metric Plot Resampling
+
+If "Resampling" of metric plots is enabled in the configuration file (`config.json`), and read correctly on start-up, this informational display will list both the amount of data points on whichthe next resolution will be requested ("Trigger") as well as the applicable resolutions themselves.
+
+*Note*: Changes to the resampling options have to be perfofmed by changing the configuration file and restarting the application.
+
+### Edit Notice Shown On Homepage
+
+The contents of the text form field will be written into `$CCPATH/var/notice.txt` on submission. If this file does not exist, it will be created.
+
+If any content is found, an informational card will be rendered above the home site table. The content will also be mirrored within the form field itself.
+
+Removing any content from the form field, and submitting, will clear the file and remove the rendered card from the homepage. This state is indicated by the placeholder text "No Content." being shown in the form field.

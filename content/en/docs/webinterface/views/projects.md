@@ -21,6 +21,8 @@ The table can be sorted by clicking the respective icon next to the column heade
 
 {{< alert >}}*Please Note:* By default, a "Last 30 Days" filter is activated by default when opening this view.{{< /alert >}}
 
+{{< alert >}}*Managers Only:* For users with `manager` authority, this view will be titled 'Managed Projects' in the navigation bar. Managers will only be able to see colected data of managed projects.{{< /alert >}}
+
 ### Details
 
 |Column|Description|Note|

@@ -10,30 +10,30 @@ The following schema in its raw form can be found in the [ClusterCockpit GitHub]
 
 {{< alert title="Manual Updates">}}
   Changes to the original JSON schema found in the repository are not automatically rendered in this reference documentation.</br></br>
-  **Last Update:** 02.02.2024
+  **Last Update:** 04.12.2024
 {{< /alert >}}
 
 ## Metric unit
 
-- [1. [Required] Property Metric unit > base](#base)
-- [2. [Optional] Property Metric unit > prefix](#prefix)
+- [1. Property `Metric unit > base`](#base)
+- [2. Property `Metric unit > prefix`](#prefix)
 
 **Title:** Metric unit
 
-|                           |                                                                           |
-| ------------------------- | ------------------------------------------------------------------------- |
-| **Type**                  | `object`                                                                  |
-| **Required**              | No                                                                        |
-| **Additional properties** | [[Any type: allowed]](# "Additional Properties of any type are allowed.") |
+|                           |                  |
+| ------------------------- | ---------------- |
+| **Type**                  | `object`         |
+| **Required**              | No               |
+| **Additional properties** | Any type allowed |
 
 **Description:** Format specification for job metric units
 
-<details>
-<summary>
-<strong> <a name="base"></a>1. [Required] Property Metric unit > base</strong>  
+| Property             | Pattern | Type             | Deprecated | Definition | Title/Description |
+| -------------------- | ------- | ---------------- | ---------- | ---------- | ----------------- |
+| + [base](#base )     | No      | enum (of string) | No         | -          | Metric base unit  |
+| - [prefix](#prefix ) | No      | enum (of string) | No         | -          | Unit prefix       |
 
-</summary>
-<blockquote>
+## <a name="base"></a>1. Property `Metric unit > base`
 
 |              |                    |
 | ------------ | ------------------ |
@@ -54,15 +54,7 @@ Must be one of:
 * "°C"
 * ""
 
-</blockquote>
-</details>
-
-<details>
-<summary>
-<strong> <a name="prefix"></a>2. [Optional] Property Metric unit > prefix</strong>  
-
-</summary>
-<blockquote>
+## <a name="prefix"></a>2. Property `Metric unit > prefix`
 
 |              |                    |
 | ------------ | ------------------ |
@@ -79,8 +71,5 @@ Must be one of:
 * "P"
 * "E"
 
-</blockquote>
-</details>
-
 ----------------------------------------------------------------------------------------------------------------------------
-Generated using [json-schema-for-humans](https://github.com/coveooss/json-schema-for-humans) on 2024-02-02 at 14:36:54 +0100
+Generated using [json-schema-for-humans](https://github.com/coveooss/json-schema-for-humans) on 2024-12-04 at 16:45:59 +0100

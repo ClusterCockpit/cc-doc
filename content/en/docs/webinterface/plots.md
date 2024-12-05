@@ -21,6 +21,14 @@ It is possible to zoom in by dragging a selection square with your mouse. Double
 
 {{< alert >}}*Please note:* Metric plots will be rendered with regard to the configured `normal` metric threshold at first, i.e. the threshold will either be the highest rendered value (spaced line), or will be used to cut-off outliers (10 x normal threshold). Resetting by double-clicking will re-render the plot with regard to the highest value *of the dataset*, i.e. adapt the Y-axis to match said maximum value.{{< /alert >}}
 
+#### Resampling of Data
+
+If "Resampling" of metric plots is enabled in the configuration file (`config.json`), data is primarily loaded on the coarsest resolution. Zooming into the dataset, as described above, will continuously trigger a reload of the data in finer resolutions, until the highest resolution is reached. A finer resolution is requested from the backend as soon as the number of visible data points falls below a configured amount ("Trigger").
+
+{{< alert >}}*Please note:* While archived data is read from disk, and therefore can be resampled in the backend directly, resampling of data for `running` jobs requires the use of a matching version of CC-Metric-Store.
+
+Running Job metric data read from older versions of CCMS will still return correctly, but will always return in the metrics configured timestep.{{< /alert >}}
+
 ### Conditional Legends
 
 Hovering over the rendered data will display a legend as hovering box colored in yellow. Depending on the amount of data shown, this legend will render differently:
@@ -58,7 +66,7 @@ The plots' background is colored depending the average value of the viewed metri
 In the job list views, high amounts of data are by default rendered as a statistical representation of the numerous, single datasets:
 
 * *Maximum*: The maximum values of the base datasets of each point in time, over time. Colored in green.
-* *Average*: The average values of the base datasets of each point in time, over time. Colored in black.
+* *Median*: The median values of the base datasets of each point in time, over time. Colored in black.
 * *Minimum*: The minimal values of the base datasets of each point in time, over time. Colored in red.
 
 #### Example
@@ -66,6 +74,8 @@ In the job list views, high amounts of data are by default rendered as a statist
 {{< figure src="../figures/metricplot_stats.png" alt="Statistics Metricplot Example" width="100%" class="ccfigure mw-xs"
     caption="A job with a high count of allocated nodes, running well within expected metric parameters. Since, by definition, the colors for this statistical render are always identical, only the runtime and the statistic datasets' identifiers are shown."
 >}}
+
+{{< alert >}}*Note:* Archived jobs might still show "Max/Average/Min" in their metric plots. This is due to these jobs being archived *before* the change in favor of median values was perfomed.{{< /alert >}}
 
 ## Histograms
 
@@ -107,7 +117,7 @@ The roofline model shown in the analysis view, as the single exception, is rende
 
 ## Polar Plots
 
-A polar, or radar, plot represents the utilization of three key metrics: `flops_any`, `mem_used`, and `mem_bw`. Both the maximum and the average utilization as a fraction of the 100% theoretical maximum (labelled as `1.0`) are rendered on three axes. This leads to an increasing area, which in return marks increasingly optimal resource usage. In principle, this is a graphic representation of data also shown in the [footprint]({{< ref "job#footprint" >}} "Joblist") component.
+A polar, or radar, plot represents the utilization of key metrics. Both the maximum and the average utilization as a fraction of the 100% theoretical maximum (labelled as `1.0`) are rendered on a number of axes equal to the displayed key metrics. This leads to an increasing area, which in return marks increasingly optimal resource usage. In principle, this is a graphic representation of data also shown in the [footprint]({{< ref "job#footprint" >}} "Joblist") component.
 
 By clicking on one of the two legends, the respective dataset will be hidden. This can be useful if high overlap reduces visibility.
 

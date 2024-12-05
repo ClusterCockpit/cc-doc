@@ -21,5 +21,5 @@ The schemas in their raw form can be found in the [ClusterCockpit GitHub](https:
 {{< alert title="Manual Updates">}}
   Changes to the original JSON schemas found in the repository are not automatically rendered in this reference documentation.</br></br>
   The raw JSON schemas are parsed and rendered for better readability using the [json-schema-for-humans](https://github.com/coveooss/json-schema-for-humans) utility.</br></br>
-  **Last Update:** 02.02.2024
+  **Last Update:** 04.12.2024
 {{< /alert >}}
