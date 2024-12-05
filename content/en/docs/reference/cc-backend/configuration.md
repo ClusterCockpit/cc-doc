@@ -90,7 +90,6 @@ To override the default, specify the location of a JSON configuration file with 
 * `analysis_view_scatterPlotMetrics`: Type array of string array. Initial
 scatter plot configuration in analysis view. Default `[["flops_any", "mem_bw"], ["flops_any", "cpu_load"], ["cpu_load", "mem_bw"]]`.
 * `job_view_nodestats_selectedMetrics`: Type array [string]. Initial metrics shown in node statistics table of single job view. Default `["flops_any", "mem_bw", "mem_used"]`.
-* `job_view_polarPlotMetrics`: Type array [string]. Metrics shown in polar plot of single job view. Default `["flops_any", "mem_bw", "mem_used", "net_bw", "file_bw"]`.
 * `job_view_selectedMetrics`: Type array [string].  Default `["flops_any", "mem_bw", "mem_used"]`.
 * `plot_general_colorBackground`: Type bool. Color plot background according to job average threshold limits. Default `true`.
 * `plot_general_colorscheme`: Type array [string]. Initial color scheme. Default `"#00bfff", "#0000ff", "#ff00ff", "#ff0000", "#ff8000", "#ffff00", "#80ff00"`.
@@ -103,4 +102,4 @@ scatter plot configuration in analysis view. Default `[["flops_any", "mem_bw"], 
 * `plot_view_showStatTable`: Type bool. Option to toggle the node statistic table in single job view. Default `true`.
 * `system_view_selectedMetric`: Type string. Initial metric shown in system view. Default `cpu_load`.
 
-Some of the `ui-defaults` values can be appended by `:<clustername>` in order to have different settings depending on the current cluster. Those are notably `job_view_nodestats_selectedMetrics`, `job_view_polarPlotMetrics`, `job_view_selectedMetrics` and `plot_list_selectedMetrics`.
+Some of the `ui-defaults` values can be appended by `:<clustername>` in order to have different settings depending on the current cluster. Those are notably `job_view_nodestats_selectedMetrics`, `job_view_selectedMetrics` and `plot_list_selectedMetrics`.
