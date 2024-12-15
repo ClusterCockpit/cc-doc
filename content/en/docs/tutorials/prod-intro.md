@@ -65,7 +65,7 @@ installation:
 ## Common problems
 
 Up front here is a list with common issues people are facing when installing
-ClusterCockpit for the first time:
+ClusterCockpit for the first time.
 
 ### Inconsistent metric names across components
 
@@ -90,5 +90,20 @@ to the metric names suggested in the schema, there are two exceptions: `mem_bw`
 SP flops) are required for the roofline plots to work.
 
 ### Inconsistent device naming between `cc-metric-collector` and batch job scheduler adapter
+
+The batch job scheduler adapter (e.g. `cc-slurm-sync`) provides a list of
+resources that are used by the job. `cc-backend` will query `cc-metric-store`
+with exactly those resource ids for getting all metrics for a job.
+As a consequence if `cc-metric-collector` uses another systematic the metrics
+will not be found.
+
+If you have GPU accelerators `cc-slurm-sync` should use the PCI-E device
+addresses as ids. The option `use_pci_info_as_type_id` for the nvidia and
+rocm-smi collectors in the collector configuration must be set to true.
+To validate and debug problems you can use the `cc-metric-store` debug endpoint:
+
+```bash
+
+```
 
 ### Missing nodes in subcluster node lists
