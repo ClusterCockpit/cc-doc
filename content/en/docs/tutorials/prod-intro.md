@@ -103,7 +103,17 @@ rocm-smi collectors in the collector configuration must be set to true.
 To validate and debug problems you can use the `cc-metric-store` debug endpoint:
 
 ```bash
-
+curl -H "Authorization: Bearer $JWT" -D - "http://localhost:8080/api/debug"
 ```
 
+This will return the current state of `cc-metric-store`. You can search for a
+hostname and there scroll for all topology leaf nodes that are available.
+
 ### Missing nodes in subcluster node lists
+
+ClusterCockpit supports multiple subclusters as part of a cluster. A subcluster
+in this context is a homogeneous hardware partition with a dedicated metric
+and device configuration. `cc-backend` dynamically matches the nodes a job runs
+on to subcluster node list to figure out on which subcluster a job is running.
+If nodes are missing in a subcluster node list this fails and the metric list
+used may be wrong.
