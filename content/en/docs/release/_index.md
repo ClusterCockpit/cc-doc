@@ -11,15 +11,26 @@ performance footprint. The database had dedicated columns for each of these
 metric stats in order to filter jobs using those performance metrics.
 Because you may want to use different footprints on an accelerated cluster
 compared to a standard multi-core system, this is a severe restriction.
-Version 1.4.0 of `cc-backend` introduces a new attribute `footprint` for metrics
+Version 1.4.0 of `cc-backend` introduces a new boolean attribute `footprint` for metrics
 in the `cluster.json` configuration of the job archive. This allows you do
 define your individual performance footprint for every cluster and optionally
-subcluster. The footprint is stored in the database as a JSON object for every
-job. This also enables to change the footprint configuration. Jobs before the
-change will still show the old footprint and new jobs will show the updated
-footprint. The footprint metrics will be used in the footprint UI component
-shown in job views and optionally job lists. The are also used for the metrics
+subcluster. This also enables you to change the footprint configuration if required.
+The footprint metrics will be used in the footprint UI component
+shown in job views and optionally job lists. They are also used for the metrics
 shown in the polar plot and are available for sorting and filtering jobs.
+
+Metrics configured as footprints are collected as aggregated `key:value` pairs
+in one JSON object for every job, either on job completion, or during runtime in
+configurable intervals. The JSON object itself is written to the database
+in a single dedicated column named `footprint`.
+
+{{< alert >}}
+*Please note:* In order to guarantee a seamless update, follow the
+instructions on updating the `cluster.json` and migrating the database on this page.
+With missing configuration of the `footprint` attribute, only existing jobs will show
+`footprint` data after update and database migration, while subsequently completed jobs
+will not be updated due to missing information, and therefore show no footprint data.
+{{< /alert >}}
 
 Moreover, `cc-backend` also provides an energy footprint configuration now.
 This is a set of metrics that are used to calculate the total energy used by a
