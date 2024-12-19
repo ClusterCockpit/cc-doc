@@ -11,7 +11,7 @@ performance footprint. The database had dedicated columns for each of these
 metric stats in order to filter jobs using those performance metrics.
 Because you may want to use different footprints on an accelerated cluster
 compared to a standard multi-core system, this is a severe restriction.
-Version 1.4.0 of `cc-backend` introduces a new boolean attribute `footprint` for metrics
+Version 1.4.0 of `cc-backend` introduces a new string attribute `footprint` for metrics
 in the `cluster.json` configuration of the job archive. This allows you do
 define your individual performance footprint for every cluster and optionally
 subcluster. This also enables you to change the footprint configuration if required.
