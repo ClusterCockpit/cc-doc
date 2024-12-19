@@ -1,7 +1,8 @@
 ---
 title: Reference
-description: Reference docs for ClusterCockpit
-weight: 9
+description: In-depth technical documentation
+weight: 30
 ---
+
 In-depth description of configuration options, file formats, and REST API
 interfaces.
