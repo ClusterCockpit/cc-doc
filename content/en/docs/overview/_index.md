@@ -18,12 +18,6 @@ ClusterCockpit provides a modern web interface which provides:
 ClusterCockpit is used in production at several Tier-2 HPC computing centers,
 you can find a list [here](/testimonials). It should work for small to medium HPC clusters.
 
-{{< alert color="warning" title="Warning" >}}
-Because ClusterCockpit performs no data reduction for jobs with many nodes and a
-long duration there are currently limits to the job sizes that can be viewed.
-This will be resolved in a future release.
-{{< /alert >}}
-
 ## How does it work?
 
 {{< figure src="cc-arch.png"  width="80%" alt="ClusterCockpit software architecture" >}}

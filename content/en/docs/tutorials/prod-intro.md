@@ -54,11 +54,16 @@ systemd services.
 We recommended the following order for planning and configuring a ClusterCockpit
 installation:
 
-1. Setup your metric list
+1. **Setup your metric list**: With two exceptions you are in general free which metrics you
+   want choose. Those exceptions are: `mem_bw` for main memory bandwidth and
+   'flops_any' for flop throughput (double precision flops are upscaled to single
+   precision rates). You can find a discussion of useful metrics and their naming
+   [here]({{< ref prod-metric-list >}}). This metric list is an integral
+   component for  the configuration of all ClusterCockpit components.
 1. Configure and deploy `cc-metric-store`.
 1. Configure and deploy `cc-metric-collector`. For a detailed description on how
    to setup cc-metric-collector have a look at
-   {{< ref "prod-cc-metric-collector" >}}
+   {{< ref "prod-ccmc" >}}
 1. Configure and deploy `cc-backend`
 1. Setup batch job scheduler adapter
 
