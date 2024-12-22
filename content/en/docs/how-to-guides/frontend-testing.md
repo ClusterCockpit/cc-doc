@@ -1,13 +1,16 @@
 ---
-title: Tips
+title: Tips for cc-backend frontend development
+weight: 99
 description: >
-  Tips for ClusterCockpit Development and Contribution
+  How to setup cc-backend for easiert frontend development
+categories: [cc-backend]
+tags: [Developer]
 ---
 
-## Frontend
+## ClusterCockpit web frontend
 
 The frontend assets including the Svelte js files are per default embedded in
-the bgo binary. To enable a quick turnaround cycle for web development of the
+the go binary. To enable a quick turnaround cycle for web development of the
 frontend disable embedding of static assets in `config.json`:
 
 ```json

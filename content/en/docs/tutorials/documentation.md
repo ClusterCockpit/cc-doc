@@ -1,7 +1,7 @@
 ---
-title: Documentation
-weight: 10
-description: How to contribute to the docs
+title: Contribute documentation
+weight: 90
+description: How to contribute to the documentation website
 ---
 We use [Hugo](https://gohugo.io/) to format and generate our website, the
 [Docsy](https://github.com/google/docsy) theme for styling and site structure.
@@ -48,7 +48,7 @@ If you want to run your own local Hugo server to preview your changes as you wor
 git clone --recurse-submodules --depth 1 https://github.com/ClusterCockpit/cc-doc.git
 ```
 
-1. Run `hugo server` in the site root directory. By default your site will be available at http://localhost:1313/. Now that you're serving your site locally, Hugo will watch for changes to the content and automatically refresh your site.
+1. Run `hugo server` in the site root directory. By default your site will be available at <http://localhost:1313/>. Now that you're serving your site locally, Hugo will watch for changes to the content and automatically refresh your site.
 1. Continue with the usual GitHub workflow to edit files, commit them, push the changes up to your fork, and create a pull request.
 
 ## Creating an issue

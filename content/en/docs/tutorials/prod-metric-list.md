@@ -13,7 +13,7 @@ useful the monitoring will be. As part of a collaborative project several
 academic HPC centers came up with a minimal set of metrics including their
 naming. To use a consistent naming is crucial for establishing what metrics mean
 and we urge you to adhere to the metric names suggested there. You can find this
-list as part of the ClusterCockpit job data structure schemas.
+list as part of the ClusterCockpit job data structure JSON schemas.
 
 ## Required Metrics
 
@@ -83,3 +83,20 @@ system type names suggested are:
 
 ### File system write bandwidth: `write_bw`
 
+### File system read requests: `read_req`
+
+### File system write requests: `write_req`
+
+### File system inodes used: `inodes`
+
+### File system open and close: `accesses`
+
+### File system file syncs: `fsync`
+
+### File system file creates: `create`
+
+### File system file open: `open`
+
+### File system file close: `close`
+
+### File system file syncs: `seek`

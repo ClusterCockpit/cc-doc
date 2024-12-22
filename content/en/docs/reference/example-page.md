@@ -1,13 +1,12 @@
 ---
-title: Example Page
-weight: 10
-description: Example page to showcase the options for docsy.
+title: Docsy example page
+weight: 90
+description: Example page to showcase formatting options for docsy.
 ---
 
 {{% pageinfo %}}
 This is a placeholder page. Replace it with your own content.
 {{% /pageinfo %}}
-
 
 Text can be **bold**, _italic_, or ~~strikethrough~~. [Links](https://gohugo.io) should be blue with no underlines (unless hovered over).
 
@@ -23,14 +22,13 @@ There should be whitespace between paragraphs. Vape migas chillwave sriracha pou
 
 ## First Header 2
 
-This is a normal paragraph following a header. Knausgaard kale chips snackwave microdosing cronut copper mug swag synth bitters letterpress glossier **craft beer**. Mumblecore bushwick authentic gochujang vegan chambray meditation jean shorts irony. Viral farm-to-table kale chips, pork belly palo santo distillery activated charcoal aesthetic jianbing air plant woke lomo VHS organic. Tattooed locavore succulents heirloom, small batch sriracha echo park DIY af. Shaman you probably haven't heard of them copper mug, crucifix green juice vape *single-origin coffee* brunch actually. Mustache etsy vexillologist raclette authentic fam. Tousled beard humblebrag asymmetrical. I love turkey, I love my job, I love my friends, I love Chardonnay!
+This is a normal paragraph following a header. Knausgaard kale chips snackwave microdosing cronut copper mug swag synth bitters letterpress glossier **craft beer**. Mumblecore bushwick authentic gochujang vegan chambray meditation jean shorts irony. Viral farm-to-table kale chips, pork belly palo santo distillery activated charcoal aesthetic jianbing air plant woke lomo VHS organic. Tattooed locavore succulents heirloom, small batch sriracha echo park DIY af. Shaman you probably haven't heard of them copper mug, crucifix green juice vape _single-origin coffee_ brunch actually. Mustache etsy vexillologist raclette authentic fam. Tousled beard humblebrag asymmetrical. I love turkey, I love my job, I love my friends, I love Chardonnay!
 
 Deae legum paulatimque terra, non vos mutata tacet: dic. Vocant docuique me plumas fila quin afuerunt copia haec o neque.
 
 On big screens, paragraphs and headings should not take up the full container width, but we want tables, code blocks and similar to take the full width.
 
 Scenester tumeric pickled, authentic crucifix post-ironic fam freegan VHS pork belly 8-bit yuccie PBR&B. **I love this life we live in**.
-
 
 ## Second Header 2
 
@@ -84,15 +82,15 @@ And an ordered list:
 
 And an unordered task list:
 
-- [x] Create a Hugo theme
-- [x] Add task lists to it
-- [ ] Take a vacation
+* [x] Create a Hugo theme
+* [x] Add task lists to it
+* [ ] Take a vacation
 
 And a "mixed" task list:
 
-- [ ] Pack bags
-- ?
-- [ ] Travel!
+* [ ] Pack bags
+* ?
+* [ ] Travel!
 
 And a nested list:
 
@@ -121,7 +119,6 @@ Birthplace
 
 Color
 : Green
-
 
 ----------------
 
@@ -195,7 +192,6 @@ Large images should always scale down and fit in the content container.
 
 _The photo above of the Spruce Picea abies shoot with foliage buds: Bjørn Erik Pedersen, CC-BY-SA._
 
-
 ## Components
 
 ### Alerts
@@ -207,15 +203,13 @@ _The photo above of the Spruce Picea abies shoot with foliage buds: Bjørn Erik 
 {{< alert color="warning" >}}This is a warning.{{< /alert >}}
 {{< alert color="warning" title="Warning" >}}This is a warning with a title.{{< /alert >}}
 
-
 ## Another Heading
 
 Add some sections here to see how the ToC looks like. Bacon ipsum dolor sit amet t-bone doner shank drumstick, pork belly porchetta chuck sausage brisket ham hock rump pig. Chuck kielbasa leberkas, pork bresaola ham hock filet mignon cow shoulder short ribs biltong.
 
 ### This Document
 
-Inguina genus: Anaphen post: lingua violente voce suae meus aetate diversi. Orbis unam nec flammaeque status deam Silenum erat et a ferrea. Excitus rigidum ait: vestro et Herculis convicia: nitidae deseruit coniuge Proteaque adiciam *eripitur*? Sitim noceat signa *probat quidem*. Sua longis *fugatis* quidem genae.
-
+Inguina genus: Anaphen post: lingua violente voce suae meus aetate diversi. Orbis unam nec flammaeque status deam Silenum erat et a ferrea. Excitus rigidum ait: vestro et Herculis convicia: nitidae deseruit coniuge Proteaque adiciam _eripitur_? Sitim noceat signa _probat quidem_. Sua longis _fugatis_ quidem genae.
 
 ### Pixel Count
 
@@ -225,12 +219,9 @@ Tilde photo booth wayfarers cliche lomo intelligentsia man braid kombucha vaporw
 
 Plaid hell of cred microdosing, succulents tilde pour-over. Offal shabby chic 3 wolf moon blue bottle raw denim normcore poutine pork belly.
 
-
 ### External Links
 
 Stumptown PBR&B keytar plaid street art, forage XOXO pitchfork selvage affogato green juice listicle pickled everyday carry hashtag. Organic sustainable letterpress sartorial scenester intelligentsia swag bushwick. Put a bird on it stumptown neutra locavore. IPhone typewriter messenger bag narwhal. Ennui cold-pressed seitan flannel keytar, single-origin coffee adaptogen occupy yuccie williamsburg chillwave shoreditch forage waistcoat.
-
-
 
 ```
 This is the final element on the page and there should be no margin below this.

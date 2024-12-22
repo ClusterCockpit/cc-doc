@@ -1,10 +1,12 @@
 ---
-title: Setup of cc-metric-store
-weight: 20
-description: How to configure and deploy cc-metric-store
+title: Setup of cc-backend
+weight: 40
+description: How to configure and deploy cc-backend
 categories: [cc-metric-store]
 tags: [Admin]
 ---
+
+## Introduction
 
 ## Recommended workflow for deployment
 

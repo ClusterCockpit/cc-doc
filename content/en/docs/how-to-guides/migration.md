@@ -1,5 +1,6 @@
 ---
-title: Migration
+title: Migrations
+weight: 200
 description: Database and job archive migrations
 categories: [cc-backend]
 tags: [Admin]

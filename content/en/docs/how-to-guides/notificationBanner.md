@@ -1,5 +1,5 @@
 ---
-title: How to add notification banner
+title: How to add a notification banner
 description: Add a message of the day banner on homepage
 categories: [cc-backend]
 tags: [Admin]
