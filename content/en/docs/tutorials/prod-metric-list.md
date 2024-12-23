@@ -15,6 +15,15 @@ naming. To use a consistent naming is crucial for establishing what metrics mean
 and we urge you to adhere to the metric names suggested there. You can find this
 list as part of the ClusterCockpit job data structure JSON schemas.
 
+ClusterCockpit supports multiple clusters within one instance of `cc-backend`.
+You have to create separate metric lists for each of them. In `cc-backend` the
+metric lists are provided as part of the cluster configuration. Every cluster is
+configured as part of the
+[job archive]({{< ref "/docs/reference/cc-backend/jobarchive" >}}) using one
+`cluster.json` file per cluster.
+[This how-to]({{< ref "/docs/how-to-guides/clusterConfig" >}}) describes
+in-detail how to create a `cluster.json` file.
+
 ## Required Metrics
 
 ### Flop throughput rate: `flops_any`
