@@ -1,8 +1,7 @@
 ---
-title: Release process for cc-backend
+title: How to prepare a new release
 description: >
-  Steps to prepare a `cc-backend` release
-categories: [cc-backend]
+  Steps to prepare releases with goreleaser
 tags: [developer]
 ---
 ## Steps to prepare a release

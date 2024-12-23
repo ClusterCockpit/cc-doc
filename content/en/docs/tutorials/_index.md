@@ -1,6 +1,7 @@
 ---
 title: Tutorials
-weight: 8
-description: Step-by-step descriptions of tasks.
+weight: 5
+description: Detailed step-by-step lessons how to configure and deploy ClusterCockpit
+categories: [ClusterCockpit]
+tags: [Admin]
 ---
-

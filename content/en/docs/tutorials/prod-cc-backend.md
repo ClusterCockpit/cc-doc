@@ -1,9 +1,12 @@
 ---
-title: Deployment workflow
-description: How to start, deploy and update ClusterCockpit
-categories: [cc-backend]
+title: Setup of cc-backend
+weight: 40
+description: How to configure and deploy cc-backend
+categories: [cc-metric-store]
 tags: [Admin]
 ---
+
+## Introduction
 
 ## Recommended workflow for deployment
 
