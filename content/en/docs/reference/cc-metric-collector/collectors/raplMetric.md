@@ -7,13 +7,11 @@ tags: [cc-metric-collector, Collector, rapl]
 weight: 2
 ---
 
-# Running average power limit (RAPL) metric collector
+## `rapl` collector
 
 This collector reads running average power limit (RAPL) monitoring attributes to compute average power consumption metrics. See <https://www.kernel.org/doc/html/latest/power/powercap/powercap.html#monitoring-attributes>.
 
 The Likwid metric collector provides similar functionality.
-
-## Configuration
 
 ```json
   "rapl": {
@@ -22,6 +20,5 @@ The Likwid metric collector provides similar functionality.
   }
 ```
 
-## Metrics
-
+Metrics:
 * `rapl_average_power`: average power consumption in Watt. The average is computed over the entire runtime from the last measurement to the current measurement
