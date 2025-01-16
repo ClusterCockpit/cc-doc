@@ -6,8 +6,6 @@ tags: [cc-event-store, REST API, General]
 weight: 40
 ---
 
-# REST API component
-
 ## Configuration
 
 ```json
@@ -21,7 +19,7 @@ weight: 40
 }
 ```
 
-- `address`: Hostname or IP to listen for requests 
+- `address`: Hostname or IP to listen for requests
 - `port`: Port number (as string) to listen at
 - `idle_timeout`: Close connection after this time. Must be a parseable time for `time.ParseDuration`
 - `keep_alives_enabled`: Keep connections alive for some time
@@ -33,4 +31,6 @@ weight: 40
 - `http://address:port/api/query`
 - `http://address:port/api/write?cluster=<cluster>`
 
-See generated Swagger documentation or web-based Swagger UI for more information and the data format accepted by the endpoints
+See generated Swagger documentation or web-based Swagger UI for more information
+and the data format accepted by the endpoints
+
