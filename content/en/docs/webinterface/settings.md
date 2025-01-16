@@ -7,7 +7,7 @@ tags: [Frontend, General, Admin]
 weight: 1
 ---
 
-The settings view allows [non-privileged users]({{< ref "roles#user-role" >}} "User Role") to choose their preferred paging style, to customize how metric plots are rendered, and to generate personalized tokes for use with the [API]({{< ref "rest-api" >}} "CC-Backend API"). Customization options include line width, number of plots per row (where applicable), whether backgrounds should be colored, and the color scheme of multi-line metric plots.
+The settings view allows [non-privileged users]({{< ref "roles#user-role" >}} "User Role") to choose their preferred paging style, to customize how metric plots are rendered, and to generate personalized tokes for use with the [API]({{< relref "../reference/cc-backend/rest-api.md" >}} "CC-Backend API"). Customization options include line width, number of plots per row (where applicable), whether backgrounds should be colored, and the color scheme of multi-line metric plots.
 
 [Privileged users]({{< ref "roles#administrator-role" >}} "Admin Role") will also find an [administrative interface]({{< ref "#administration-options" >}} "Administration Options") for handling local user accounts. This includes creating local accounts from the interface, editing user roles, listing and deleting existing users, generating JSON Web Tokens for API usage, and delegating managed projects for [manager role]({{< ref "roles#manager-role" >}} "Manager Role") users.
 
@@ -25,7 +25,7 @@ The settings view allows [non-privileged users]({{< ref "roles#user-role" >}} "U
 
 This function will generate and return a personalized JWT, printed into the "Display JWT" field.
 
-If working with the [ClusterCockpit API]({{< ref "rest-api" >}} "CC-Backend API"), this token is required to authorize the user against the REST API endpoints.
+If working with the [ClusterCockpit API]({{< relref "../reference/cc-backend/rest-api" >}} "CC-Backend API"), this token is required to authorize the user against the REST API endpoints.
 
 ### Color Schemes
 

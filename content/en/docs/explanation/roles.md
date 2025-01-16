@@ -4,15 +4,22 @@ description: >
  Description of roles used in the web interface
 ---
 
-ClusterCockpit uses a specified set of user roles to steer data access and discriminate authorizations, primarily used in the [web interface]({{< ref "webinterface" >}} "ClusterCockpit Web Interface") for different display of views, but also limiting data access when requsts return from the server backend.
+ClusterCockpit uses a specified set of user roles to steer data access and
+discriminate authorizations, primarily used in the [web interface]({{< ref
+"webinterface" >}} "ClusterCockpit Web Interface") for different display of
+views, but also limiting data access when requests return from the server
+backend.
 
 The roles currently implemented are:
 
 ### User Role
 
-The standard role for all users. By default, granted to all users imported from LDAP. It is also the default selection for the administrative "Create User" [form]({{< ref "settings#create-user" >}} "Admin: Create User").
+The standard role for all users. By default, granted to all users imported from
+LDAP. It is also the default selection for the administrative "Create User"
+[form]({{< ref "settings#create-user" >}} "Admin: Create User").
 
-*Use Case:* View and list personal jobs, view personal job detail, inspect metrics of personal jobs.
+*Use Case:* View and list personal jobs, view personal job detail, inspect
+metrics of personal jobs.
 
 *Access:* Jobs started from the users account only.
 
@@ -48,7 +55,7 @@ All jobs from all active users on all systems can be accessed, as well as all we
 
 ### API Role
 
-An optional, technical role given to users in order to enable usage of the [RESTful API endpoints]({{< ref "rest-api" >}} "ClusterCockpit REST API"). This role has to be granted manually by administrators. No JWT can ever grant this role.
+An optional, technical role given to users in order to enable usage of the [RESTful API endpoints]({{< relref "../reference/cc-backend/rest-api.md" >}} "ClusterCockpit REST API"). This role has to be granted manually by administrators. No JWT can ever grant this role.
 
 This role can either be granted to a specialized "API User", which does not have a password or any other roles, and therefore, can not log in by itself. Such an user is only intended to be used to generate JWT access tokens for scripted API access, for example.
 

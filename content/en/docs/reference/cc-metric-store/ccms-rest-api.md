@@ -1,5 +1,5 @@
 ---
-title: REST API
+title: Metric Store REST API
 type: "swagger"
 description: >
   ClusterCockpit Metric Store RESTful API Endpoint description
@@ -88,4 +88,4 @@ However, a `Curl` call and a compiled `Request URL` will still be displayed, if
 an API endpoint is executed.
 {{< /alert >}}
 
-{{< swagger-ui "https://raw.githubusercontent.com/ClusterCockpit/cc-metric-store/refs/heads/main/api/swagger.json" >}}
+{{< swagger-ui "<https://raw.githubusercontent.com/ClusterCockpit/cc-metric-store/refs/heads/main/api/swagger.json>" >}}
