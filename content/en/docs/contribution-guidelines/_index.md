@@ -1,8 +1,9 @@
 ---
-title: Reference
-description: In-depth technical documentation
-weight: 30
+title: Contribution Guidelines
+description: Articles related to developers
+weight: 80
 ---
 
-In-depth description of configuration options, file formats, and REST API
-interfaces.
+
+You can find a list with articles related to contributing to ClusterCockpit
+[here](/tags/developer/).
