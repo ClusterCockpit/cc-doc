@@ -58,18 +58,30 @@ attributes of the `ldap` JSON object:
 - `url`: URL of the LDAP directory server. This must be a complete URL including
   the protocol and not only the host name. Example: `ldaps://ldsrv.mydomain.com`.
 - `user_base`: Base DN of user tree root. Example: `ou=people,ou=users,dc=rz,dc=mydomain,dc=com`.
-- `search_dn`: DN for authenticating an LDAP admin account with general read rights. This is required for the sync on login and the sync options. Example: `cn=monitoring,ou=adm,ou=profile,ou=manager,dc=rz,dc=mydomain,dc=com`
-- `user_bind`: Expression used to authenticate users via LDAP bind. Must contain `uid={username}`. Example: `uid={username},ou=people,ou=users,dc=rz,dc=mydomain,dc=com`.
+- `search_dn`: DN for authenticating an LDAP admin account with general read
+rights. This is required for the sync on login and the sync options. Example:
+`cn=monitoring,ou=adm,ou=profile,ou=manager,dc=rz,dc=mydomain,dc=com`
+- `user_bind`: Expression used to authenticate users via LDAP bind. Must contain
+`uid={username}`. Example:
+`uid={username},ou=people,ou=users,dc=rz,dc=mydomain,dc=com`.
 - `user_filter`:  Filter to extract users for syncing. Example: `(&(objectclass=posixAccount))`.
 
 Optional configuration options are:
 
 - `username_attr`:  Attribute with full user name. Defaults to `gecos` if not provided.
-- `sync_interval`:  Interval used for syncing SQL user table with LDAP directory. Parsed using time.ParseDuration. The sync interval is always relative to the time `cc-backend` was started. Example: `24h`.
-- `sync_del_old_users`: Type boolean. Delete users in SQL database if not in LDAP directory anymore. This of course only applies to users that were added from LDAP.
-- `syncUserOnLogin`: Type boolean. Add non-existent user to DB at login attempt if user exists in LDAP directory. This option enables that users can login at once after they are added to the LDAP directory.
+- `sync_interval`:  Interval used for syncing SQL user table with LDAP
+directory. Parsed using time.ParseDuration. The sync interval is always relative
+to the time `cc-backend` was started. Example: `24h`.
+- `sync_del_old_users`: Type boolean. Delete users in SQL database if not in
+LDAP directory anymore. This of course only applies to users that were added
+from LDAP.
+- `syncUserOnLogin`: Type boolean. Add non-existent user to DB at login attempt
+if user exists in LDAP directory. This option enables that users can login at
+once after they are added to the LDAP directory.
 
-The LDAP authentication method requires the environment variable `LDAP_ADMIN_PASSWORD` for the `search_dn` account that is used to sync users.
+The LDAP authentication method requires the environment variable
+`LDAP_ADMIN_PASSWORD` for the `search_dn` account that is used to sync users.
+
 ### Usage
 
 If LDAP is configured it is the first authentication method that is tried if a
@@ -114,7 +126,23 @@ user records that were added from LDAP or JWT tokens.
 [JSON web tokens](https://jwt.io/) are a standardized method for representing
 claims securely between two parties. In ClusterCockpit they are used for
 authorization to use REST APIs as well as a method to delegate authentication to
-a third party.
+a third party. This section only describes JWT based authentication for
+initiating a user session.
+
+There exist two variants:
+
+- Session Authenticator: Passes JWT token in the HTTP header _Authorization_
+using the Bearer prefix or using the query key _login-token_. Example for
+Authorization header:
+
+``` txt
+Authorization: Bearer S0VLU0UhIExFQ0tFUiEK
+```
+
+- Cookie Session Authenticator: Passes the JWT token in a Cookie, that is
+instantly deleted after the session is initiated. This is a more secure
+alternative to the standard header based solution.
+
 ### Configuration
 
 ## Authorization control
