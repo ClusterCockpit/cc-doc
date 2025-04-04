@@ -9,17 +9,22 @@ weight: 1
 
 The settings view allows [non-privileged users]({{< ref "roles#user-role" >}} "User Role") to choose their preferred paging style, to customize how metric plots are rendered, and to generate personalized tokes for use with the [API]({{< relref "../reference/cc-backend/rest-api.md" >}} "CC-Backend API"). Customization options include line width, number of plots per row (where applicable), whether backgrounds should be colored, and the color scheme of multi-line metric plots.
 
-[Privileged users]({{< ref "roles#administrator-role" >}} "Admin Role") will also find an [administrative interface]({{< ref "#administration-options" >}} "Administration Options") for handling local user accounts. This includes creating local accounts from the interface, editing user roles, listing and deleting existing users, generating JSON Web Tokens for API usage, and delegating managed projects for [manager role]({{< ref "roles#manager-role" >}} "Manager Role") users.
+[Privileged users]({{< ref "roles#support-role" >}} "Support Role") will find an [additional interface]({{< ref "#support-options" >}} "Support Options") for choosing the preferred paging style used in the [node list view]({{< ref "nodes#node-list" >}} "Node List").
+
+[Administrators]({{< ref "roles#administrator-role" >}} "Admin Role") will also find an [administrative interface]({{< ref "#administration-options" >}} "Administration Options") for handling local user accounts. This includes creating local accounts from the interface, editing user roles, listing and deleting existing users, generating JSON Web Tokens for API usage, and delegating managed projects for [manager role]({{< ref "roles#manager-role" >}} "Manager Role") users.
 
 ## User Options
 
+Settings available to the User Role are:
+
 |Field|Options|Note|
 |---|---|---|
-|Paging Type|Classic / Continuous|Style of paging in job lists|
+|Job List Paging Type|Classic / Continuous|Style of paging in [job list]({{< ref "joblist" >}} "Job List") and [user job list]({{< ref "userjobs#job-list" >}} "Node List")|
 |Line Width|# Pixels|Width of the lines in the timeseries plots|
 |Plots Per Row|# Plots|How many plots to show next to each other on pages such as the [job]({{< ref "job" >}} "Job View") or [nodes]({{< ref "nodes" >}} "Nodes View") views|
 |Colored Backgrounds|Yes / No|Color plot backgrounds indicating mean values within warning thresholds|
-|Color Scheme|See Below|Render multi-line metric plots in different color ranges|
+|Color Blind Mode|Yes / No|Whether to use color vision deficiency friendly palettes across the webinterface|
+|Color Scheme|See Below|Render multi-line metric plots in different color ranges. Will change to CVD-Friendly palettes if Color Blind Mode is active|
 
 ### Generate JWT
 
@@ -89,6 +94,91 @@ If working with the [ClusterCockpit API]({{< relref "../reference/cc-backend/res
     </td>
   </tr>
 </table>
+
+### CVD-Friendly Color Schemes
+
+These color palettes are based on https://personal.sron.nl/~pault/ and https://tsitsul.in/blog/coloropt/
+
+<table>
+  <tr>
+    <th>Name</th>
+    <th>Colors</th>
+  </tr>
+  <tr>
+    <td>HighContrast</td>
+    <td>
+      <span style="background-color: rgb(221, 170, 51);">&nbsp;&nbsp;&nbsp;</span><span 
+      style="background-color: rgb(187, 85, 102);">&nbsp;&nbsp;&nbsp;</span><span
+      style="background-color: rgb(0, 68, 136);">&nbsp;&nbsp;&nbsp;</span><span 
+      style="background-color: rgb(0, 0, 0);">&nbsp;&nbsp;&nbsp;</span>
+    </td>
+  </tr>
+  <tr>
+    <td>Bright</td>
+    <td>
+      <span style="background-color: rgb(68, 119, 170);">&nbsp;&nbsp;&nbsp;</span><span 
+      style="background-color: rgb(102, 204, 238);">&nbsp;&nbsp;&nbsp;</span><span 
+      style="background-color: rgb(34, 136, 51);">&nbsp;&nbsp;&nbsp;</span><span 
+      style="background-color: rgb(204, 187, 68);">&nbsp;&nbsp;&nbsp;</span><span 
+      style="background-color: rgb(238, 102, 119);">&nbsp;&nbsp;&nbsp;</span><span 
+      style="background-color: rgb(170, 51, 119);">&nbsp;&nbsp;&nbsp;</span><span 
+      style="background-color: rgb(187, 187, 187);">&nbsp;&nbsp;&nbsp;</span>
+    </td>
+  </tr>
+  <tr>
+    <td>Muted</td>
+    <td>
+      <span style="background-color: rgb(51, 34, 136);">&nbsp;&nbsp;&nbsp;</span><span 
+      style="background-color: rgb(136, 204, 238);">&nbsp;&nbsp;&nbsp;</span><span
+      style="background-color: rgb(68, 170, 153);">&nbsp;&nbsp;&nbsp;</span><span
+      style="background-color: rgb(17, 119, 51);">&nbsp;&nbsp;&nbsp;</span><span
+      style="background-color: rgb(153, 153, 51);">&nbsp;&nbsp;&nbsp;</span><span
+      style="background-color: rgb(221, 204, 119);">&nbsp;&nbsp;&nbsp;</span><span 
+      style="background-color: rgb(204, 102, 119);">&nbsp;&nbsp;&nbsp;</span><span 
+      style="background-color: rgb(136, 34,85);">&nbsp;&nbsp;&nbsp;</span><span 
+      style="background-color: rgb(170, 68, 153);">&nbsp;&nbsp;&nbsp;</span><span 
+      style="background-color: rgb(221, 221, 221);">&nbsp;&nbsp;&nbsp;</span>
+    </td>
+  </tr>
+  <tr>
+    <td>NormalSixColor</td>
+    <td>
+      <span style="background-color: rgb(64, 83, 211);">&nbsp;&nbsp;&nbsp;</span><span 
+      style="background-color: rgb(221, 179, 16);">&nbsp;&nbsp;&nbsp;</span><span 
+      style="background-color: rgb(181, 29, 20);">&nbsp;&nbsp;&nbsp;</span><span 
+      style="background-color: rgb(0, 190, 255);">&nbsp;&nbsp;&nbsp;</span><span 
+      style="background-color: rgb(251, 73, 176);">&nbsp;&nbsp;&nbsp;</span><span 
+      style="background-color: rgb(0, 178, 93);">&nbsp;&nbsp;&nbsp;</span><span 
+      style="background-color: rgb(202, 202, 202);">&nbsp;&nbsp;&nbsp;</span>
+    </td>
+  </tr>
+  <tr>
+    <td>NormalTwelveColor</td>
+    <td>
+      <span style="background-color: rgb(235, 172, 35);">&nbsp;&nbsp;&nbsp;</span><span 
+      style="background-color: rgb(184, 0, 88);">&nbsp;&nbsp;&nbsp;</span><span 
+      style="background-color: rgb(0, 140, 249);">&nbsp;&nbsp;&nbsp;</span><span 
+      style="background-color: rgb(0, 110, 0);">&nbsp;&nbsp;&nbsp;</span><span 
+      style="background-color: rgb(0, 187, 173);">&nbsp;&nbsp;&nbsp;</span><span 
+      style="background-color: rgb(209, 99, 230);">&nbsp;&nbsp;&nbsp;</span><span 
+      style="background-color: rgb(178, 69, 2);">&nbsp;&nbsp;&nbsp;</span><span 
+      style="background-color: rgb(255, 146, 135);">&nbsp;&nbsp;&nbsp;</span><span 
+      style="background-color: rgb(89, 84, 214);">&nbsp;&nbsp;&nbsp;</span><span 
+      style="background-color: rgb(0, 198, 248);">&nbsp;&nbsp;&nbsp;</span><span 
+      style="background-color: rgb(135, 133, 0);">&nbsp;&nbsp;&nbsp;</span><span 
+      style="background-color: rgb(0, 167, 108);">&nbsp;&nbsp;&nbsp;</span><span 
+      style="background-color: rgb(189, 189, 189);">&nbsp;&nbsp;&nbsp;</span>
+    </td>
+  </tr>
+</table>
+
+## Support Options
+
+Settings available to the Support User Role are:
+
+|Field|Options|Note|
+|---|---|---|
+|Node List Paging Type|Classic / Continuous|Style of paging in [node list view]({{< ref "nodes#node-list" >}} "Node List")|
 
 ## Admin Options
 

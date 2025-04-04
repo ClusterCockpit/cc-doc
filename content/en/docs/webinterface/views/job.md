@@ -25,7 +25,7 @@ Identical to the job list equivalent, this component displays meta data containi
 
 |Field|Example|Description|Destination|
 |-----|-------|-----------|----|
-|Job Id|`123456`|The JobId of the job assigned by the scheduling daemon|[Job View]({{< ref "job" >}} "Job View")|
+|Job Id|`123456`|The JobId of the job assigned by the scheduling daemon. The icon on the right allows for easy copy to clipboard.|[Job View]({{< ref "job" >}} "Job View")|
 |Job Name|`myJobName`|The name of the job as supplied by the user|-|
 |Username|`abcd10`|The username of the submitting user|[User Jobs]({{< ref "userjobs" >}} "User Jobs")|
 |Project|`abcd`|The name of the usergroup the submitting user belongs to|[Joblist with preset Filter]({{< ref "#filters" >}} "Job List")|
@@ -73,7 +73,7 @@ Metric values colored in blue, however, usually report performance above the exp
 |Red|Warning|Metric value below configured warning threshold|Job performance impacted with high probability - Inspection recommended|
 |Dark Grey|Error|Metric value extremely above maximum configured threshold|Inspection required - Metric spikes in affected metrics can lead to errorneous average values|
 
-{{< alert >}} *Specific to the job view*: In the job view, the footprint component also allows for 1:1 rendering of HTML code, saved within the jobs' meta data secton of the database. This is intended for administrative messages towards the user who created the job, e.g. for displaying warning, hints, or contact information. {{< /alert >}}
+{{< alert >}} *Specific to the job view*: In the job view, the footprint component also allows for 1:1 rendering of HTML code, saved within the jobs' meta data section of the database. This is intended for administrative messages towards the user who created the job, e.g. for displaying warning, hints, or contact information. {{< /alert >}}
 
 #### Examples
 
@@ -91,15 +91,27 @@ Metric values colored in blue, however, usually report performance above the exp
 
 ### Polar Representation
 
-Next to the footprints, a second tab will render the [polar plot]({{< ref "plots#polar-plots" >}} "Polar Plot") representation of the configured footprint metrics. Both the maximum and the average are rendered.
+Next to the footprints, a second tab will render the [polar plot]({{< ref "plots#polar-plots" >}} "Polar Plot") representation of the configured footprint metrics. Minimum, Average and Maximum ranges are rendered.
 
 ### Roofline Representation
 
 A [roofline plot]({{< ref "plots#roofline-plot" >}} "Roofline Plot") representing the utilization of available resources as the relation between computation and memory usage over time (color scale blue -> red).
 
+## Energy Summary
+
+{{< figure src="../../figures/jobview_energysummary.png" alt="Job Energy Summary" width="100%" class="ccfigure mw-xl"
+    caption="Energy Summary for a completed Job with Accelerators. Carbon Emission Estimate is activated."
+>}}
+
+For completed jobs, the energy estimates are shown below the top bar. Energy is shown in kilowatt hours for all contributing metrics. If a constant for `g/kWh` is configured, an additional estimate is calculated which displays the amount of carbon emissions.
+
+{{< alert >}}*Please note:* Energy metrics displayed here are configured. All metrics, for which the `energy` flag is set in the respective metrics' configuration will be shown in this view.
+
+In addition, "Total Energy" is calculated as the sum of all configured metrics, regardless of their origin. I.e., if `core_power` _and_ `cpu_power` are configured, both values contribute to the total energy.{{< /alert >}}
+
 ## Metric Plot Table
 
-The views' middle section consists of [metric plots]({{< ref "plots#metric-plots" >}} "Metric Plot") for each metric selected in the "Metrics" selector, which defaults to all configured metrics.
+The views' middle section consists of [metric plots]({{< ref "plots#metric-plots" >}} "Metric Plot") for each metric selected in the "Select Metrics" menu, which defaults to all configured metrics available to the jobs' `cluster` and `subCluster`.
 
 The data shown per metric defaults to the *smallest* available granularity of the metric with data of *all* nodes, but can be changed at will by using the drop down selectors above each plot.
 
@@ -137,9 +149,11 @@ On the bottom of the job view, additional information about the job is collected
 
 The statistics table collects all metric statistical values (min, max, avg) for each allocated node and each granularity.
 
-The metrics to be displayed can be selected using the "Metrics" selection pop-up window. In the header, next to the metric name, a second drop down allows the selection of the displayed granularity.
+The metrics to be displayed can be selected using the "Select Metrics" selection pop-up window. In the header, next to the metric name, a second drop down allows the selection of the displayed granularity. If no other scopes than `node` are available, the drop down menu is disabled.
 
 Core and Accelerator metrics default to their respective native granularities automatically.
+
+For multi-node jobs, fine granularities are not requested from the backend from the start. A "Load Scopes" will allow for the later load of more scopes, which will apply to all selected metrics in the statistics table, and also to metrics selected later.
 
 ### Job Script
 
