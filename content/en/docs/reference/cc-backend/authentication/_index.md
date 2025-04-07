@@ -88,6 +88,76 @@ If LDAP is configured it is the first authentication method that is tried if a
 user logs in using the login form. A sync with the LDAP directory can also be
 triggered from the command line using the flag `-sync-ldap`.
 
+## OpenID Connect authentication
+
+### Configuration
+
+To enable OpenID Connect authentication the following set of options are
+required below a top-level `oicd` key:
+
+- `provider`: The base URL of your OpenID Connect provider. Example:
+`https://auth.example.com/realms/mycloud`.
+
+Full example:
+
+```
+"oidc": {
+  "provider": "https://auth.server.com:8080/realms/nhr-cloud"
+},
+```
+
+Furthermore the following environment variables have to be set (in the `.env`
+file):
+
+- `OID_CLIENT_ID`: Set this to the Client ID you configured in Keycloak.
+- `OID_CLIENT_SECRET`: Set this to the Client ID secret available in you
+Keycloak Open ID Client configuration.
+
+### Required settings in KeyCloak
+
+The OpenID Connect implementation was only tested against the KeyCloak
+provider.
+
+Steps to setup KeyCloak:
+
+- Create a new realm. This will determine the provider URL.
+- Create a new OpenID Connect client
+- Set a Client ID, the Client ID secret is automatically generated and
+   available at the `Credentials` tab.
+- For Access settings set:
+
+  - `Root URL`: This is the base URL of your cc-backend instance.
+  - `Valid redirect URLs`: Set this to `oidc-callback`. Wildcards did not work
+  for me.
+  - `Web origins`: Set this also to the base URL of your cc-backend instance.
+{{< figure src="access-settings.png" alt="Keycloak Access settings" width="100%" class="ccfigure"
+    caption="Keycloak client Access settings"
+
+>}}
+
+- Enable PKCE:
+
+  - Click on Advanced tab. Further click on Advanced settings on the right side.
+  - Set the option `Proof Key for Code Exchange Code Challenge Method` to
+  `S256`.
+
+{{< figure src="pkce-settings.png" alt="Set PKCE Keycloak option" width="100%" class="ccfigure"
+    caption="Keycloak advanced client settings for PKCE"
+>}}
+
+Everything else can be left to the default. Do not forget to create users in
+your realm before testing.
+
+### Usage
+
+If the `oicd` config key is correctly set and the required environment variables
+are available, an additional button for OpenID Connect Login is shown below the
+login mask. If pressed this button will redirect to the OpenID Connect login.
+
+{{< figure src="oidc-login.png" alt="OpenID Connect login mask" width="100%" class="ccfigure"
+    caption="Login mask with OpenID Connect enabled"
+>}}
+
 ## Local authentication
 
 No configuration is required for local authentication.
