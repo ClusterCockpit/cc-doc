@@ -91,6 +91,8 @@ To override the default, specify the location of a JSON configuration file with 
 scatter plot configuration in analysis view. Default `[["flops_any", "mem_bw"], ["flops_any", "cpu_load"], ["cpu_load", "mem_bw"]]`.
 * `job_view_nodestats_selectedMetrics`: Type array [string]. Initial metrics shown in node statistics table of single job view. Default `["flops_any", "mem_bw", "mem_used"]`.
 * `job_view_selectedMetrics`: Type array [string].  Default `["flops_any", "mem_bw", "mem_used"]`.
+* `job_view_showFootprint`: Type bool. If the [Job Footprint]({{< ref "job#footprint" >}} "Job Footprint") component should be displayed.
+* `job_list_usePaging`: Type bool. If classic paging is used by default for [Job Lists]({{< ref "joblist" >}} "Job Lists"). Can be overridden by user settings.
 * `plot_general_colorBackground`: Type bool. Color plot background according to job average threshold limits. Default `true`.
 * `plot_general_colorscheme`: Type array [string]. Initial color scheme. Default `"#00bfff", "#0000ff", "#ff00ff", "#ff0000", "#ff8000", "#ffff00", "#80ff00"`.
 * `plot_general_lineWidth`: Type int. Initial linewidth. Default `3`.
@@ -101,5 +103,9 @@ scatter plot configuration in analysis view. Default `[["flops_any", "mem_bw"], 
 * `plot_view_showRoofline`: Type bool. Option to toggle roofline plot in single job view. Default `true`.
 * `plot_view_showStatTable`: Type bool. Option to toggle the node statistic table in single job view. Default `true`.
 * `system_view_selectedMetric`: Type string. Initial metric shown in system view. Default `cpu_load`.
+* `analysis_view_selectedTopEntity`: Type string. Defines default entity to load for pie chart. Options: [user, project].
+* `analysis_view_selectedTopCategory`: Type string. Defines default category to load for pie chart. Options: [totalWalltime, totalNodeHours, totalCoreHours, totalAccHours].
+* `status_view_selectedTopUserCategory`: Type string. Defines default category to load for pie chart. Options: [totalJobs, totalNodes, totalCores, totalAccs].
+* `status_view_selectedTopProjectCategory`: Type string. Defines default category to load for pie chart. Options: [totalJobs, totalNodes, totalCores, totalAccs].
 
 Some of the `ui-defaults` values can be appended by `:<clustername>` in order to have different settings depending on the current cluster. Those are notably `job_view_nodestats_selectedMetrics`, `job_view_selectedMetrics` and `plot_list_selectedMetrics`.
