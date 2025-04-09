@@ -7,3 +7,5 @@ tags: [Admin]
 ---
 
 ## Introduction
+
+The `cc-metric-collector` is the main component of ClusterCockpit.
