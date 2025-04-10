@@ -2,13 +2,28 @@
 title: Setup of cc-backend
 weight: 40
 description: How to configure and deploy cc-backend
-categories: [cc-metric-store]
+categories: [cc-backend]
 tags: [Admin]
 ---
 
 ## Introduction
 
-## Recommended workflow for deployment
+`cc-backend` is the main hub within the ClusterCockpit framework. Its
+configuration consists of the main part in `config.json` and the cluster
+configurations in `cluster.json` files, that are part of the
+[job archive]({{< ref "docs/reference/cc-backend/jobarchive" >}}).
+The job archive is a long-term persistent storage for all job meta and metric data.
+The job meta data including job statistics as well as the user data are stored
+in a SQL database.
+
+## Configuration
+
+### `config.json`
+
+For a complete reference of all configuration options see
+[here](/docs/reference/cc-backend/configuration/).
+
+## Workflow for deployment
 
 {{< alert color="danger" title="Why we do not provide a docker container" >}}
 The ClusterCockpit web backend binary has no external dependencies, everything
@@ -23,7 +38,7 @@ It is recommended to install all ClusterCockpit components in a common
 directory, e.g. `/opt/monitoring`, `var/monitoring` or `var/clustercockpit`. In
 the following we use `/opt/monitoring`.
 
-Two systemd services run on the central monitoring server:
+Two Systemd services run on the central monitoring server:
 
 - clustercockpit : binary cc-backend in `/opt/monitoring/cc-backend`.
 - cc-metric-store : Binary cc-metric-store in `/opt/monitoring/cc-metric-store`.
