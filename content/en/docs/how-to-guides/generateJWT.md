@@ -5,10 +5,13 @@ tags: [User, Admin, Developer]
 ---
 
 ## Overview
-ClusterCockpit uses JSON Web Tokens (JWT) for authorization of its APIs.
-JWTs are the industry standard for securing APIs and is also used for example in
-OAuth2. For details on JWTs refer to the [JWT article](/docs/concepts/jwtoken)
-in the Concepts section.
+
+ClusterCockpit uses [JSON Web Tokens](https://jwt.io/introduction) (JWT) for
+authorization of its APIs. JWTs are the industry standard for securing APIs and
+is also used for example in OAuth2. For details on JWTs refer to the [JWT
+article](/docs/concepts/jwtoken) in the Concepts section.
+
+## JWT tokens for cc-backend login and REST API
 
 When a user logs in via the `/login` page using a browser, a session cookie
 (secured using the random bytes in the `SESSION_KEY` env variable you should
@@ -37,8 +40,6 @@ There are two usage scenarios:
 The token is commonly specified in the Authorization HTTP header using the
 Bearer schema. ClusterCockpit uses a ECDSA private/public keypair to sign and
 verify its tokens. You can use `cc-backend` to generate new JWT tokens.
-
-## Workflow
 
 ### Create a new ECDSA Public/private key pair for signing and validating tokens
 
@@ -103,8 +104,28 @@ ClusterCockpit refer to the [JWT article](/docs/concepts/jwtoken).
 
 The [cc-metric-store](https://github.com/ClusterCockpit/cc-metric-store) also
 uses JWTs for authentication. As it does not issue new tokens, it does not need
-to kown the private key. The public key of the keypair that is used to generate
+to know the private key. The public key of the keypair that is used to generate
 the JWTs that grant access to the `cc-metric-store` can be specified in its
 `config.json`. When configuring the `metricDataRepository` object in the
 `cluster.json` file of the job-archive, you can put a token issued by
 `cc-backend` itself.
+
+## Other tools to generate signed tokens
+
+The [golang-jwt](https://github.com/golang-jwt/jwt) project provides a small
+[command line tool](https://github.com/golang-jwt/jwt/tree/main/cmd/jwt)
+to sign and verify tokens. You can install it with:
+
+``` bash
+ go install github.com/golang-jwt/jwt/v5/cmd/jwt
+```
+
+[OpenSSL](https://docs.openssl.org/master/man1/openssl/)
+can be used to generate ED25519 key-pairs:
+
+``` bash
+# Generate ed25519 private key
+openssl genpkey -algorithm ed25519 -out privkey.pem
+# export its public key
+openssl pkey -in privkey.pem -pubout -out pubkey.pem
+```

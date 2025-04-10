@@ -8,14 +8,23 @@ tags: [Developer, Admin]
 
 ## Introduction
 
-ClusterCockpit uses JSON Web Tokens (JWT) for authorization of its APIs.
-JSON Web Token (JWT) is an open standard (RFC 7519) that defines a compact and self-contained way for securely transmitting information between parties as a JSON object.
-This information can be verified and trusted because it is digitally signed.
-In ClusterCockpit JWTs are signed using a public/private key pair using ECDSA.
-Because tokens are signed using public/private key pairs, the signature also certifies that only the party holding the private key is the one that signed it.
-Expiration of the generated tokens as well as the maximum length of a browser session can be configured in the `config.json` file described [here]({{< ref "configuration" >}} "Job Metadata Schema Reference").
+ClusterCockpit uses [JSON Web Tokens](https://jwt.io/introduction) (JWT) for
+authorization of its APIs. JSON Web Token (JWT) is an open standard (RFC 7519)
+that defines a compact and self-contained way for securely transmitting
+information between parties as a JSON object. This information can be verified
+and trusted because it is digitally signed. In ClusterCockpit JWTs are signed
+using a public/private key pair using ECDSA. Because tokens are signed using
+public/private key pairs, the signature also certifies that only the party
+holding the private key is the one that signed it. Expiration of the generated
+tokens as well as the maximum length of a browser session can be configured in
+the `config.json` file described [here]({{< ref "configuration" >}} "Job
+Metadata Schema Reference").
 
-The [Ed25519](https://ed25519.cr.yp.to/) algorithm for signatures was used because it is compatible with other tools that require authentication, such as NATS.io, and because these elliptic-curve methods provide simillar security with smaller keys compared to something like RSA. They are sligthly more expensive to validate, but that effect is negligible.
+The [Ed25519](https://ed25519.cr.yp.to/) algorithm for signatures was used
+because it is compatible with other tools that require authentication, such as
+NATS.io, and because these elliptic-curve methods provide simillar security with
+smaller keys compared to something like RSA. They are sligthly more expensive to
+validate, but that effect is negligible.
 
 ## JWT Payload
 

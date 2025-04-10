@@ -26,10 +26,10 @@ Recognized attributes:
     parent level
     - `"avg"` means that values from the child levels are averaged for the
     parent level
-- `nats`: (optionals)
+- `nats`: (optional)
   - `address`: Url of NATS.io server, example: "nats://localhost:4222"
-  - `username` and `password`: Optional, if provided use those for the connection
-  - `subscriptions`:
+  - `creds-file-path`: Path to a NATS credentials file
+  - `subscriptions` (array of objects):
     - `subscribe-to`: Where to expect the measurements to be published
     - `cluster-tag`: Default value for the cluster tag
 - `http-api`: (required)
@@ -45,7 +45,7 @@ time (required)
   - `directory`: Path to a directory (required)
   - `restore`: After a restart, load the last X seconds/minutes/hours of data
   back into memory (required)
-- `archive`:
+- `archive`: (required)
   - `interval`: Move and compress all checkpoints not needed anymore every X
   seconds/minutes/hours (required)
   - `directory`: Path to a directory (required)
