@@ -65,6 +65,7 @@ installation:
 `mem_bw` for main memory bandwidth and 'flops_any' for flop throughput (double
 precision flops are upscaled to single precision rates). The metric list is an
 integral component for  the configuration of all ClusterCockpit components.
+1. [Planning of deployment]({{< ref prod-deploy >}})
 1. [Configure and deploy]({{< ref prod-ccms >}}) `cc-metric-store`
 1. [Configure and deploy]({{< ref prod-ccmc >}}) `cc-metric-collector`
 1. [Configure and deploy]({{< ref prod-cc-backend >}}) `cc-backend`
