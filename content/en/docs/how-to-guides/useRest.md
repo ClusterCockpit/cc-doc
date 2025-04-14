@@ -43,7 +43,7 @@ These endpoints are secured by JWT authentication. As such, all prerequisites ap
 
 ## User Accessible REST API
 
-These endpoints are secured by JWT authentication. As such, all prerequisites applicable to Json Web Tokens apply in this case as well, e.g. private and public key setup (see: TODO).
+These endpoints are secured by JWT authentication. As such, all prerequisites applicable to Json Web Tokens apply in this case as well, e.g. private and public key setup.
 
 {{< alert >}}
     Endpoints described here can be used by users to write scripted job analysis for their jobs only.
