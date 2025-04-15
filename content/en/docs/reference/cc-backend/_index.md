@@ -1,5 +1,5 @@
 ---
-title: Backend
+title: cc-backend
 description: ClusterCockpit Backend References
 categories: [cc-backend]
 tags: [Backend]

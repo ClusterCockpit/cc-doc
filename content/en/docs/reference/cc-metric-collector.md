@@ -1,5 +1,5 @@
 ---
-title: Metric Collector
+title: cc-metric-collector
 description: ClusterCockpit Metric Collector References
 categories: [cc-metric-collector]
 weight: 3

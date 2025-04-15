@@ -143,7 +143,9 @@ It is first checked if the required configuration options are set:
 * `trustedIssuer`
 * `CookieName`
 
-and optionally the environment variable `CROSS_LOGIN_JWT_PUBLIC_KEY` is set.
+The environment variable `CROSS_LOGIN_JWT_PUBLIC_KEY` is required as well:
+It is used to verify the identity of the `trustedIssuer`.
+The public key must match accordingly.
 
 This authenticator is applied if the configured cookie is present:
 

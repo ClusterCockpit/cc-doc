@@ -9,18 +9,21 @@ The central component of ClusterCockpit is the web- and api backend
 the web interface. If you just want to try the demo and you have a Linux OS you
 can do so using the `cc-backend` [release binary](https://github.com/ClusterCockpit/cc-backend/releases).
 You find detailed instructions on how to setup the demo with the release binary [here](/docs/getting-started/demo-standalone)
-If you have a different OS or want to build `cc-backend` yourself follow the instructions below.
+If you have a different OS or want to build `cc-backend` yourself follow the
+instructions below.
 
 ## Prerequisites
 
 To build `cc-backend` you need:
 
-* A [go compiler](https://go.dev/dl/), version 1.20 or newer. Most recent os environments should have a package with a recent enough version. On MacOS we recommend to use [Homebrew](https://brew.sh) to install on.
+* A [go compiler](https://go.dev/dl/), version 1.20 or newer. Most recent os
+environments should have a package with a recent enough version. On MacOS we
+recommend to use [Homebrew](https://brew.sh) to install on.
 * A node.js environment including the `npm` package manager.
 * A git revision control client.
 * For the demo shell script you need `wget` to download the example job archive
 
-## Try it out!
+## Try it out
 
 {{< youtube id="INPU1d-TGJ0" title="How to get the ClusterCockpit demo up and running" >}}
 
@@ -50,16 +53,20 @@ Open a web browser and access [http://localhost:8080](http://localhost:8080).
 You should see the ClusterCockpit login page:
 {{< figure src="./demo-standalone/cc-login-screen.png" alt="ClusterCockpit Login page" class="ccfigure">}}
 
-Enter `demo` for the Username and `demo` for the Password and press the Submit button. After that the ClusterCockpit index page should be displayed:
-{{< figure src="./demo-standalone/cc-index-screen.png" alt="ClusterCockpit Index page" class="ccfigure">}}
+Enter `demo` for the Username and `demo` for the Password and press the Submit
+button. After that the ClusterCockpit index page should be displayed: {{< figure
+src="./demo-standalone/cc-index-screen.png" alt="ClusterCockpit Index page"
+class="ccfigure">}}
 
-The demo user has the admin role and therefore can see all views.
-{{< alert title="Note" >}}Because the demo only loads data from the job archive some views as the status and systems view do not work!{{< /alert >}}
+The demo user has the admin role and therefore can see all views. {{< alert
+title="Note" >}}Because the demo only loads data from the job archive some views
+as the status and systems view do not work!{{< /alert >}}
 
 For details about the features of the web interface have a look at the [user guide](/docs/userguide).
 
 ## Installation
 
-## Setup
-
-Is there any initial setup users need to do after installation to try your project?
+We provide an [installation manual](/docs/tutorials/prod-intro/) to guide you
+how to plan and configure a production ClusterCockpit deployment. If you are a
+computing center and face problems do not hesitate to ask for help in our
+[communication channels](/community/).

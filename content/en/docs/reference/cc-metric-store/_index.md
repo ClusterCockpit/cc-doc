@@ -1,5 +1,5 @@
 ---
-title: Metric Store
+title: cc-metric-store
 description: ClusterCockpit Metric Store References
 categories: [cc-metric-store]
 tags: [Backend]

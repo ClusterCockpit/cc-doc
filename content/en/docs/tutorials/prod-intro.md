@@ -29,10 +29,16 @@ ClusterCockpit requires the following components:
   SQL database backends.
 - A **batch job scheduler adapter** that provides the job meta information to
   `cc-backend`. This is done by using the provided REST api for starting and
-  stopping jobs. For Slurm there is a Python based solution
-  ([cc-slurm-sync](https://github.com/ClusterCockpit/cc-slurm-sync) )
-  maintained by PC2 Paderborn is available. For HTCondor there also exists
-  [cc-condor-sync](https://github.com/ClusterCockpit/cc-condor-sync).
+  stopping jobs. Currently available adapters:
+
+  - Slurm: Python based solution
+  ([cc-slurm-sync](https://github.com/ClusterCockpit/cc-slurm-sync)) maintained
+  by PC2 Paderborn
+  - Slurm: Golang based solution
+  ([cc-slurm-adapter](https://github.com/ClusterCockpit/cc-slurm-adapter)) maintained
+  by NHR@FAU
+  - HTCondor: [cc-condor-sync](https://github.com/ClusterCockpit/cc-condor-sync)
+  maintained by Saarland University
 
 ## Server Hardware
 
@@ -54,18 +60,19 @@ systemd services.
 We recommended the following order for planning and configuring a ClusterCockpit
 installation:
 
-1. **Setup your metric list**: With two exceptions you are in general free which
-   metrics you want choose. Those exceptions are: `mem_bw` for main memory
-   bandwidth and 'flops_any' for flop throughput (double precision flops are
-   upscaled to single precision rates). You can find a discussion of useful metrics
-   and their naming [here]({{< ref prod-metric-list >}}). This metric list is an
-   integral component for  the configuration of all ClusterCockpit components.
-1. Configure and deploy `cc-metric-store`.
-1. Configure and deploy `cc-metric-collector`. For a detailed description on how
-   to setup cc-metric-collector have a look at
-   {{< ref "prod-ccmc" >}}
-1. Configure and deploy `cc-backend`
+1. [Setup your metric list]({{< ref prod-metric-list >}}): With two exceptions
+   you are in general free which metrics you want choose. Those exceptions are:
+`mem_bw` for main memory bandwidth and 'flops_any' for flop throughput (double
+precision flops are upscaled to single precision rates). The metric list is an
+integral component for  the configuration of all ClusterCockpit components.
+1. [Planning of deployment]({{< ref prod-deploy >}})
+1. [Configure and deploy]({{< ref prod-ccms >}}) `cc-metric-store`
+1. [Configure and deploy]({{< ref prod-ccmc >}}) `cc-metric-collector`
+1. [Configure and deploy]({{< ref prod-cc-backend >}}) `cc-backend`
 1. Setup batch job scheduler adapter
+
+You can find complete example production configurations in the
+[cc-examples](https://github.com/ClusterCockpit/cc-examples) repository.
 
 ## Common problems
 
