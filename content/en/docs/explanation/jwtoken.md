@@ -17,8 +17,8 @@ using a public/private key pair using ECDSA. Because tokens are signed using
 public/private key pairs, the signature also certifies that only the party
 holding the private key is the one that signed it. Expiration of the generated
 tokens as well as the maximum length of a browser session can be configured in
-the `config.json` file described [here]({{< ref "configuration" >}} "Job
-Metadata Schema Reference").
+the `config.json` file described
+[here]({{< ref "docs/reference/cc-backend/configuration" >}} "Job Metadata Schema Reference").
 
 The [Ed25519](https://ed25519.cr.yp.to/) algorithm for signatures was used
 because it is compatible with other tools that require authentication, such as
