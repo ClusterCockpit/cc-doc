@@ -15,12 +15,22 @@ VERBOSITY = False
 
 regex_html_comment_open = re.compile("<!--")
 regex_html_comment_close = re.compile("-->")
-regex_reference = re.compile("\[(.+)\]\(([^\)]+)\)")
+regex_reference = re.compile("\[(.+?)\]\((.+?)\)")
 regex_github_url_repo_name = re.compile(".+/(.+)\.git")
 hugo_reference_format = '[{}]({{{{< ref "{}" >}}}})'
 regex_url_cc_lib = re.compile("https://github.com/ClusterCockpit/cc\-lib/blob/main/(.+)\.md")
 replace_url_cc_lib = r'{{{{< ref "docs/reference/cc-lib/{}" >}}}}'
+regex_url_cc_collector = re.compile("https://github.com/ClusterCockpit/cc\-metric\-collector/blob/main/(.+)\.md")
+replace_url_cc_collector = r'{{{{< ref "docs/reference/cc-metric-collector/{}" >}}}}'
+regex_url_cc_collector_main = re.compile("https://github.com/ClusterCockpit/cc\-metric\-collector(.*)")
+replace_url_cc_collector_main = r'{{{{< ref "docs/reference/cc-metric-collector/" >}}}}'
 to_404 = '[{}]({{{{< ref "404" >}}}})'
+
+url_replacers = {
+    regex_url_cc_lib : replace_url_cc_lib,
+    regex_url_cc_collector : replace_url_cc_collector,
+    regex_url_cc_collector_main : replace_url_cc_collector_main,
+}
 
 def get_github_repo(url, folder=".", branch="main"):
     p = None
@@ -144,11 +154,17 @@ for doc, header in files.items():
                 m = regex_reference.search(l)
                 if m:
                     key, value = m.groups()
-                    cclib = regex_url_cc_lib.match(value)
-                    if cclib:
-                        value = cclib.group(1).replace(".md", "").replace("README", "")
-              
-                        lm = re.sub(regex_reference, "[{}]({})".format(key, replace_url_cc_lib.format(value)), lm)
+                    for regex in url_replacers:
+                        rm = regex.search(value)
+                        if rm:
+                            if len(m.groups()) > 1:
+                                print(regex, rm.groups())
+                                
+                                value = rm.group(1).replace(".md", "").replace("README", "")
+                                lm = re.sub(regex_reference, "[{}]({})".format(key, url_replacers[regex].format(value)), lm)
+                            else:
+                                lm = re.sub(regex_reference, "[{}]({})".format(key, url_replacers[regex]), lm)
+
                     if value.startswith("./docs"):
                         lm = re.sub(regex_reference, hugo_reference_format.format(key, "404"), lm)
                     elif value.startswith(".") and "md" in value:
