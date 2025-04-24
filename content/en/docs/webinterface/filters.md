@@ -85,7 +85,7 @@ Select a named node or specify an amount of used resources, and display only job
 
 *Options:*
 
-* Named node free text field: Enter a hostname here to only return jobs which were ran on this node.
+* Named node free text field: Enter a hostname here to only return jobs which were ran on this node. Select the desired match logic (Defaults to "Equal", i.e. exact match).
 * Range selectors: Select a range of allocated job resources ranging from the minimal to the maximum configured resource count of all clusters. If the [cluster filter]({{< ref "#clusterpartition" >}} "Cluster Filter") is set, the ranges are limited to the respective resources' configuration. Available resources are:
   * Nodes
   * HWThreads

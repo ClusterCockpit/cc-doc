@@ -31,12 +31,14 @@ Endpoints described here should be restricted to administrators only, as they in
 |----------|--------|---------|-------------|
 | `/api/users/`                 | GET         | - | Lists all Users |
 | `/api/clusters/`              | GET         | - | Lists all Clusters |
+| `/api/tags/`                  | DELETE      | JSON Payload | Removes payload array of tags specified with `Type, Name, Scope` from DB. Private Tags cannot be removed. |
 | `/api/jobs/start_job/`        | POST, PUT   | JSON Payload | Starts Job |
 | `/api/jobs/stop_job/`         | POST, PUT   | JSON Payload | Stops Jobs |
 | `/api/jobs/`                  | GET         | URL-Query Params | Lists Jobs |
 | `/api/jobs/{id}`              | POST        | $id, JSON Payload | Loads specified job metadata |
 | `/api/jobs/{id}`              | GET         | $id | Loads specified job with metrics |
-| `/api/jobs/tag_job/{id}`      | POST, PATCH | $id, JSON Payload | Tags specified job with tag ids in payload |
+| `/api/jobs/tag_job/{id}`      | POST, PATCH | $id, JSON Payload | Adds payload array of tags specified with `Type, Name, Scope` to Job with $id. Tags are created in BD. |
+| `/api/jobs/tag_job/{id}`      | POST, PATCH | $id, JSON Payload | Removes payload array of tags specified with `Type, Name, Scope` from Job with $id. Tags remain in DB. |
 | `/api/jobs/edit_meta/{id}`    | POST, PATCH | $id, JSON Payload | Edits meta_data db colums info |
 | `/api/jobs/metrics/{id}`      | GET         | $id, URL-Query Params | Loads specified jobmetrics for metric and scope params |
 | `/api/jobs/delete_job/`       | DELETE      | JSON Payload | Deletes job specified in payload |
