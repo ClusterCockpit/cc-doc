@@ -46,7 +46,8 @@ Below is a production configuration enabling the following functionality:
 - Enable to initiate a user session via an JWT token, e.g. by an IDM portal
 - Drop permission after privileged ports are taken
 - Use compression for metric data files in job archive
-- enable re-sampling of timeseries metric data for long jobs
+- Allow access to the REST API from all IPs
+- enable re-sampling of time-series metric data for long jobs
 - Configure three clusters using one local `cc-metric-store`
 - Use a sqlite database (this is the default)
 
@@ -81,6 +82,9 @@ Below is a production configuration enabling the following functionality:
             "policy": "none"
         }
     },
+    "apiAllowedIPs": [
+      "*"
+    ],
     "enable-resampling": {
               "trigger": 30,
               "resolutions": [
