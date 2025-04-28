@@ -6,7 +6,7 @@ tags: [Backend]
 weight: 1
 ---
 
-A detailed description of each of the application configuration options can be found in the [config documentation]({{< ref "configuration" >}} "CC-Backend Configuration").
+A detailed description of each of the application configuration options can be found in the [config documentation]({{< ref "docs/reference/cc-backend/configuration" >}} "CC-Backend Configuration").
 
 The following schema in its raw form can be found in the [ClusterCockpit GitHub](https://github.com/ClusterCockpit/cc-backend/tree/master/pkg/schema/schemas) repository.
 
