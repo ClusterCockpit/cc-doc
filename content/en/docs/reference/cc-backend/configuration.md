@@ -14,7 +14,7 @@ To override the default, specify the location of a JSON configuration file with 
 ## Configuration Options
 
 * `addr`: Type string.  Address where the http (or https) server will listen on (for example: 'localhost:80'). Default `:8080`.
-* `apiAllowedIPs`: Type array [string].  Addresses from which the secured API endpoints (/users and other auth related endpoints)  can be reached
+* `apiAllowedIPs`: Type array [string].  Wildcard `*` or IPv4 addresses from which the secured administrator API endpoint functions `/api/*` can be reached.
 * `user`: Type string. Drop root permissions once .env was read and the port was taken. Only applicable if using privileged port.
 * `group`: Type string.  Drop root permissions once .env was read and the port was taken. Only applicable if using privileged port.
 * `disable-authentication`: Type bool.  Disable authentication (for everything: API, Web-UI, ...). Default `false`.

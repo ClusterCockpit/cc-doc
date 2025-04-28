@@ -57,4 +57,8 @@ This reference is rendered using the `swaggerui` plugin based on the original de
 This means that all interactivity ("Try It Out") will not return actual data. However, a `Curl` call and a compiled `Request URL` will still be displayed, if an API endpoint is executed.
 {{< /alert >}}
 
+{{< alert title="Administrator API" >}}
+Endpoints displayed here correspond to the administrator `/api/` endpoints, but user-accessible `/userapi/` endpoints are functionally identical. See [these lists]({{< ref "userest" >}} "How-To REST API") for information about accessibility.
+{{< /alert >}}
+
 {{< swagger-ui "https://raw.githubusercontent.com/ClusterCockpit/cc-backend/refs/heads/master/api/swagger.json" >}}
