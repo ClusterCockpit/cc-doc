@@ -4,7 +4,7 @@ description: >
   All Metrics of One Selected Node
 categories: [cc-backend]
 tags: [Frontend, Admin]
-weight: 13
+weight: 14
 ---
 
 {{< figure src="../../figures/nodeview.png" alt="Node View" width="100%" class="ccfigure mw-xl"

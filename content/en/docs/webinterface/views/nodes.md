@@ -4,7 +4,7 @@ description: >
   Node Based Metric Information of one Cluster
 categories: [cc-backend]
 tags: [Frontend, Admin]
-weight: 12
+weight: 13
 ---
 
 ## Node Overview
