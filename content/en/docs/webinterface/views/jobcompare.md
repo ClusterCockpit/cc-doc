@@ -8,7 +8,7 @@ weight: 4
 ---
 
 {{< figure src="../../figures/compare_list.png" alt="Job List With Compare Switch" width="100%" class="ccfigure mw-xl"
-    caption="Job list with compare switch. In this example, we bail."
+    caption="Job list with compare switch. In this example, filters return 145 jobs, while no job is selected manually."
 >}}
 
 Accessible from the job list primary view, the job compare view allows for the comparison of metric statistics in a pseudo-time-dependent manner.
@@ -29,7 +29,7 @@ Manual job selection will also work if the current job list has more than 500 re
 ## Fixed Compare Elements
 
 {{< figure src="../../figures/compare_top.png" alt="Job Compare Options and Resource Compare" width="100%" class="ccfigure mw-xl"
-    caption="Job list with compare switch. In this example, we bail."
+    caption="Job compare view top elements. The count of 145 jobs remains after switching to this view. The resource plot shows jobs sorted by their startTime, and all jobs have allocated accelerators (red data line)."
 >}}
 
 The compare view features a reduced header:
@@ -57,7 +57,7 @@ The legend includes further information, such as:
 ## Selectable Compare Elements
 
 {{< figure src="../../figures/compare_down.png" alt="Job Compare Metric Plot and Table" width="100%" class="ccfigure mw-xl"
-    caption="Job list with compare switch. In this example, we bail."
+    caption="Job compare view metric plot and table. 'Clock' metric statistics are plotted for every job sorted by their startTime. All information is also shown as sortable table at the bottom of the compare view."
 >}}
 
 Below the resource compare plot, the individual metric compare plots are rendered. For each job, the `Min/Max/Avg` of the respective metric is plotted in a banded manner.
