@@ -4,7 +4,7 @@ description: >
   Hardware Usage Information
 categories: [cc-backend]
 tags: [Frontend, Admin]
-weight: 16
+weight: 17
 ---
 
 The status view is always called in respect to one specified cluster. It displays the current state of utilization of the respective clusters resources, as well as user and project top lists and distribution histograms of the allocated resources per job.

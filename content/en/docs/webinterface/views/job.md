@@ -4,7 +4,7 @@ description: >
   Detailed Single Job Information View
 categories: [cc-backend]
 tags: [Frontend, User, Manager, Support, Admin]
-weight: 4
+weight: 5
 ---
 
 {{< figure src="../../figures/jobview.png" alt="Job View" width="100%" class="ccfigure mw-xl"

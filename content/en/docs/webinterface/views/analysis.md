@@ -4,7 +4,7 @@ description: >
   Metric Data Analysis View
 categories: [cc-backend]
 tags: [Frontend, Support, Admin]
-weight: 14
+weight: 15
 ---
 
 {{< figure src="../../figures/analysis.png" alt="Analysis View" width="100%" class="ccfigure mw-xl"

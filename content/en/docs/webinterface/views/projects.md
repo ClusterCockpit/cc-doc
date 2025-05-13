@@ -4,7 +4,7 @@ description: >
   Table of All Projects Running Jobs on the Clusters
 categories: [cc-backend]
 tags: [Frontend, Support, Admin]
-weight: 8
+weight: 9
 ---
 
 {{< figure src="../../figures/projecttable.png" alt="User Table" width="100%" class="ccfigure mw-lg"

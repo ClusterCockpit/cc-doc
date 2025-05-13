@@ -4,7 +4,7 @@ description: >
   Table of All Users Running Jobs on the Clusters
 categories: [cc-backend]
 tags: [Frontend, Manager, Support, Admin]
-weight: 6
+weight: 7
 ---
 
 {{< figure src="../../figures/usertable.png" alt="User Table" width="100%" class="ccfigure mw-lg"
