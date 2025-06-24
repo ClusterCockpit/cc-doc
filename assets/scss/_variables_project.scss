@@ -1,56 +1,81 @@
 /*
 Add styles or override variables from the theme here.
 */
-$td-enable-google-fonts: false;
+$primary: rgb(255, 255, 255) !default;
+$primary-light: lighten($primary, 75%) !default;
+$secondary: #2d70de !default;
+$light: rgb(255, 255, 255) !default;
+$grey: #888 !default;
+$orange: $secondary;
+$td-sidebar-tree-root-color: #222 !default;
 
-$primary: #0751A6;
+$enable-shadows: false;
+
+.nav-shadow {
+  box-shadow: 0 2px 2px -2px rgba(0, 0, 0, 0.2);
+}
+
+.navbar-brand {
+  color: black !important;
+}
+
+.navbar-bg-onscroll {
+  box-shadow: 0 2px 2px -2px rgba(0, 0, 0, 0.2);
+  #agones-top {
+    display: block !important;
+  }
+}
+
+.control-bar {
+  display: none;
+}
 
 /*
 Custom Classes
 */
 
 figure.ccfigure {
-    padding: 0.5rem;
-    border-width: 1px;
-    border-style: solid;
-    border-color: lightgray;
-    border-radius: 5px;
-    text-align: center;
+  padding: 0.5rem;
+  border-width: 1px;
+  border-style: solid;
+  border-color: lightgray;
+  border-radius: 5px;
+  text-align: center;
 }
 
 figure.ccfigure > figcaption > p {
-    border-top: 1px solid gray;
-    padding-top: 0.5rem;
-    margin-top: 0.5rem;
-    margin-bottom: 0rem;
-    text-align: left;
+  border-top: 1px solid gray;
+  padding-top: 0.5rem;
+  margin-top: 0.5rem;
+  margin-bottom: 0rem;
+  text-align: left;
 }
 
 figure.mw-xl > img {
-    max-width: 992px;
+  max-width: 992px;
 }
 
 /* 224px less */
 figure.mw-lg > img {
-    max-width: 768px;
+  max-width: 768px;
 }
 
 /* 192px less */
 figure.mw-md > img {
-    max-width: 576px;
+  max-width: 576px;
 }
 
 /* 96px less */
 figure.mw-sm > img {
-    max-width: 480px;
+  max-width: 480px;
 }
 
 /* 96px less */
 figure.mw-xs > img {
-    max-width: 384px;
+  max-width: 384px;
 }
 
 /* 48px less */
 figure.mw-xxs > img {
-    max-width: 336px;
+  max-width: 336px;
 }

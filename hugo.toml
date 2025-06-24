@@ -80,7 +80,7 @@ style = "tango"
 section = ["HTML", "print", "RSS"]
 
 [params]
-copyright = "ClusterCockpit Team"
+copyright = "ClusterCockpit Project"
 privacy_policy = "/privacy"
 
 # First one is picked as the Twitter card image if not set on page.
@@ -139,6 +139,7 @@ url = "https://v1-3-1.clustercockpit.org"
 
 # User interface configuration
 [params.ui]
+showLightDarkModeMenu = true
 #  Set to true to disable breadcrumb navigation.
 breadcrumb_disable = false
 # Set to true to disable the About link in the site footer
@@ -148,7 +149,7 @@ navbar_logo = false
 # Set to true if you don't want the top navbar to be translucent when over a `block/cover`, like on the homepage.
 navbar_translucent_over_cover_disable = false
 # Enable to show the side bar menu in its compact state.
-sidebar_menu_compact = true
+sidebar_menu_compact = false
 # Set to true to hide the sidebar search box (the top nav search box will still be displayed if search is enabled)
 sidebar_search_disable = false
 
