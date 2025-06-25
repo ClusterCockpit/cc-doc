@@ -4,18 +4,17 @@ min, med, max, full. */}} {{ $height := .Get "height" | default "max" }}
   class="row td-cover-block td-cover-block--height-{{ $height }} js-td-cover td-overlay td-overlay--light -bg-{{ $col_id }}"
 >
   <div class="container td-overlay__inner">
-    <div class="row justify-content-center align-items-end">
-      <div class="col col-lg-4" id="cover-title">
+    <div class="row justify-content-center">
+      <div class="col" id="cover-title">
         <h1 class="display-1 mt-0 pb-3">
-          <img alt="ClusterCockpit" width="98" src="images/logo.svg" />
-          ClusterCockpit
+          <img alt="ClusterCockpit" width="300" src="images/logo.svg" />
         </h1>
-        <p class="display-2 mb-0">
+        <p class="display-4 mb-0">
           Job-specific Performance and Energy Monitoring for HPC Clusters
         </p>
       </div>
-      <div class="col col-lg-auto mt-1 mt-lg-3 d-none d-md-block">
-        <img alt="ClusterCockpit Job list" src="images/cc-joblist.jpg" />
+      <div class="col-4">
+        <img class="img-fluid" alt="ClusterCockpit Job list" src="images/cc-joblist.jpg" />
       </div>
       <div class="col-12 pt-3">
         <div class="pt-3 lead text-center">{{ .Inner }}</div>

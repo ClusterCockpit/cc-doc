@@ -139,7 +139,6 @@ url = "https://v1-3-1.clustercockpit.org"
 
 # User interface configuration
 [params.ui]
-showLightDarkModeMenu = true
 #  Set to true to disable breadcrumb navigation.
 breadcrumb_disable = false
 # Set to true to disable the About link in the site footer
