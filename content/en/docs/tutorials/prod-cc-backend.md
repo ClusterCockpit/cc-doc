@@ -418,7 +418,9 @@ Here is an example:
 Since it is tedious to write this by hand, we provide a
 [Perl script](https://github.com/ClusterCockpit/cc-backend/blob/master/configs/generate-subcluster.pl)
 as part of `cc-backend` that generates a subCluster template. This script only
-works if the `LIKWID` tools are installed and in the PATH.
+works if the `LIKWID` tools are installed and in the PATH. You also need the
+`LIKWID` library for cc-metric-store. You find instructions on how to install
+`LIKWID` [here](https://github.com/RRZE-HPC/likwid/wiki/Build).
 
 The resource ID for cores is the OS processor ID. For GPUs we recommend to use
 the PCI-E address as resource ID.

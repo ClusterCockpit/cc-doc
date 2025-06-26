@@ -1,0 +1,24 @@
+{{ $col_id := .Get "color" | default "dark" }} {{/* Height can be one of: auto,
+min, med, max, full. */}} {{ $height := .Get "height" | default "max" }}
+<section
+  class="row td-cover-block td-cover-block--height-{{ $height }} js-td-cover td-overlay td-overlay--light -bg-{{ $col_id }}"
+>
+  <div class="container td-overlay__inner">
+    <div class="row justify-content-center">
+      <div class="col" id="cover-title">
+        <h1 class="display-1 mt-0 pb-3">
+          <img alt="ClusterCockpit" width="300" src="images/logo.svg" />
+        </h1>
+        <p class="display-4 mb-0">
+          Job-specific Performance and Energy Monitoring for HPC Clusters
+        </p>
+      </div>
+      <div class="col-4">
+        <img class="img-fluid" alt="ClusterCockpit Job list" src="images/cc-joblist.jpg" />
+      </div>
+      <div class="col-12 pt-3">
+        <div class="pt-3 lead text-center">{{ .Inner }}</div>
+      </div>
+    </div>
+  </div>
+</section>

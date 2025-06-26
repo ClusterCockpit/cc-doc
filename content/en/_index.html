@@ -1,0 +1,89 @@
+---
+title: ClusterCockpit
+---
+
+{{< blocks/cover title="" image_anchor="top" height="min" color="white" >}}
+<div class="mx-auto">
+	<a class="btn btn-lg btn-secondary mr-3 mb-4" href="{{< relref "/docs" >}}">
+		Learn More <i class="fas fa-arrow-alt-circle-right ml-2"></i>
+	</a>
+<a class="btn btn-lg btn-secondary me-3 mb-4" href="/docs/getting-started/">
+Get started
+</a>
+	<div class="mx-auto mt-5">
+		{{< blocks/link-down color="secondary" >}}
+	</div>
+</div>
+{{< /blocks/cover >}}
+
+{{% blocks/lead color="secondary" %}}
+ClusterCockpit is a framework for job-specific performance and energy monitoring
+on HPC clusters with a focus on simple installation and maintenance, high
+security and intuitive usage.
+{{% /blocks/lead %}}
+
+{{< blocks/section color="dark" type="row" >}}
+
+{{% blocks/feature icon="fas fa-server" title="Scalable" %}}
+<p>Supports multiple clusters in one web interface. Scales to thousands of nodes and millions of jobs.
+Supports heterogeneous clusters with and without node sharing.</p>
+{{% /blocks/feature %}}
+
+{{% blocks/feature icon="fas fa-wrench" title="Slurm integration" url="https://github.com/ClusterCockpit/cc-slurm-adapter" %}}
+<p>Comes with a ready to use Slurm integration. Can be integrated with any batch job scheduler via a REST API.</p>
+{{% /blocks/feature %}}
+
+{{% blocks/feature icon="fas fa-display" title="Modern Web UI" url="./docs/webinterface/" %}}
+<p>Responsive web interface with job specific, node, user, and system views. Provides metric plots, aggregate statistics,
+  roofline plots and ressource table, and access to job script. Fully user configurable. </p>
+{{% /blocks/feature %}}
+
+{{% blocks/feature icon="fas fa-chart-simple" title="Global access to metric data" url="./docs/tutorials/prod-metric-list/" %}}
+<p>
+  Access to configurable set of metrics including hardware performance counter data. Comes with powerful HPC centric node agent,
+  but can also be integrated with other node agent solutions.
+</p>
+{{% /blocks/feature %}}
+
+{{% blocks/feature icon="fas fa-lock" title="Authentication methods" url="./docs/reference/cc-backend/authentication/" %}}
+<p>Supports local accounts, LDAP, and KeyCloak OpenID Connect.
+  Can be integrated with existing user portals using JWT based authentication.</p>
+{{% /blocks/feature %}}
+
+{{% blocks/feature icon="fas fa-users" title="User roles" url="./docs/explanation/roles/" %}}
+<p>Supports roles for users, project managers, support personnel, and administrators.
+  Users can only see their own jobs.
+{{% /blocks/feature %}}
+
+{{% blocks/feature icon="fas fa-filter" title="Job sorting and filtering" url="./docs/webinterface/filters/" %}}
+<p>Powerful sorting of jobs according to all job metadata attributes. Filter for job metadata and aggregate metric data attributes.
+</p>
+{{% /blocks/feature %}}
+
+{{% blocks/feature icon="fas fa-magnifying-glass" title="Unified search bar" url="./docs/webinterface/searchbar/" %}}
+<p>A unified search bar allows to search for job ids, job names, project ids, usernames, and names.
+</p>
+{{% /blocks/feature %}}
+
+{{% blocks/feature icon="fas fa-tag" title="Job tagging" url="./docs/webinterface/views/tags/" %}}
+<p>Jobs can be tagged. Job tags are grouped by type and can have a configurable visibility using a scope attribute.
+</p>
+{{% /blocks/feature %}}
+
+
+{{< /blocks/section >}}
+
+{{< blocks/section color="secondary" type="row" >}}
+<div class="col">
+	<h2 class="text-center pb-3">HPC Centers using ClusterCockpit</h2>
+	<p class="text-center showcase">
+		<a href="https://hpc.fau.de"><img alt="NHR@FAU" height="50" src="images/nhrfau.png" /></a>
+		<a href="https://dkrz.de"><img alt="DKRZ" height="50" src="images/dkrz.png" /></a>
+		<a href="https://pc2.uni-paderborn.de/"><img alt="Paderborn PC2" height="50" src="images/paderborn.png" /></a>
+		<a href="https://www.hrz.tu-darmstadt.de">TU Darmstadt, </a>
+		<a href="https://www.it-services.ruhr-uni-bochum.de">Ruhr University Bochum, </a>
+		<a href="">University Duisburg-Essen</a>
+	</p>
+</div>
+{{< /blocks/section >}}
+
