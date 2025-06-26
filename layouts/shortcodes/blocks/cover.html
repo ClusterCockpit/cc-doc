@@ -7,14 +7,18 @@ min, med, max, full. */}} {{ $height := .Get "height" | default "max" }}
     <div class="row justify-content-center">
       <div class="col" id="cover-title">
         <h1 class="display-1 mt-0 pb-3">
-          <img alt="ClusterCockpit" width="300" src="images/logo.svg" />
+          <img alt="ClusterCockpit" width="300" src="images/logo.png" />
         </h1>
         <p class="display-4 mb-0">
           Job-specific Performance and Energy Monitoring for HPC Clusters
         </p>
       </div>
       <div class="col-4">
-        <img class="img-fluid" alt="ClusterCockpit Job list" src="images/cc-joblist.jpg" />
+        <img
+          class="img-fluid"
+          alt="ClusterCockpit Job list"
+          src="images/cc-joblist.jpg"
+        />
       </div>
       <div class="col-12 pt-3">
         <div class="pt-3 lead text-center">{{ .Inner }}</div>
