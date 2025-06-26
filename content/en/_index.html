@@ -11,7 +11,7 @@ title: ClusterCockpit
 Get started
 </a>
 	<div class="mx-auto mt-5">
-		{{< blocks/link-down color="light-secondary" >}}
+		{{< blocks/link-down color="secondary" >}}
 	</div>
 </div>
 {{< /blocks/cover >}}
@@ -23,68 +23,67 @@ security and intuitive usage.
 {{% /blocks/lead %}}
 
 {{< blocks/section color="dark" type="row" >}}
-{{% blocks/feature icon="fas fa-file-code" title="Orchestrate Game Servers" url="./docs/getting-started/" %}}
-<p>Define and manage groups of ready gameservers through YAML configuration or API calls.</p>
+
+{{% blocks/feature icon="fas fa-server" title="Scalable" %}}
+<p>Supports multiple clusters in one web interface. Scales to thousands of nodes and millions of jobs.
+Supports heterogeneous clusters with and without node sharing.</p>
 {{% /blocks/feature %}}
 
-{{% blocks/feature icon="fas fa-wrench" title="Integrate any Engine" url="./docs/guides/client-sdks/" %}}
-<p>Integrated SDK for managing game server lifecycle, health and configuration.
-
-Tools for local development included!</p>
+{{% blocks/feature icon="fas fa-wrench" title="Slurm integration" url="https://github.com/ClusterCockpit/cc-slurm-adapter" %}}
+<p>Comes with a ready to use Slurm integration. Can be integrated with any batch job scheduler via a REST API.</p>
 {{% /blocks/feature %}}
 
-
-{{% blocks/feature icon="fas fa-chart-area" title="Metrics and Monitoring" url="./docs/guides/metrics/" %}}
-<p>Integration with <a href="https://opencensus.io/">OpenCensus</a>
-for platform-independent game server metrics and monitoring dashboards</p>
+{{% blocks/feature icon="fas fa-display" title="Modern Web UI" url="./docs/webinterface/" %}}
+<p>Responsive web interface with job specific, node, user, and system views. Provides metric plots, aggregate statistics,
+  roofline plots and ressource table, and access to job script. Fully user configurable. </p>
 {{% /blocks/feature %}}
 
-{{% blocks/feature icon="fas fa-wrench" title="Integrate any Engine" url="./docs/guides/client-sdks/" %}}
-<p>Integrated SDK for managing game server lifecycle, health and configuration.
-
-Tools for local development included!</p>
+{{% blocks/feature icon="fas fa-chart-simple" title="Global access to metric data" url="./docs/tutorials/prod-metric-list/" %}}
+<p>
+  Access to configurable set of metrics including hardware performance counter data. Comes with powerful HPC centric node agent,
+  but can also be integrated with other node agent solutions.
+</p>
 {{% /blocks/feature %}}
 
+{{% blocks/feature icon="fas fa-lock" title="Authentication methods" url="./docs/reference/cc-backend/authentication/" %}}
+<p>Supports local accounts, LDAP, and KeyCloak OpenID Connect.
+  Can be integrated with existing user portals using JWT based authentication.</p>
+{{% /blocks/feature %}}
 
-{{% blocks/feature icon="fas fa-chart-area" title="Metrics and Monitoring" url="./docs/guides/metrics/" %}}
-<p>Integration with <a href="https://opencensus.io/">OpenCensus</a>
-for platform-independent game server metrics and monitoring dashboards</p>
+{{% blocks/feature icon="fas fa-users" title="User roles" url="./docs/explanation/roles/" %}}
+<p>Supports roles for users, project managers, support personnel, and administrators.
+  Users can only see their own jobs.
+{{% /blocks/feature %}}
+
+{{% blocks/feature icon="fas fa-filter" title="Job sorting and filtering" url="./docs/webinterface/filters/" %}}
+<p>Powerful sorting of jobs according to all job metadata attributes. Filter for job metadata and aggregate metric data attributes.
+</p>
+{{% /blocks/feature %}}
+
+{{% blocks/feature icon="fas fa-magnifying-glass" title="Unified search bar" url="./docs/webinterface/searchbar/" %}}
+<p>A unified search bar allows to search for job ids, job names, project ids, usernames, and names.
+</p>
+{{% /blocks/feature %}}
+
+{{% blocks/feature icon="fas fa-tag" title="Job tagging" url="./docs/webinterface/views/tags/" %}}
+<p>Jobs can be tagged. Job tags are grouped by type and can have a configurable visibility using a scope attribute.
+</p>
 {{% /blocks/feature %}}
 
 
 {{< /blocks/section >}}
 
-{{< blocks/section color="primary" type="row" >}}
+{{< blocks/section color="secondary" type="row" >}}
 <div class="col">
-	<h2 class="text-center pb-3">Companies using Agones</h2>
+	<h2 class="text-center pb-3">HPC Centers using ClusterCockpit</h2>
 	<p class="text-center showcase">
-		<img alt="ubisoft" width="100" src="images/ubisoft.png" />
-		<a href="http://supersolid.com/"><img alt="supersolid" width="100" src="images/supersolid.png" /></a>
-		<a href="http://www.yager.de/"><img alt="yager" width="100" src="images/yagerdevelopment.png" /></a>
-		<a href="http://mcmahan.games/"><img alt="mcmahan.games" width="100" src="images/mcmahangames.png" /></a>
-		<a href="http://altavr.io/"><img alt="altavr" width="100" src="images/altavr-logo.png" /></a>
-		<a href="http://www.embark.games/"><img alt="Embark Studios" width="50" src="images/embark.png" /></a>
-		<a href="http://accelbyte.io/"><img alt="accelbyte" width="100" src="images/accelbyte.png" /></a>
-		<a href="https://rolltable.app/"><img alt="rolltable" width="100" src="images/rolltable.png" /></a>
-		<a href="https://vela.games/" data-proofer-ignore><img alt="Vela Games" width="100" src="images/velagames.png" /></a>
-		<a href="https://netspeakgames.com//"><img alt="Netspeak Games" width="100" src="images/netspeakgames.png" /></a>
-		<a href="https://afterverse.com/" data-proofer-ignore><img alt="Afterverse" width="100" src="images/afterverse.svg" /></a>
-		<a href="https://rocketbotroyale.winterpixel.io/"><img alt="Winterpixel Games" width="100" src="images/winterpixel.png" /></a>
-		<a href="https://vizor-games.com"><img alt="Vizor Games" width="100" src="images/vizor-games.png" /></a>
-		<a href="https://acceleratxr.com"><img alt="AcceleratXR" width="100" src="images/acceleratxr.png" /></a>
-		<a href="https://gamefabric.com/"><img alt="GameFabric by Nitrado" width="100" src="images/gamefabric-nitrado.png" /></a>
+		<a href="https://hpc.fau.de"><img alt="NHR@FAU" height="50" src="images/nhrfau.png" /></a>
+		<a href="https://dkrz.de"><img alt="DKRZ" height="50" src="images/dkrz.png" /></a>
+		<a href="https://pc2.uni-paderborn.de/"><img alt="Paderborn PC2" height="50" src="images/paderborn.png" /></a>
+		<a href="https://www.hrz.tu-darmstadt.de">TU Darmstadt, </a>
+		<a href="https://www.it-services.ruhr-uni-bochum.de">Ruhr University Bochum, </a>
+		<a href="">University Duisburg-Essen</a>
 	</p>
 </div>
 {{< /blocks/section >}}
 
-{{% blocks/section color="secondary" type="row" %}}
-
-{{% blocks/feature icon="fab fa-github" title="Contributions welcome!" url="<https://github.com/ClusterCockpit/>" %}}
-We do a [Pull Request](https://github.com/ClusterCockpit/cc-backend/pulls) contributions workflow on **GitHub**. New users are always welcome!
-{{% /blocks/feature %}}
-
-{{% blocks/feature icon="fa-solid fa-comment" title="How to reach us!" url="/community/" %}}
-For getting support and propose feature requests.
-{{% /blocks/feature %}}
-
-{{% /blocks/section %}}

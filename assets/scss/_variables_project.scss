@@ -1,40 +1,23 @@
 /*
 Add styles or override variables from the theme here.
 */
-$primary: rgb(255, 255, 255) !default;
+$primary: rgb(42, 105, 205) !default;
 $primary-light: lighten($primary, 75%) !default;
-$secondary: #2d70de !default;
+$secondary: rgb(32, 112, 222) !default;
 $light: rgb(255, 255, 255) !default;
-$grey: #888 !default;
+$grey: rgb(41, 86, 120) !default;
 $orange: $secondary;
 $td-sidebar-tree-root-color: #222 !default;
 
 $td-enable-google-fonts: false;
+$enable-shadows: false;
 
-$navbar-light-color: rgb(255, 255, 255);
-$navbar-dark-color: rgb(80, 80, 80);
-
-.navbar-brand {
-  color: black !important;
+.showcase img {
+  margin: 0 30px;
 }
 
 #cover-title {
-    max-width: 800px;
-}
-
-.nav-shadow {
-    box-shadow: 0 2px 2px -2px rgba(0,0,0,.2);
-}
-
-.navbar-brand {
-    color: black !important
-}
-
-.navbar-bg-onscroll {
-    box-shadow: 0 2px 2px -2px rgba(0,0,0,.2);
-    #agones-top {
-        display: block !important;
-    }
+  max-width: 800px;
 }
 
 /*
@@ -88,5 +71,5 @@ figure.mw-xxs > img {
 }
 
 .nav-link {
-    margin-right: 20px !important;
+  margin-right: 20px !important;
 }
