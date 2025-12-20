@@ -137,6 +137,10 @@ url = "https://v1-2-2.clustercockpit.org"
 version = "v1.3.1"
 url = "https://v1-3-1.clustercockpit.org"
 
+[[params.versions]]
+version = "v1.4.4"
+url = "https://v1-4-4.clustercockpit.org"
+
 # User interface configuration
 [params.ui]
 #  Set to true to disable breadcrumb navigation.
