@@ -4,43 +4,37 @@ description: Settings and issues specific to the current release
 weight: 1
 ---
 
-## New performance and energy footprint configuration
+## Major changes
 
-In previous versions `cc-backend` used a set of hard-coded metrics for the
-performance footprint. The database had dedicated columns for each of these
-metric stats in order to filter jobs using those performance metrics.
-Because you may want to use different footprints on an accelerated cluster
-compared to a standard multi-core system, this is a severe restriction.
-Version 1.4.0 of `cc-backend` introduces a new string attribute `footprint` for metrics
-in the `cluster.json` configuration of the job archive. This allows you do
-define your individual performance footprint for every cluster and optionally
-subcluster. This also enables you to change the footprint configuration if required.
-The footprint metrics will be used in the footprint UI component
-shown in job views and optionally job lists. They are also used for the metrics
-shown in the polar plot and are available for sorting and filtering jobs.
+- **Metric store integration**: The previously external `cc-metric-store`
+  component was integrated into `cc-backend`. In this process the configuration
+  for the metric store was made much simpler. It is not possible to use an
+  external time-series database. It is possible though to either send the metric
+  data to multiple time-series backends or to forward all metric-data to `cc-backend`.
+- **Drop support for MySQL/MariaDB**: We only support SQLite from now on. SQLite
+  performance better and requires less administration.
+- **New slurm adapter**: We provide now an official slurm batch job adapter with
+  tighter slurm integration. The REST API should still work but was extended to
+  also provide Slurm node and job states. The job and node-state API is offered
+  as REST API or via NATS.
+- **Revised configuration**: The structure of the configuration was unified and
+  consolidated. It can now be distributed via multiple files. The UI
+  configuration can be selectively configured. Defaults for the metric plots can
+  be configured per cluster/subcluster.
+- **Switch to more flexible .env handling**:
 
-Metrics configured as footprints are collected as aggregated `key:value` pairs
-in one JSON object for every job, either on job completion, or during runtime in
-configurable intervals. The JSON object itself is written to the database
-in a single dedicated column named `footprint`.
+### New experimental features
 
-{{< alert >}}
-*Please note:* In order to guarantee a seamless update, follow the
-instructions on updating the `cluster.json` and migrating the database on this page.
-With missing configuration of the `footprint` attribute, only existing jobs will show
-`footprint` data after update and database migration, while subsequently completed jobs
-will not be updated due to missing information, and therefore show no footprint data.
-{{< /alert >}}
+- **Automatic Job taggers**: It is possible to automatically detect application
+  types and classify pathological jobs and tag jobs accordingly. The tagger
+  rules are specified in rules.
+- **Alternative job-archive backends**: As alternatives to the file-based job
+  archives there exist now an **SQLite** and **S3** compatible object store backends.
 
-Moreover, `cc-backend` also provides an energy footprint configuration now.
-This is a set of metrics that are used to calculate the total energy used by a
-job. The metrics used for the energy footprint are also marked using a new
-attribute `energy` in the cluster metric configurations.
+## What you need to do
 
-### What you need to do
-
-You need to adapt all of your `cluster.json` files in the job archive marking
-all footprint or energy metrics.
+You need to adapt your central `config.json` and all of your `cluster.json`
+files in the job archive marking all footprint or energy metrics.
 
 Here is an example how to mark a footprint metric:
 
@@ -160,10 +154,10 @@ manually to 2 by editing `./var/job-archive/version.txt`
 
 ## Database migration
 
-This release requires to migrate your database to version 8. Backup your
+This release requires to migrate your database to version 10. Backup your
 database before migration! Depending on your database size this may take a long
-time. In our case with a database file size of 50GB it took more than eight
-hours.
+time. In our case with a database file size of 75GB it took more than 48
+hours. Most of this time is spent on rebuilding the indices.
 
 To migrate the database run the following command:
 
@@ -171,14 +165,13 @@ To migrate the database run the following command:
 cc-backend -migrate-db
 ```
 
-The migration creates the new footprint column and updates its JSON object for
-existing jobs using the old footprint columns. Moreover it sets the global
-scope for all existing tags and creates additional indices to speed up common
-queries.
+The migration creates
 
 ## Configuration changes
 
-You can find a complete configuration example [here](https://github.com/ClusterCockpit/cc-examples/tree/main/nhr%40fau).
+GitHub Repository with [complete configuration examples](https://github.com/ClusterCockpit/cc-examples/tree/main/nhr%40fau).
+All configuration options are now checked against a JSON schema.
+The required options are significantly reduced.
 
 ### Enable timeseries resampling
 
