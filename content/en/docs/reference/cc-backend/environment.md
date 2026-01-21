@@ -24,14 +24,13 @@ run ./tools/gen-keypair/`. The release binaries also include the
   authentication service (optional)
 - `OID_CLIENT_ID`: OpenID connect client id (optional)
 - `OID_CLIENT_SECRET`: OpenID connect client secret (optional)
-- `PROMETHEUS_PASSWORD`: Password for the Prometheus user (optional)
 
 ## Template `.env` file
 
 Below is an example `.env` file.
 Copy it as `.env` into the project root and adapt it for your needs.
 
-``` text
+```text
 # Base64 encoded Ed25519 keys (DO NOT USE THESE TWO IN PRODUCTION!)
 # You can generate your own keypair using `go run tools/gen-keypair/main.go`
 JWT_PUBLIC_KEY="kzfYrYy+TzpanWZHJ5qSdMj5uKUWgq74BWhQG6copP0="

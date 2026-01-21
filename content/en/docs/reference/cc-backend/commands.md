@@ -15,9 +15,17 @@ This page describes the command line options for the `cc-backend` executable.
 -add-user <username>:[admin,support,manager,api,user]:<password>
 ```
 
-*Function:* Adds a new user to the database. Only one role can be assigned.
+_Function:_ Add a new user. Only one role can be assigned.
 
-*Example:* `-add-user abcduser:manager:somepass`
+_Example:_ `-add-user abcduser:manager:somepass`
+
+---
+
+```txt
+  -apply-tags
+```
+
+_Function:_ Run taggers on all completed jobs and exit.
 
 ---
 
@@ -25,11 +33,11 @@ This page describes the command line options for the `cc-backend` executable.
   -config <path>
 ```
 
-*Function:* Specifies alternative path to application configuration file.
+_Function:_ Specify alternative path to `config.json`.
 
-*Default:* `./config.json`
+_Default:_ `./config.json`
 
-*Example:* `-config ./configfiles/configuration.json`
+_Example:_ `-config ./configfiles/configuration.json`
 
 ---
 
@@ -37,9 +45,9 @@ This page describes the command line options for the `cc-backend` executable.
   -del-user <username>
 ```
 
-*Function:* Removes a user from the database by username.
+_Function:_ Remove an existing user.
 
-*Example:* `-del-user abcduser`
+_Example:_ `-del-user abcduser`
 
 ---
 
@@ -47,7 +55,15 @@ This page describes the command line options for the `cc-backend` executable.
   -dev
 ```
 
-*Function:* Enables development components: GraphQL Playground and Swagger UI.
+_Function:_ Enable development components: GraphQL Playground and Swagger UI.
+
+---
+
+```txt
+  -force-db
+```
+
+_Function:_ Force database version, clear dirty flag and exit.
 
 ---
 
@@ -55,7 +71,7 @@ This page describes the command line options for the `cc-backend` executable.
   -gops
 ```
 
-*Function:* Go server listens via github.com/google/gops/agent (for debugging).
+_Function:_ Listen via github.com/google/gops/agent (for debugging).
 
 ---
 
@@ -63,9 +79,9 @@ This page describes the command line options for the `cc-backend` executable.
   -import-job <path-to-meta.json>:<path-to-data.json>, ...
 ```
 
-*Function:* Import one or more jobs by comma seperated list of paths to `meta.json` and `data.json`.
+_Function:_ Import a job. Argument format: `<path-to-meta.json>:<path-to-data.json>,...`
 
-*Example:* `-import-job ./to-import/job1-meta.json:./to-import/job1-data.json,./to-import/job2-meta.json:./to-import/job2-data.json`
+_Example:_ `-import-job ./to-import/job1-meta.json:./to-import/job1-data.json,./to-import/job2-meta.json:./to-import/job2-data.json`
 
 ---
 
@@ -73,7 +89,7 @@ This page describes the command line options for the `cc-backend` executable.
   -init
 ```
 
-*Function:* Setups `var` directory. Initializes sqlite database file, `config.json` and `.env` environment variable file.
+_Function:_ Setup var directory, initialize sqlite database file, config.json and .env.
 
 ---
 
@@ -81,7 +97,8 @@ This page describes the command line options for the `cc-backend` executable.
   -init-db
 ```
 
-*Function:* Iterates the job-archive and re-initializes the 'job', 'tag', and 'jobtag' tables based on archived jobs.
+_Function:_ Go through job-archive and re-initialize the `job`, `tag`, and
+`jobtag` tables (all running jobs will be lost!).
 
 {{< alert color="warning">}}**Caution:** All running jobs will be lost!{{< /alert >}}
 
@@ -91,9 +108,9 @@ This page describes the command line options for the `cc-backend` executable.
   -jwt <username>
 ```
 
-*Function:* Generates and prints a JWT for the user specified by its username.
+_Function:_ Generate and print a JWT for the user specified by its username.
 
-*Example:* `-jwt abcduser`
+_Example:_ `-jwt abcduser`
 
 ---
 
@@ -101,7 +118,7 @@ This page describes the command line options for the `cc-backend` executable.
   -logdate
 ```
 
-*Function:* Set this flag to add date and time to log messages.
+_Function:_ Set this flag to add date and time to log messages.
 
 ---
 
@@ -109,13 +126,13 @@ This page describes the command line options for the `cc-backend` executable.
   -loglevel <level>
 ```
 
-*Function:* Sets the loglevel of the running ClusterCockpit instance. "Debug" will print all levels, "Crit" will only log critical log messages.
+_Function:_ Sets the logging level.
 
-*Arguments:* `debug | info | warn | err | crit`
+_Arguments:_ `debug | info | warn | err | crit`
 
-*Default:* `info`
+_Default:_ `warn`
 
-*Example:* `-loglevel debug`
+_Example:_ `-loglevel debug`
 
 ---
 
@@ -123,7 +140,15 @@ This page describes the command line options for the `cc-backend` executable.
   -migrate-db
 ```
 
-*Function:* Migrate database to latest supported version and exit.
+_Function:_ Migrate database to supported version and exit.
+
+---
+
+```txt
+  -revert-db
+```
+
+_Function:_ Migrate database to previous version and exit.
 
 ---
 
@@ -131,7 +156,8 @@ This page describes the command line options for the `cc-backend` executable.
   -server
 ```
 
-*Function:* Start a server, continues listening on configured port (Default: `:8080`) after initialization and argument handling.
+_Function:_ Start a server, continues listening on port after initialization and
+argument handling.
 
 ---
 
@@ -139,7 +165,7 @@ This page describes the command line options for the `cc-backend` executable.
   -sync-ldap
 ```
 
-*Function:* Synchronizes the 'user' table with LDAP.
+_Function:_ Sync the `hpc_user` table with ldap.
 
 ---
 
@@ -147,4 +173,4 @@ This page describes the command line options for the `cc-backend` executable.
   -version
 ```
 
-*Function:* Shows version information and exits.
+_Function:_ Show version information and exit.

@@ -6,12 +6,12 @@ weight: 1
 
 ## What does it do?
 
-ClusterCockpit is a monitoring framework for job-specific performance and power
-analysis on distributed HPC clusters. It is designed with a strong focus on ease
+ClusterCockpit is a framework for job-specific performance and power
+monitoring on distributed HPC clusters. It is designed with a strong focus on ease
 of installation and maintenance, high security, and intuitive usability.
 
 ClusterCockpit provides a modern web interface offering tailored views for
-different user groups:
+different user groups.
 
 ### For HPC users
 
@@ -60,7 +60,7 @@ metadata and metrics—is **persisted to a JSON based job archive**.
 
 cc-backend supports multiple archive backends:
 
-- A simple file-based archive
+- A file-based archive
 - A single-file SQLite-based archive
 - An S3-compatible object store
 

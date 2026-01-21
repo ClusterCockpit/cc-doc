@@ -7,12 +7,19 @@ tags: [Backend]
 weight: 2
 ---
 
-CC-Backend requires a JSON configuration file. The configuration files is
+`cc-backend` requires a JSON configuration file. The configuration files is
 structured into components. Every component is configured either in a separate
-JSON object or using a separate file.
+JSON object or using a separate file. When a section is put in a separate file
+the section key has to have a `-file` suffix.
 
-To override the default, specify the location of a JSON configuration file with
-the `-config <file path>` command line option.
+Example:
+
+```json
+"auth-file": "./var/auth.json"
+```
+
+To override the default config file path, specify the location of a JSON
+configuration file with the `-config <file path>` command line option.
 
 ## Configuration Options
 
@@ -41,8 +48,8 @@ Section must exist.
 - `enable-job-taggers`: Type bool (Optional). Enable automatic job taggers for
   application and job class detection. Requires to provide tagger rules. Default:
   `false`.
-- `validate`: Type bool (Optional). Validate all input json documents against
-  json schema. Default: `false`.
+- `validate`: Type bool (Optional). Validate all input JSON documents against
+  JSON schema. Default: `false`.
 - `session-max-age`: Type string (Optional). Specifies for how long a session
   shall be valid as a string parsable by time.ParseDuration(). If 0 or empty, the
   session/token does not expire! Default `168h`.
@@ -56,7 +63,7 @@ Section must exist.
 - `short-running-jobs-duration`: Type int (Optional). Do not show running jobs
   shorter than X seconds. Default `300`.
 - `emission-constant`: Type integer (Optional). Energy Mix CO2 Emission Constant
-  [g/kWh]. If entered, ui displays estimated CO2 emission for job based on jobs'
+  [g/kWh]. If entered, UI displays estimated CO2 emission for job based on jobs'
   total Energy.
 - `enable-resampling`: Type object (Optional). If configured, will enable
   dynamic downsampling of metric data using the configured values.
@@ -76,7 +83,7 @@ Section must exist.
 
 Section is optional.
 
-- `address`: Type string. Address of the NATS server (e.g., 'nats://localhost:4222').
+- `address`: Type string. Address of the NATS server (e.g., `nats://localhost:4222`).
 - `username`: Type string (Optional). Username for NATS authentication.
 - `password`: Type string (Optional). Password for NATS authentication (optional).
 - `creds-file-path`: Type string (Optional). Path to NATS credentials file for
@@ -146,7 +153,7 @@ Section must exist.
     user table with LDAP directory. Parsed using time.ParseDuration.
   - `sync-del-old-users`: Type bool (Optional). Delete obsolete users in database.
   - `sync-user-on-login`: Type bool (Optional). Add non-existent user to DB at
-    login attempt if user exists in Ldap directory.
+    login attempt if user exists in LDAP directory.
 - `oidc`: Type object (Optional). For OpenID Connect Authentication. Default `nil`.
   - `provider`: Type string (required). OpenID Connect provider URL.
   - `sync-user-on-login`: Type bool. Add non-existent user to DB at login attempt
@@ -165,36 +172,90 @@ Section must exist.
   buffers still used by long running jobs will be freed.
 - `num-workers`: Type integer (Optional). Number of concurrent workers for
   checkpoint and archive operations. Default: If not set defaults to
-  min(runtime.NumCPU()/2+1, 10)
+  `min(runtime.NumCPU()/2+1, 10)`
+- `checkpoints`: Type object (required). Configuration for checkpointing the
+  metrics buffers
+  - `file-format`: Type string (Optional). Format to use for checkpoint files.
+    Can be JSON or Avro. Default: Avro.
+  - `interval`: Type string (required). Interval at which the metrics should be
+    checkpointed. Expression must be parsable by `time.ParseDuration()`. Usually
+    the unit is hours. E.g. `12h`.
+  - `directory`: Type string (Optional). Path in which the checkpoints should be
+    placed. Default: `./var/checkpoints`.
+- `cleanup`: Type object (Optional). Configuration for the cleanup process. If
+  not set the `mode` is `delete` with `interval` set to the `retention-in-memory`
+  interval.
+  - `mode`: Type string (Optional). The mode for cleanup. Can be `delete` or
+    `archive`. Default: `delete`.
+  - `interval`: Type string (Optional). Interval at which the cleanup runs.
+  - `directory`: Type string (required if mode is `archive`). Directory where to
+    put the archive
+    files.
 - `nats-subscriptions`: Type array (Optional). List of NATS subjects the metric
   store should subscribe to. Items are of type object with the following
   attributes:
-  - `subscribe-to`: Type string (required). NATS subkect to subscribe to.
+  - `subscribe-to`: Type string (required). NATS subject to subscribe to.
   - `cluster-tag`: Type string (Optional). Allow lines without a cluster tag,
     use this as default.
 
-## UI Default Object Fields
+### Section `ui`
 
-- `analysis_view_histogramMetrics`: Type array [string]. Metrics to show as job count histograms in analysis view. Default `["flops_any", "mem_bw", "mem_used"]`.
-- `analysis_view_scatterPlotMetrics`: Type array of string array. Initial
-  scatter plot configuration in analysis view. Default `[["flops_any", "mem_bw"], ["flops_any", "cpu_load"], ["cpu_load", "mem_bw"]]`.
-- `job_view_nodestats_selectedMetrics`: Type array [string]. Initial metrics shown in node statistics table of single job view. Default `["flops_any", "mem_bw", "mem_used"]`.
-- `job_view_selectedMetrics`: Type array [string]. Default `["flops_any", "mem_bw", "mem_used"]`.
-- `job_view_showFootprint`: Type bool. If the [Job Footprint]({{< ref "job#footprint" >}} "Job Footprint") component should be displayed.
-- `job_list_usePaging`: Type bool. If classic paging is used by default for [Job Lists]({{< ref "joblist" >}} "Job Lists"). Can be overridden by user settings.
-- `plot_general_colorBackground`: Type bool. Color plot background according to job average threshold limits. Default `true`.
-- `plot_general_colorscheme`: Type array [string]. Initial color scheme. Default `"#00bfff", "#0000ff", "#ff00ff", "#ff0000", "#ff8000", "#ffff00", "#80ff00"`.
-- `plot_general_lineWidth`: Type int. Initial linewidth. Default `3`.
-- `plot_list_jobsPerPage`: Type int. Jobs shown per page in job lists. Default `50`.
-- `plot_list_selectedMetrics`: Type array [string]. Initial metric plots shown in jobs lists. Default `"cpu_load", "ipc", "mem_used", "flops_any", "mem_bw"`.
-- `plot_view_plotsPerRow`: Type int. Number of plots per row in single job view. Default `3`.
-- `plot_view_showPolarplot`: Type bool. Option to toggle polar plot in single job view. Default `true`.
-- `plot_view_showRoofline`: Type bool. Option to toggle roofline plot in single job view. Default `true`.
-- `plot_view_showStatTable`: Type bool. Option to toggle the node statistic table in single job view. Default `true`.
-- `system_view_selectedMetric`: Type string. Initial metric shown in system view. Default `cpu_load`.
-- `analysis_view_selectedTopEntity`: Type string. Defines default entity to load for pie chart. Options: [user, project].
-- `analysis_view_selectedTopCategory`: Type string. Defines default category to load for pie chart. Options: [totalWalltime, totalNodeHours, totalCoreHours, totalAccHours].
-- `status_view_selectedTopUserCategory`: Type string. Defines default category to load for pie chart. Options: [totalJobs, totalNodes, totalCores, totalAccs].
-- `status_view_selectedTopProjectCategory`: Type string. Defines default category to load for pie chart. Options: [totalJobs, totalNodes, totalCores, totalAccs].
+The `ui` section specifies defaults for the web user interface. The defaults
+which metrics to show in different views can be overwritten per cluster or
+subcluster.
 
-Some of the `ui-defaults` values can be appended by `:<clustername>` in order to have different settings depending on the current cluster. Those are notably `job_view_nodestats_selectedMetrics`, `job_view_selectedMetrics` and `plot_list_selectedMetrics`.
+- `job-list`: Type object (Optional). Job list defaults. Applies to user and
+  jobs views.
+  - `use-paging`: Type bool (Optional). If classic paging is used instead of
+    continuous scrolling by default.
+  - `show-footprint`: Type bool (Optional). If footprint bars are shown as first
+    column by default.
+- `node-list`: Type object (Optional). Node list defaults. Applies to node list
+  view.
+  - `use-paging`: Type bool (Optional). If classic paging is used instead of
+    continuous scrolling by default.
+- `job-view`: Type object (Optional). Job view defaults.
+  - `show-polar-plot`: Type bool (Optional). If the job metric footprints polar
+    plot is shown by default.
+  - `show-footprint`: Type bool (Optional). If the annotated job metric
+    footprint bars are shown by default.
+  - `show-roofline`: Type bool (Optional). If the job roofline plot is shown by
+    default.
+  - `show-stat-table`: Type bool (Optional). If the job metric statistics table
+    is shown by default.
+- `metric-config`: Type object (Optional). Global initial metric selections for
+  primary views of all clusters.
+  - `job-list-metrics`: Type array [string] (Optional). Initial metrics shown
+    for new users in job lists (User and jobs view).
+  - `job-view-plot-metrics`: Type array [string] (Optional). Initial metrics
+    shown for new users as job view metric plots.
+  - `job-view-table-metrics`: Type array [string] (Optional). Initial metrics
+    shown for new users in job view statistics table.
+  - `clusters`: Type array of objects (Optional). Overrides for global defaults
+    by cluster and subcluster.
+    - `name`: Type string (required). The name of the cluster.
+    - `job-list-metrics`: Type array [string] (Optional). Initial metrics shown
+      for new users in job lists (User and jobs view) for this cluster.
+    - `job-view-plot-metrics`: Type array [string] (Optional). Initial metrics
+      shown for new users as job view timeplots for this cluster.
+    - `job-view-table-metrics`: Type array [string] (Optional). Initial metrics
+      shown for new users in job view statistics table for this cluster.
+    - `sub-clusters`: Type array of objects (Optional). The array of overrides
+      per subcluster.
+      - `name`: Type string (required). The name of the subcluster.
+      - `job-list-metrics`: Type array [string] (Optional). Initial metrics
+        shown for new users in job lists (User and jobs view) for subcluster.
+      - `job-view-plot-metrics`: Type array [string] (Optional). Initial metrics
+        shown for new users as job view timeplots for subcluster.
+      - `job-view-table-metrics`: Type array [string] (Optional). Initial
+        metrics shown for new users in job view statistics table for subcluster.
+- `plot-configuration`: Type object (Optional). Initial settings for plot render
+  options.
+  - `color-background`: Type bool (Optional). If the metric plot backgrounds are
+    initially colored by threshold limits.
+  - `plots-per-row`: Type integer (Optional). How many plots are initially
+    rendered per row. Applies to job, single node, and analysis views.
+  - `line-width`: Type integer (Optional). Initial thickness of rendered
+    plotlines. Applies to metric plot, job compare plot and roofline.
+  - `color-scheme`: Type array [string] (Optional). Initial colorScheme to be
+    used for metric plots.
