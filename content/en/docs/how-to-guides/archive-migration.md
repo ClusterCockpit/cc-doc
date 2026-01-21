@@ -23,6 +23,11 @@ It is recommended to make a backup copy of the job-archive before each update.
 
 ## Migrating the job archive
 
+{{< alert title="Notice" >}}
+Don't forget to also migrate archive jobs in case you use an archive retention
+policy!. Archive migration is only supported from the previous archive version.
+{{< /alert >}}
+
 Job archive migration requires a separate tool (`archive-migration`), which is
 part of the cc-backend source tree (build with `go build ./tools/archive-migration`)
 and is also provided as part of the releases.
