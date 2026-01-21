@@ -45,96 +45,95 @@ Below is a production configuration enabling the following functionality:
 - Enable authentication and user syncing via an LDAP directory
 - Enable to initiate a user session via an JWT token, e.g. by an IDM portal
 - Drop permission after privileged ports are taken
+- enable re-sampling of time-series metric data for long jobs
+- Enable NATS for job and metric store APIs
+- Set metric in memory retention to 48h
+- Set upper memory capping for internal metric store to 100GB
+- Enable archiving of metric data
+- Using S3 as job archive backend. Note: The file based archive in
+  `./var/job-archive` is the default.
+
+Not included below but set by the default settings:
+
 - Use compression for metric data files in job archive
 - Allow access to the REST API from all IPs
-- enable re-sampling of time-series metric data for long jobs
-- Configure three clusters using one local `cc-metric-store`
-- Use a sqlite database (this is the default)
 
 ```json
 {
-  "addr": "0.0.0.0:443",
-  "short-running-jobs-duration": 300,
-  "ldap": {
-    "url": "ldaps://hpcldap.rrze.uni-erlangen.de",
-    "user_base": "ou=people,ou=hpc,dc=rrze,dc=uni-erlangen,dc=de",
-    "search_dn": "cn=hpcmonitoring,ou=roadm,ou=profile,ou=hpc,dc=rrze,dc=uni-erlangen,dc=de",
-    "user_bind": "uid={username},ou=people,ou=hpc,dc=rrze,dc=uni-erlangen,dc=de",
-    "user_filter": "(&(objectclass=posixAccount))",
-    "sync_interval": "24h"
+  "main": {
+    "addr": "0.0.0.0:443",
+    "https-cert-file": "/etc/letsencrypt/live/url/fullchain.pem",
+    "https-key-file": "/etc/letsencrypt/live/url/privkey.pem",
+    "user": "clustercockpit",
+    "group": "clustercockpit",
+    "short-running-jobs-duration": 300,
+    "enable-job-taggers": true,
+    "resampling": {
+      "minimum-points": 600,
+      "trigger": 180,
+      "resolutions": [240, 60]
+    },
+    "api-subjects": {
+      "subject-job-event": "cc.job.event",
+      "subject-node-state": "cc.node.state"
+    }
   },
-  "jwts": {
-    "syncUserOnLogin": true,
-    "updateUserOnLogin": true,
-    "validateUser": false,
-    "trustedIssuer": "https://portal.hpc.fau.de/",
-    "max-age": "168h"
+  "nats": {
+    "address": "nats://x.x.x.x:4222",
+    "username": "root",
+    "password": "root"
   },
-  "https-cert-file": "/etc/letsencrypt/live/monitoring.nhr.fau.de/fullchain.pem",
-  "https-key-file": "/etc/letsencrypt/live/monitoring.nhr.fau.de/privkey.pem",
-  "user": "clustercockpit",
-  "group": "clustercockpit",
+  "auth": {
+    "jwts": {
+      "max-age": "2000h"
+    },
+    "ldap": {
+      "url": "ldaps://hpcldap.rrze.uni-erlangen.de",
+      "user_base": "ou=people,ou=hpc,dc=rz,dc=uni,dc=de",
+      "search_dn": "cn=hpcmonitoring,ou=roadm,ou=profile,ou=hpc,dc=rz,dc=uni,dc=de",
+      "user_bind": "uid={username},ou=people,ou=hpc,dc=rrze,dc=uni,dc=de",
+      "user_filter": "(&(objectclass=posixAccount))",
+      "sync_interval": "24h"
+    }
+  },
+  "cron": {
+    "commit-job-worker": "1m",
+    "duration-worker": "5m",
+    "footprint-worker": "10m"
+  },
   "archive": {
-    "kind": "file",
-    "path": "./var/job-archive",
-    "compression": 7,
+    "kind": "s3",
+    "endpoint": "http://x.x.x.x",
+    "bucket": "jobarchive",
+    "access-key": "xx",
+    "secret-key": "xx",
     "retention": {
-      "policy": "none"
+      "policy": "move",
+      "age": 365,
+      "location": "./var/archive"
     }
   },
-  "apiAllowedIPs": ["*"],
-  "enable-resampling": {
-    "trigger": 30,
-    "resolutions": [600, 300, 120, 60]
+  "metric-store": {
+    "memory-cap": 100,
+    "retention-in-memory": "48h",
+    "cleanup": {
+      "mode": "archive",
+      "directory": "./var/archive"
+    },
+    "nats-subscriptions": [
+      {
+        "subscribe-to": "hpc-nats",
+        "cluster-tag": "fritz"
+      },
+      {
+        "subscribe-to": "hpc-nats",
+        "cluster-tag": "alex"
+      }
+    ]
   },
-  "emission-constant": 317,
-  "clusters": [
-    {
-      "name": "fritz",
-      "metricDataRepository": {
-        "kind": "cc-metric-store",
-        "url": "http://localhost:8082",
-        "token": "XYZ"
-      },
-      "filterRanges": {
-        "numNodes": { "from": 1, "to": 64 },
-        "duration": { "from": 0, "to": 86400 },
-        "startTime": { "from": "2022-01-01T00:00:00Z", "to": null }
-      }
-    },
-    {
-      "name": "alex",
-      "metricDataRepository": {
-        "kind": "cc-metric-store",
-        "url": "http://localhost:8082",
-        "token": "XYZ"
-      },
-      "filterRanges": {
-        "numNodes": { "from": 1, "to": 64 },
-        "duration": { "from": 0, "to": 86400 },
-        "startTime": { "from": "2022-01-01T00:00:00Z", "to": null }
-      }
-    },
-    {
-      "name": "woody",
-      "metricDataRepository": {
-        "kind": "cc-metric-store",
-        "url": "http://localhost:8082",
-        "token": "XYZ"
-      },
-      "filterRanges": {
-        "numNodes": { "from": 1, "to": 1 },
-        "duration": { "from": 0, "to": 172800 },
-        "startTime": { "from": "2020-01-01T00:00:00Z", "to": null }
-      }
-    }
-  ]
+  "ui-file": "ui-config.json"
 }
 ```
-
-The cluster names have to match the clusters configured in the job-archive. The
-filter ranges in the cluster configuration affect the filter UI limits in
-frontend views and should reflect your typical job properties.
 
 Further reading:
 

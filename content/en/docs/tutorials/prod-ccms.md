@@ -6,13 +6,16 @@ categories: [cc-metric-store]
 tags: [Admin]
 ---
 
+{{< alert title="Note" >}}The current external cc-metric-store is deprecated.
+Its role in the future will be for redundancy reasons.{{< /alert >}}
+
 ## Introduction
 
 The `cc-metric-store` provides an in-memory metric timeseries cache. It is
 configured via a JSON configuration file (`config.json`). Metrics are received
 via messages using the ClusterCockpit [ccMessage protocol](https://github.com/ClusterCockpit/cc-specifications/tree/master/interfaces/lineprotocol).
 It can receive messages via a HTTP REST api or by subscribing to a NATS subject.
-Requesting  data is at the moment only possible via a HTTP REST api.
+Requesting data is at the moment only possible via a HTTP REST api.
 
 ## Configuration
 
@@ -20,7 +23,7 @@ For a complete list of configuration options see
 [here]({{< ref "docs/reference/cc-metric-store/ccms-configuration" >}}).
 Minimal example of a configuration file:
 
-``` json
+```json
 {
   "metrics": {
     "clock": {
@@ -45,7 +48,7 @@ Minimal example of a configuration file:
     },
     "mem_used": {
       "frequency": 60
-    },
+    }
   },
   "checkpoints": {
     "interval": "12h",
@@ -123,19 +126,19 @@ NATS. You find more infos about NATS in this [background article]({{< ref "docs/
 To enable NATS in `cc-metric-store` add the following section to the
 configuration file:
 
-``` json
+```json
 {
   "nats": [
-      {
-          "address": "nats://localhost:4222",
-          "creds-file-path": "test.creds",
-          "subscriptions": [
-              {
-                  "subscribe-to": "ee-hpc-nats",
-                  "cluster-tag": "fritz2"
-              }
-          ]
-      }
-  ],
+    {
+      "address": "nats://localhost:4222",
+      "creds-file-path": "test.creds",
+      "subscriptions": [
+        {
+          "subscribe-to": "ee-hpc-nats",
+          "cluster-tag": "fritz2"
+        }
+      ]
+    }
+  ]
 }
 ```
