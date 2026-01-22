@@ -40,7 +40,7 @@ weight: 1
 You need to:
 
 - Adapt your central `config.json` to the new [configuration
-  option](/docs/reference/cc-backend/configuration/) systematic.
+  option]({{< ref "ccb-configuration" >}}) systematic.
 - Revise all of your `cluster.json` files in the job archive to reflect the
   [current options](/docs/how-to-guides/clusterconfig/).
 - Migrate your job database to version 10 (see [Database

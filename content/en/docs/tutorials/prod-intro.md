@@ -24,6 +24,17 @@ ClusterCockpit requires the following components:
   database for ClusterCockpit. You can setup [LiteStream](https://litestream.io/)
   as a service which performs a continuous replication of the sqlite database to
   multiple storage backends.
+- (Optional) **NATS message broker**: Apart from REST APIs ClusterCockpit also
+  supports NATS as a way to connect components. Using NATS brings a number of
+  advantages:
+  - More flexible deployment and testing. Instances can have different URLs or
+    IP addresses. Test instances are easy to deploy in parallel without a need to
+    touch the configuration.
+  - NATS comes with a builtin sophisticated [token key
+    management](https://docs.nats.io/running-a-nats-service/configuration/securing_nats/auth_intro).
+    This also enables to restrict authorization to specific subjects.
+  - NATS may provide a larger message throughput compared to REST over HTTP.
+  - Upcoming ClusterCockpit components as the Energy Manager require NATS.
 - A **batch job scheduler adapter** that provides the job meta information to
   `cc-backend`. This is done by using the provided REST or NATS API for starting
   and stopping jobs. Currently available adapters:
@@ -68,7 +79,7 @@ installation:
 1. [Planning of deployment]({{< ref prod-deploy >}})
 1. [Configure and deploy]({{< ref prod-ccmc >}}) `cc-metric-collector`
 1. [Configure and deploy]({{< ref prod-cc-backend >}}) `cc-backend`
-1. [Configure and deploy]({{< ref cc-slurm-adapter >}}) `cc-slurm-adapter` or
+1. [Configure and deploy](/docs/reference/cc-slurm-adapter/) `cc-slurm-adapter` or
    another job scheduler adapter of your choice
 
 You can find complete example production configurations in the
@@ -83,18 +94,15 @@ ClusterCockpit for the first time.
 
 At the moment you need to configure the metric list in every component
 separately. In `cc-metric-collector` the metrics that are send to the
-`cc-metric-store` are determined by the collector configuration and possible
-renaming in the router configuration. For `cc-metric-store` in `config.json` you
-need to specify a metric list in-order to configure the native metric frequency
-and how a metric is aggregated. Metrics that are send to `cc-metric-store` and
-do not appear in its configuration are silently dropped!
+`cc-backend` are determined by the collector configuration and possible
+renaming in the router configuration.
 In `cc-backend` for every cluster you need to create a `cluster.json`
 configuration in the job-archive. There you setup which metrics are shown in the
 web-frontend including many additional properties for the metrics. For running
-jobs `cc-backend` will query `cc-metric-store` for exactly those metric names
-and if there is no match there will be an error.
+jobs `cc-backend` will query the internal `metric-store` for exactly those
+metric names and if there is no match there will be an error.
 
-We provide a json schema based specification as part of the job meta and metric
+We provide a JSON schema based specification as part of the job meta and metric
 schema. This specification recommends a minimal set of metrics and we suggest to
 use the metric names provided there. While it is up to you if you want to adhere
 to the metric names suggested in the schema, there are two exceptions: `mem_bw`
@@ -103,29 +111,29 @@ SP flops) are required for the roofline plots to work.
 
 ### Inconsistent device naming between `cc-metric-collector` and batch job scheduler adapter
 
-The batch job scheduler adapter (e.g. `cc-slurm-sync`) provides a list of
-resources that are used by the job. `cc-backend` will query `cc-metric-store`
+The batch job scheduler adapter (e.g. `cc-slurm-adapter`) provides a list of
+resources that are used by the job. `cc-backend` will query the internal `metric-store`
 with exactly those resource ids for getting all metrics for a job.
 As a consequence if `cc-metric-collector` uses another systematic the metrics
 will not be found.
 
-If you have GPU accelerators `cc-slurm-sync` should use the PCI-E device
-addresses as ids. The option `use_pci_info_as_type_id` for the nvidia and
-rocm-smi collectors in the collector configuration must be set to true.
-To validate and debug problems you can use the `cc-metric-store` debug endpoint:
+If you have GPU accelerators `cc-slurm-adapter` should use the PCI-E device
+addresses as ids. The option `gpuPciAddrs` for the nvidia and
+rocm-smi collectors in the collector configuration must be configured.
+To validate and debug problems you can use the `cc-backend` debug endpoint:
 
 ```bash
 curl -H "Authorization: Bearer $JWT" -D - "http://localhost:8080/api/debug"
 ```
 
 This will return the current state of `cc-metric-store`. You can search for a
-hostname and there scroll for all topology leaf nodes that are available.
+hostname and scroll there for all topology leaf nodes that are available.
 
 ### Missing nodes in subcluster node lists
 
 ClusterCockpit supports multiple subclusters as part of a cluster. A subcluster
 in this context is a homogeneous hardware partition with a dedicated metric
 and device configuration. `cc-backend` dynamically matches the nodes a job runs
-on to subcluster node list to figure out on which subcluster a job is running.
+on to a subcluster node list to figure out on which subcluster a job is running.
 If nodes are missing in a subcluster node list this fails and the metric list
 used may be wrong.

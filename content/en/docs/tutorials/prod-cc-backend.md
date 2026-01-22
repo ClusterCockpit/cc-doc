@@ -137,7 +137,7 @@ Not included below but set by the default settings:
 
 Further reading:
 
-- [Configuration reference]({{< ref "docs/reference/cc-backend/configuration" >}})
+- [Configuration reference]({{< ref "ccb-configuration" >}})
 - [Authentication Handbook]({{< ref "docs/reference/cc-backend/authentication" >}})
 - [Job-Archive Handbook]({{< ref "docs/reference/cc-backend/jobarchive" >}})
 
