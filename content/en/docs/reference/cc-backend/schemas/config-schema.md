@@ -6,13 +6,13 @@ tags: [Backend]
 weight: 1
 ---
 
-A detailed description of each of the application configuration options can be found in the [config documentation]({{< ref "docs/reference/cc-backend/configuration" >}} "CC-Backend Configuration").
+A detailed description of each of the application configuration options can be found in the [config documentation]({{< ref "ccb-configuration" >}} "CC-Backend Configuration").
 
 The following schema in its raw form can be found in the [ClusterCockpit GitHub](https://github.com/ClusterCockpit/cc-backend/tree/master/pkg/schema/schemas) repository.
 
 {{< alert title="Manual Updates">}}
-  Changes to the original JSON schema found in the repository are not automatically rendered in this reference documentation.</br></br>
-  **Last Update:** 04.12.2024
+Changes to the original JSON schema found in the repository are not automatically rendered in this reference documentation.</br></br>
+**Last Update:** 04.12.2024
 {{< /alert >}}
 
 ## cc-backend configuration file schema
@@ -120,34 +120,34 @@ The following schema in its raw form can be found in the [ClusterCockpit GitHub]
 | **Required**              | No               |
 | **Additional properties** | Any type allowed |
 
-| Property                                                         | Pattern | Type             | Deprecated | Definition | Title/Description                                                                                                                                |
-| ---------------------------------------------------------------- | ------- | ---------------- | ---------- | ---------- | ------------------------------------------------------------------------------------------------------------------------------------------------ |
-| - [addr](#addr )                                                 | No      | string           | No         | -          | Address where the http (or https) server will listen on (for example: 'localhost:80').                                                           |
-| - [apiAllowedIPs](#apiAllowedIPs )                               | No      | array of string  | No         | -          | Addresses from which secured API endpoints can be reached                                                                                        |
-| - [user](#user )                                                 | No      | string           | No         | -          | Drop root permissions once .env was read and the port was taken. Only applicable if using privileged port.                                       |
-| - [group](#group )                                               | No      | string           | No         | -          | Drop root permissions once .env was read and the port was taken. Only applicable if using privileged port.                                       |
-| - [disable-authentication](#disable-authentication )             | No      | boolean          | No         | -          | Disable authentication (for everything: API, Web-UI, ...).                                                                                       |
-| - [embed-static-files](#embed-static-files )                     | No      | boolean          | No         | -          | If all files in \`web/frontend/public\` should be served from within the binary itself (they are embedded) or not.                               |
-| - [static-files](#static-files )                                 | No      | string           | No         | -          | Folder where static assets can be found, if embed-static-files is false.                                                                         |
-| - [db-driver](#db-driver )                                       | No      | enum (of string) | No         | -          | sqlite3 or mysql (mysql will work for mariadb as well).                                                                                          |
-| - [db](#db )                                                     | No      | string           | No         | -          | For sqlite3 a filename, for mysql a DSN in this format: https://github.com/go-sql-driver/mysql#dsn-data-source-name (Without query parameters!). |
-| - [archive](#archive )                                           | No      | object           | No         | -          | Configuration keys for job-archive                                                                                                               |
-| - [disable-archive](#disable-archive )                           | No      | boolean          | No         | -          | Keep all metric data in the metric data repositories, do not write to the job-archive.                                                           |
-| - [validate](#validate )                                         | No      | boolean          | No         | -          | Validate all input json documents against json schema.                                                                                           |
-| - [session-max-age](#session-max-age )                           | No      | string           | No         | -          | Specifies for how long a session shall be valid  as a string parsable by time.ParseDuration(). If 0 or empty, the session/token does not expire! |
-| - [https-cert-file](#https-cert-file )                           | No      | string           | No         | -          | Filepath to SSL certificate. If also https-key-file is set use HTTPS using those certificates.                                                   |
-| - [https-key-file](#https-key-file )                             | No      | string           | No         | -          | Filepath to SSL key file. If also https-cert-file is set use HTTPS using those certificates.                                                     |
-| - [redirect-http-to](#redirect-http-to )                         | No      | string           | No         | -          | If not the empty string and addr does not end in :80, redirect every request incoming at port 80 to that url.                                    |
-| - [stop-jobs-exceeding-walltime](#stop-jobs-exceeding-walltime ) | No      | integer          | No         | -          | If not zero, automatically mark jobs as stopped running X seconds longer than their walltime. Only applies if walltime is set for job.           |
-| - [short-running-jobs-duration](#short-running-jobs-duration )   | No      | integer          | No         | -          | Do not show running jobs shorter than X seconds.                                                                                                 |
-| - [emission-constant](#emission-constant )                       | No      | integer          | No         | -          | .                                                                                                                                                |
-| - [cron-frequency](#cron-frequency )                             | No      | object           | No         | -          | Frequency of cron job workers.                                                                                                                   |
-| - [enable-resampling](#enable-resampling )                       | No      | object           | No         | -          | Enable dynamic zoom in frontend metric plots.                                                                                                    |
-| + [jwts](#jwts )                                                 | No      | object           | No         | -          | For JWT token authentication.                                                                                                                    |
-| - [oidc](#oidc )                                                 | No      | object           | No         | -          | -                                                                                                                                                |
-| - [ldap](#ldap )                                                 | No      | object           | No         | -          | For LDAP Authentication and user synchronisation.                                                                                                |
-| + [clusters](#clusters )                                         | No      | array of object  | No         | -          | Configuration for the clusters to be displayed.                                                                                                  |
-| - [ui-defaults](#ui-defaults )                                   | No      | object           | No         | -          | Default configuration for web UI                                                                                                                 |
+| Property                                                        | Pattern | Type             | Deprecated | Definition | Title/Description                                                                                                                                |
+| --------------------------------------------------------------- | ------- | ---------------- | ---------- | ---------- | ------------------------------------------------------------------------------------------------------------------------------------------------ |
+| - [addr](#addr)                                                 | No      | string           | No         | -          | Address where the http (or https) server will listen on (for example: 'localhost:80').                                                           |
+| - [apiAllowedIPs](#apiAllowedIPs)                               | No      | array of string  | No         | -          | Addresses from which secured API endpoints can be reached                                                                                        |
+| - [user](#user)                                                 | No      | string           | No         | -          | Drop root permissions once .env was read and the port was taken. Only applicable if using privileged port.                                       |
+| - [group](#group)                                               | No      | string           | No         | -          | Drop root permissions once .env was read and the port was taken. Only applicable if using privileged port.                                       |
+| - [disable-authentication](#disable-authentication)             | No      | boolean          | No         | -          | Disable authentication (for everything: API, Web-UI, ...).                                                                                       |
+| - [embed-static-files](#embed-static-files)                     | No      | boolean          | No         | -          | If all files in \`web/frontend/public\` should be served from within the binary itself (they are embedded) or not.                               |
+| - [static-files](#static-files)                                 | No      | string           | No         | -          | Folder where static assets can be found, if embed-static-files is false.                                                                         |
+| - [db-driver](#db-driver)                                       | No      | enum (of string) | No         | -          | sqlite3 or mysql (mysql will work for mariadb as well).                                                                                          |
+| - [db](#db)                                                     | No      | string           | No         | -          | For sqlite3 a filename, for mysql a DSN in this format: <https://github.com/go-sql-driver/mysql#dsn-data-source-name> (Without query parameters!). |
+| - [archive](#archive)                                           | No      | object           | No         | -          | Configuration keys for job-archive                                                                                                               |
+| - [disable-archive](#disable-archive)                           | No      | boolean          | No         | -          | Keep all metric data in the metric data repositories, do not write to the job-archive.                                                           |
+| - [validate](#validate)                                         | No      | boolean          | No         | -          | Validate all input json documents against json schema.                                                                                           |
+| - [session-max-age](#session-max-age)                           | No      | string           | No         | -          | Specifies for how long a session shall be valid as a string parsable by time.ParseDuration(). If 0 or empty, the session/token does not expire!  |
+| - [https-cert-file](#https-cert-file)                           | No      | string           | No         | -          | Filepath to SSL certificate. If also https-key-file is set use HTTPS using those certificates.                                                   |
+| - [https-key-file](#https-key-file)                             | No      | string           | No         | -          | Filepath to SSL key file. If also https-cert-file is set use HTTPS using those certificates.                                                     |
+| - [redirect-http-to](#redirect-http-to)                         | No      | string           | No         | -          | If not the empty string and addr does not end in :80, redirect every request incoming at port 80 to that url.                                    |
+| - [stop-jobs-exceeding-walltime](#stop-jobs-exceeding-walltime) | No      | integer          | No         | -          | If not zero, automatically mark jobs as stopped running X seconds longer than their walltime. Only applies if walltime is set for job.           |
+| - [short-running-jobs-duration](#short-running-jobs-duration)   | No      | integer          | No         | -          | Do not show running jobs shorter than X seconds.                                                                                                 |
+| - [emission-constant](#emission-constant)                       | No      | integer          | No         | -          | .                                                                                                                                                |
+| - [cron-frequency](#cron-frequency)                             | No      | object           | No         | -          | Frequency of cron job workers.                                                                                                                   |
+| - [enable-resampling](#enable-resampling)                       | No      | object           | No         | -          | Enable dynamic zoom in frontend metric plots.                                                                                                    |
+| + [jwts](#jwts)                                                 | No      | object           | No         | -          | For JWT token authentication.                                                                                                                    |
+| - [oidc](#oidc)                                                 | No      | object           | No         | -          | -                                                                                                                                                |
+| - [ldap](#ldap)                                                 | No      | object           | No         | -          | For LDAP Authentication and user synchronisation.                                                                                                |
+| + [clusters](#clusters)                                         | No      | array of object  | No         | -          | Configuration for the clusters to be displayed.                                                                                                  |
+| - [ui-defaults](#ui-defaults)                                   | No      | object           | No         | -          | Default configuration for web UI                                                                                                                 |
 
 ## <a name="addr"></a>1. Property `cc-backend configuration file schema > addr`
 
@@ -241,8 +241,9 @@ The following schema in its raw form can be found in the [ClusterCockpit GitHub]
 **Description:** sqlite3 or mysql (mysql will work for mariadb as well).
 
 Must be one of:
-* "sqlite3"
-* "mysql"
+
+- "sqlite3"
+- "mysql"
 
 ## <a name="db"></a>9. Property `cc-backend configuration file schema > db`
 
@@ -251,7 +252,7 @@ Must be one of:
 | **Type**     | `string` |
 | **Required** | No       |
 
-**Description:** For sqlite3 a filename, for mysql a DSN in this format: https://github.com/go-sql-driver/mysql#dsn-data-source-name (Without query parameters!).
+**Description:** For sqlite3 a filename, for mysql a DSN in this format: <https://github.com/go-sql-driver/mysql#dsn-data-source-name> (Without query parameters!).
 
 ## <a name="archive"></a>10. Property `cc-backend configuration file schema > archive`
 
@@ -263,12 +264,12 @@ Must be one of:
 
 **Description:** Configuration keys for job-archive
 
-| Property                               | Pattern | Type             | Deprecated | Definition | Title/Description                                              |
-| -------------------------------------- | ------- | ---------------- | ---------- | ---------- | -------------------------------------------------------------- |
-| + [kind](#archive_kind )               | No      | enum (of string) | No         | -          | Backend type for job-archive                                   |
-| - [path](#archive_path )               | No      | string           | No         | -          | Path to job archive for file backend                           |
-| - [compression](#archive_compression ) | No      | integer          | No         | -          | Setup automatic compression for jobs older than number of days |
-| - [retention](#archive_retention )     | No      | object           | No         | -          | Configuration keys for retention                               |
+| Property                              | Pattern | Type             | Deprecated | Definition | Title/Description                                              |
+| ------------------------------------- | ------- | ---------------- | ---------- | ---------- | -------------------------------------------------------------- |
+| + [kind](#archive_kind)               | No      | enum (of string) | No         | -          | Backend type for job-archive                                   |
+| - [path](#archive_path)               | No      | string           | No         | -          | Path to job archive for file backend                           |
+| - [compression](#archive_compression) | No      | integer          | No         | -          | Setup automatic compression for jobs older than number of days |
+| - [retention](#archive_retention)     | No      | object           | No         | -          | Configuration keys for retention                               |
 
 ### <a name="archive_kind"></a>10.1. Property `cc-backend configuration file schema > archive > kind`
 
@@ -280,8 +281,9 @@ Must be one of:
 **Description:** Backend type for job-archive
 
 Must be one of:
-* "file"
-* "s3"
+
+- "file"
+- "s3"
 
 ### <a name="archive_path"></a>10.2. Property `cc-backend configuration file schema > archive > path`
 
@@ -311,12 +313,12 @@ Must be one of:
 
 **Description:** Configuration keys for retention
 
-| Property                                     | Pattern | Type             | Deprecated | Definition | Title/Description                                                       |
-| -------------------------------------------- | ------- | ---------------- | ---------- | ---------- | ----------------------------------------------------------------------- |
-| + [policy](#archive_retention_policy )       | No      | enum (of string) | No         | -          | Retention policy                                                        |
-| - [includeDB](#archive_retention_includeDB ) | No      | boolean          | No         | -          | Also remove jobs from database                                          |
-| - [age](#archive_retention_age )             | No      | integer          | No         | -          | Act on jobs with startTime older than age (in days)                     |
-| - [location](#archive_retention_location )   | No      | string           | No         | -          | The target directory for retention. Only applicable for retention move. |
+| Property                                    | Pattern | Type             | Deprecated | Definition | Title/Description                                                       |
+| ------------------------------------------- | ------- | ---------------- | ---------- | ---------- | ----------------------------------------------------------------------- |
+| + [policy](#archive_retention_policy)       | No      | enum (of string) | No         | -          | Retention policy                                                        |
+| - [includeDB](#archive_retention_includeDB) | No      | boolean          | No         | -          | Also remove jobs from database                                          |
+| - [age](#archive_retention_age)             | No      | integer          | No         | -          | Act on jobs with startTime older than age (in days)                     |
+| - [location](#archive_retention_location)   | No      | string           | No         | -          | The target directory for retention. Only applicable for retention move. |
 
 #### <a name="archive_retention_policy"></a>10.4.1. Property `cc-backend configuration file schema > archive > retention > policy`
 
@@ -328,9 +330,10 @@ Must be one of:
 **Description:** Retention policy
 
 Must be one of:
-* "none"
-* "delete"
-* "move"
+
+- "none"
+- "delete"
+- "move"
 
 #### <a name="archive_retention_includeDB"></a>10.4.2. Property `cc-backend configuration file schema > archive > retention > includeDB`
 
@@ -384,7 +387,7 @@ Must be one of:
 | **Type**     | `string` |
 | **Required** | No       |
 
-**Description:** Specifies for how long a session shall be valid  as a string parsable by time.ParseDuration(). If 0 or empty, the session/token does not expire!
+**Description:** Specifies for how long a session shall be valid as a string parsable by time.ParseDuration(). If 0 or empty, the session/token does not expire!
 
 ## <a name="https-cert-file"></a>14. Property `cc-backend configuration file schema > https-cert-file`
 
@@ -450,10 +453,10 @@ Must be one of:
 
 **Description:** Frequency of cron job workers.
 
-| Property                                                | Pattern | Type   | Deprecated | Definition | Title/Description                                  |
-| ------------------------------------------------------- | ------- | ------ | ---------- | ---------- | -------------------------------------------------- |
-| - [duration-worker](#cron-frequency_duration-worker )   | No      | string | No         | -          | Duration Update Worker [Defaults to '5m']          |
-| - [footprint-worker](#cron-frequency_footprint-worker ) | No      | string | No         | -          | Metric-Footprint Update Worker [Defaults to '10m'] |
+| Property                                               | Pattern | Type   | Deprecated | Definition | Title/Description                                  |
+| ------------------------------------------------------ | ------- | ------ | ---------- | ---------- | -------------------------------------------------- |
+| - [duration-worker](#cron-frequency_duration-worker)   | No      | string | No         | -          | Duration Update Worker [Defaults to '5m']          |
+| - [footprint-worker](#cron-frequency_footprint-worker) | No      | string | No         | -          | Metric-Footprint Update Worker [Defaults to '10m'] |
 
 ### <a name="cron-frequency_duration-worker"></a>20.1. Property `cc-backend configuration file schema > cron-frequency > duration-worker`
 
@@ -483,10 +486,10 @@ Must be one of:
 
 **Description:** Enable dynamic zoom in frontend metric plots.
 
-| Property                                         | Pattern | Type             | Deprecated | Definition | Title/Description                                                  |
-| ------------------------------------------------ | ------- | ---------------- | ---------- | ---------- | ------------------------------------------------------------------ |
-| + [trigger](#enable-resampling_trigger )         | No      | integer          | No         | -          | Trigger next zoom level at less than this many visible datapoints. |
-| + [resolutions](#enable-resampling_resolutions ) | No      | array of integer | No         | -          | Array of resampling target resolutions, in seconds.                |
+| Property                                        | Pattern | Type             | Deprecated | Definition | Title/Description                                                  |
+| ----------------------------------------------- | ------- | ---------------- | ---------- | ---------- | ------------------------------------------------------------------ |
+| + [trigger](#enable-resampling_trigger)         | No      | integer          | No         | -          | Trigger next zoom level at less than this many visible datapoints. |
+| + [resolutions](#enable-resampling_resolutions) | No      | array of integer | No         | -          | Array of resampling target resolutions, in seconds.                |
 
 ### <a name="enable-resampling_trigger"></a>21.1. Property `cc-backend configuration file schema > enable-resampling > trigger`
 
@@ -535,13 +538,13 @@ Must be one of:
 
 **Description:** For JWT token authentication.
 
-| Property                                    | Pattern | Type    | Deprecated | Definition | Title/Description                                                                                      |
-| ------------------------------------------- | ------- | ------- | ---------- | ---------- | ------------------------------------------------------------------------------------------------------ |
-| + [max-age](#jwts_max-age )                 | No      | string  | No         | -          | Configure how long a token is valid. As string parsable by time.ParseDuration()                        |
-| - [cookieName](#jwts_cookieName )           | No      | string  | No         | -          | Cookie that should be checked for a JWT token.                                                         |
-| - [validateUser](#jwts_validateUser )       | No      | boolean | No         | -          | Deny login for users not in database (but defined in JWT). Overwrite roles in JWT with database roles. |
-| - [trustedIssuer](#jwts_trustedIssuer )     | No      | string  | No         | -          | Issuer that should be accepted when validating external JWTs                                           |
-| - [syncUserOnLogin](#jwts_syncUserOnLogin ) | No      | boolean | No         | -          | Add non-existent user to DB at login attempt with values provided in JWT.                              |
+| Property                                   | Pattern | Type    | Deprecated | Definition | Title/Description                                                                                      |
+| ------------------------------------------ | ------- | ------- | ---------- | ---------- | ------------------------------------------------------------------------------------------------------ |
+| + [max-age](#jwts_max-age)                 | No      | string  | No         | -          | Configure how long a token is valid. As string parsable by time.ParseDuration()                        |
+| - [cookieName](#jwts_cookieName)           | No      | string  | No         | -          | Cookie that should be checked for a JWT token.                                                         |
+| - [validateUser](#jwts_validateUser)       | No      | boolean | No         | -          | Deny login for users not in database (but defined in JWT). Overwrite roles in JWT with database roles. |
+| - [trustedIssuer](#jwts_trustedIssuer)     | No      | string  | No         | -          | Issuer that should be accepted when validating external JWTs                                           |
+| - [syncUserOnLogin](#jwts_syncUserOnLogin) | No      | boolean | No         | -          | Add non-existent user to DB at login attempt with values provided in JWT.                              |
 
 ### <a name="jwts_max-age"></a>22.1. Property `cc-backend configuration file schema > jwts > max-age`
 
@@ -577,7 +580,7 @@ Must be one of:
 | **Type**     | `string` |
 | **Required** | No       |
 
-**Description:** Issuer that should be accepted when validating external JWTs 
+**Description:** Issuer that should be accepted when validating external JWTs
 
 ### <a name="jwts_syncUserOnLogin"></a>22.5. Property `cc-backend configuration file schema > jwts > syncUserOnLogin`
 
@@ -597,7 +600,8 @@ Must be one of:
 | **Additional properties** | Any type allowed |
 
 ### <a name="autogenerated_heading_2"></a>23.1. The following properties are required
-* provider
+
+- provider
 
 ## <a name="ldap"></a>24. Property `cc-backend configuration file schema > ldap`
 
@@ -609,17 +613,17 @@ Must be one of:
 
 **Description:** For LDAP Authentication and user synchronisation.
 
-| Property                                          | Pattern | Type    | Deprecated | Definition | Title/Description                                                                                |
-| ------------------------------------------------- | ------- | ------- | ---------- | ---------- | ------------------------------------------------------------------------------------------------ |
-| + [url](#ldap_url )                               | No      | string  | No         | -          | URL of LDAP directory server.                                                                    |
-| + [user_base](#ldap_user_base )                   | No      | string  | No         | -          | Base DN of user tree root.                                                                       |
-| + [search_dn](#ldap_search_dn )                   | No      | string  | No         | -          | DN for authenticating LDAP admin account with general read rights.                               |
-| + [user_bind](#ldap_user_bind )                   | No      | string  | No         | -          | Expression used to authenticate users via LDAP bind. Must contain uid={username}.                |
-| + [user_filter](#ldap_user_filter )               | No      | string  | No         | -          | Filter to extract users for syncing.                                                             |
-| - [username_attr](#ldap_username_attr )           | No      | string  | No         | -          | Attribute with full username. Default: gecos                                                     |
-| - [sync_interval](#ldap_sync_interval )           | No      | string  | No         | -          | Interval used for syncing local user table with LDAP directory. Parsed using time.ParseDuration. |
-| - [sync_del_old_users](#ldap_sync_del_old_users ) | No      | boolean | No         | -          | Delete obsolete users in database.                                                               |
-| - [syncUserOnLogin](#ldap_syncUserOnLogin )       | No      | boolean | No         | -          | Add non-existent user to DB at login attempt if user exists in Ldap directory                    |
+| Property                                         | Pattern | Type    | Deprecated | Definition | Title/Description                                                                                |
+| ------------------------------------------------ | ------- | ------- | ---------- | ---------- | ------------------------------------------------------------------------------------------------ |
+| + [url](#ldap_url)                               | No      | string  | No         | -          | URL of LDAP directory server.                                                                    |
+| + [user_base](#ldap_user_base)                   | No      | string  | No         | -          | Base DN of user tree root.                                                                       |
+| + [search_dn](#ldap_search_dn)                   | No      | string  | No         | -          | DN for authenticating LDAP admin account with general read rights.                               |
+| + [user_bind](#ldap_user_bind)                   | No      | string  | No         | -          | Expression used to authenticate users via LDAP bind. Must contain uid={username}.                |
+| + [user_filter](#ldap_user_filter)               | No      | string  | No         | -          | Filter to extract users for syncing.                                                             |
+| - [username_attr](#ldap_username_attr)           | No      | string  | No         | -          | Attribute with full username. Default: gecos                                                     |
+| - [sync_interval](#ldap_sync_interval)           | No      | string  | No         | -          | Interval used for syncing local user table with LDAP directory. Parsed using time.ParseDuration. |
+| - [sync_del_old_users](#ldap_sync_del_old_users) | No      | boolean | No         | -          | Delete obsolete users in database.                                                               |
+| - [syncUserOnLogin](#ldap_syncUserOnLogin)       | No      | boolean | No         | -          | Add non-existent user to DB at login attempt if user exists in Ldap directory                    |
 
 ### <a name="ldap_url"></a>24.1. Property `cc-backend configuration file schema > ldap > url`
 
@@ -731,11 +735,11 @@ Must be one of:
 | **Required**              | No               |
 | **Additional properties** | Any type allowed |
 
-| Property                                                        | Pattern | Type   | Deprecated | Definition | Title/Description                                                                                |
-| --------------------------------------------------------------- | ------- | ------ | ---------- | ---------- | ------------------------------------------------------------------------------------------------ |
-| + [name](#clusters_items_name )                                 | No      | string | No         | -          | The name of the cluster.                                                                         |
-| + [metricDataRepository](#clusters_items_metricDataRepository ) | No      | object | No         | -          | Type of the metric data repository for this cluster                                              |
-| + [filterRanges](#clusters_items_filterRanges )                 | No      | object | No         | -          | This option controls the slider ranges for the UI controls of numNodes, duration, and startTime. |
+| Property                                                       | Pattern | Type   | Deprecated | Definition | Title/Description                                                                                |
+| -------------------------------------------------------------- | ------- | ------ | ---------- | ---------- | ------------------------------------------------------------------------------------------------ |
+| + [name](#clusters_items_name)                                 | No      | string | No         | -          | The name of the cluster.                                                                         |
+| + [metricDataRepository](#clusters_items_metricDataRepository) | No      | object | No         | -          | Type of the metric data repository for this cluster                                              |
+| + [filterRanges](#clusters_items_filterRanges)                 | No      | object | No         | -          | This option controls the slider ranges for the UI controls of numNodes, duration, and startTime. |
 
 #### <a name="clusters_items_name"></a>25.1.1. Property `cc-backend configuration file schema > clusters > clusters items > name`
 
@@ -756,11 +760,11 @@ Must be one of:
 
 **Description:** Type of the metric data repository for this cluster
 
-| Property                                               | Pattern | Type             | Deprecated | Definition | Title/Description |
-| ------------------------------------------------------ | ------- | ---------------- | ---------- | ---------- | ----------------- |
-| + [kind](#clusters_items_metricDataRepository_kind )   | No      | enum (of string) | No         | -          | -                 |
-| + [url](#clusters_items_metricDataRepository_url )     | No      | string           | No         | -          | -                 |
-| - [token](#clusters_items_metricDataRepository_token ) | No      | string           | No         | -          | -                 |
+| Property                                              | Pattern | Type             | Deprecated | Definition | Title/Description |
+| ----------------------------------------------------- | ------- | ---------------- | ---------- | ---------- | ----------------- |
+| + [kind](#clusters_items_metricDataRepository_kind)   | No      | enum (of string) | No         | -          | -                 |
+| + [url](#clusters_items_metricDataRepository_url)     | No      | string           | No         | -          | -                 |
+| - [token](#clusters_items_metricDataRepository_token) | No      | string           | No         | -          | -                 |
 
 ##### <a name="clusters_items_metricDataRepository_kind"></a>25.1.2.1. Property `cc-backend configuration file schema > clusters > clusters items > metricDataRepository > kind`
 
@@ -770,10 +774,11 @@ Must be one of:
 | **Required** | Yes                |
 
 Must be one of:
-* "influxdb"
-* "prometheus"
-* "cc-metric-store"
-* "test"
+
+- "influxdb"
+- "prometheus"
+- "cc-metric-store"
+- "test"
 
 ##### <a name="clusters_items_metricDataRepository_url"></a>25.1.2.2. Property `cc-backend configuration file schema > clusters > clusters items > metricDataRepository > url`
 
@@ -799,11 +804,11 @@ Must be one of:
 
 **Description:** This option controls the slider ranges for the UI controls of numNodes, duration, and startTime.
 
-| Property                                               | Pattern | Type   | Deprecated | Definition | Title/Description                   |
-| ------------------------------------------------------ | ------- | ------ | ---------- | ---------- | ----------------------------------- |
-| + [numNodes](#clusters_items_filterRanges_numNodes )   | No      | object | No         | -          | UI slider range for number of nodes |
-| + [duration](#clusters_items_filterRanges_duration )   | No      | object | No         | -          | UI slider range for duration        |
-| + [startTime](#clusters_items_filterRanges_startTime ) | No      | object | No         | -          | UI slider range for start time      |
+| Property                                              | Pattern | Type   | Deprecated | Definition | Title/Description                   |
+| ----------------------------------------------------- | ------- | ------ | ---------- | ---------- | ----------------------------------- |
+| + [numNodes](#clusters_items_filterRanges_numNodes)   | No      | object | No         | -          | UI slider range for number of nodes |
+| + [duration](#clusters_items_filterRanges_duration)   | No      | object | No         | -          | UI slider range for duration        |
+| + [startTime](#clusters_items_filterRanges_startTime) | No      | object | No         | -          | UI slider range for start time      |
 
 ##### <a name="clusters_items_filterRanges_numNodes"></a>25.1.3.1. Property `cc-backend configuration file schema > clusters > clusters items > filterRanges > numNodes`
 
@@ -815,10 +820,10 @@ Must be one of:
 
 **Description:** UI slider range for number of nodes
 
-| Property                                              | Pattern | Type    | Deprecated | Definition | Title/Description |
-| ----------------------------------------------------- | ------- | ------- | ---------- | ---------- | ----------------- |
-| + [from](#clusters_items_filterRanges_numNodes_from ) | No      | integer | No         | -          | -                 |
-| + [to](#clusters_items_filterRanges_numNodes_to )     | No      | integer | No         | -          | -                 |
+| Property                                             | Pattern | Type    | Deprecated | Definition | Title/Description |
+| ---------------------------------------------------- | ------- | ------- | ---------- | ---------- | ----------------- |
+| + [from](#clusters_items_filterRanges_numNodes_from) | No      | integer | No         | -          | -                 |
+| + [to](#clusters_items_filterRanges_numNodes_to)     | No      | integer | No         | -          | -                 |
 
 ###### <a name="clusters_items_filterRanges_numNodes_from"></a>25.1.3.1.1. Property `cc-backend configuration file schema > clusters > clusters items > filterRanges > numNodes > from`
 
@@ -844,10 +849,10 @@ Must be one of:
 
 **Description:** UI slider range for duration
 
-| Property                                              | Pattern | Type    | Deprecated | Definition | Title/Description |
-| ----------------------------------------------------- | ------- | ------- | ---------- | ---------- | ----------------- |
-| + [from](#clusters_items_filterRanges_duration_from ) | No      | integer | No         | -          | -                 |
-| + [to](#clusters_items_filterRanges_duration_to )     | No      | integer | No         | -          | -                 |
+| Property                                             | Pattern | Type    | Deprecated | Definition | Title/Description |
+| ---------------------------------------------------- | ------- | ------- | ---------- | ---------- | ----------------- |
+| + [from](#clusters_items_filterRanges_duration_from) | No      | integer | No         | -          | -                 |
+| + [to](#clusters_items_filterRanges_duration_to)     | No      | integer | No         | -          | -                 |
 
 ###### <a name="clusters_items_filterRanges_duration_from"></a>25.1.3.2.1. Property `cc-backend configuration file schema > clusters > clusters items > filterRanges > duration > from`
 
@@ -873,10 +878,10 @@ Must be one of:
 
 **Description:** UI slider range for start time
 
-| Property                                               | Pattern | Type   | Deprecated | Definition | Title/Description |
-| ------------------------------------------------------ | ------- | ------ | ---------- | ---------- | ----------------- |
-| + [from](#clusters_items_filterRanges_startTime_from ) | No      | string | No         | -          | -                 |
-| + [to](#clusters_items_filterRanges_startTime_to )     | No      | null   | No         | -          | -                 |
+| Property                                              | Pattern | Type   | Deprecated | Definition | Title/Description |
+| ----------------------------------------------------- | ------- | ------ | ---------- | ---------- | ----------------- |
+| + [from](#clusters_items_filterRanges_startTime_from) | No      | string | No         | -          | -                 |
+| + [to](#clusters_items_filterRanges_startTime_to)     | No      | null   | No         | -          | -                 |
 
 ###### <a name="clusters_items_filterRanges_startTime_from"></a>25.1.3.3.1. Property `cc-backend configuration file schema > clusters > clusters items > filterRanges > startTime > from`
 
@@ -903,24 +908,24 @@ Must be one of:
 
 **Description:** Default configuration for web UI
 
-| Property                                                                                 | Pattern | Type            | Deprecated | Definition | Title/Description                                                 |
-| ---------------------------------------------------------------------------------------- | ------- | --------------- | ---------- | ---------- | ----------------------------------------------------------------- |
-| + [plot_general_colorBackground](#ui-defaults_plot_general_colorBackground )             | No      | boolean         | No         | -          | Color plot background according to job average threshold limits   |
-| + [plot_general_lineWidth](#ui-defaults_plot_general_lineWidth )                         | No      | integer         | No         | -          | Initial linewidth                                                 |
-| + [plot_list_jobsPerPage](#ui-defaults_plot_list_jobsPerPage )                           | No      | integer         | No         | -          | Jobs shown per page in job lists                                  |
-| + [plot_view_plotsPerRow](#ui-defaults_plot_view_plotsPerRow )                           | No      | integer         | No         | -          | Number of plots per row in single job view                        |
-| + [plot_view_showPolarplot](#ui-defaults_plot_view_showPolarplot )                       | No      | boolean         | No         | -          | Option to toggle polar plot in single job view                    |
-| + [plot_view_showRoofline](#ui-defaults_plot_view_showRoofline )                         | No      | boolean         | No         | -          | Option to toggle roofline plot in single job view                 |
-| + [plot_view_showStatTable](#ui-defaults_plot_view_showStatTable )                       | No      | boolean         | No         | -          | Option to toggle the node statistic table in single job view      |
-| + [system_view_selectedMetric](#ui-defaults_system_view_selectedMetric )                 | No      | string          | No         | -          | Initial metric shown in system view                               |
-| + [job_view_showFootprint](#ui-defaults_job_view_showFootprint )                         | No      | boolean         | No         | -          | Option to toggle footprint ui in single job view                  |
-| + [job_list_usePaging](#ui-defaults_job_list_usePaging )                                 | No      | boolean         | No         | -          | Option to switch from continous scroll to paging                  |
-| + [analysis_view_histogramMetrics](#ui-defaults_analysis_view_histogramMetrics )         | No      | array of string | No         | -          | Metrics to show as job count histograms in analysis view          |
-| + [analysis_view_scatterPlotMetrics](#ui-defaults_analysis_view_scatterPlotMetrics )     | No      | array of array  | No         | -          | Initial scatter plto configuration in analysis view               |
-| + [job_view_nodestats_selectedMetrics](#ui-defaults_job_view_nodestats_selectedMetrics ) | No      | array of string | No         | -          | Initial metrics shown in node statistics table of single job view |
-| + [job_view_selectedMetrics](#ui-defaults_job_view_selectedMetrics )                     | No      | array of string | No         | -          | -                                                                 |
-| + [plot_general_colorscheme](#ui-defaults_plot_general_colorscheme )                     | No      | array of string | No         | -          | Initial color scheme                                              |
-| + [plot_list_selectedMetrics](#ui-defaults_plot_list_selectedMetrics )                   | No      | array of string | No         | -          | Initial metric plots shown in jobs lists                          |
+| Property                                                                                | Pattern | Type            | Deprecated | Definition | Title/Description                                                 |
+| --------------------------------------------------------------------------------------- | ------- | --------------- | ---------- | ---------- | ----------------------------------------------------------------- |
+| + [plot_general_colorBackground](#ui-defaults_plot_general_colorBackground)             | No      | boolean         | No         | -          | Color plot background according to job average threshold limits   |
+| + [plot_general_lineWidth](#ui-defaults_plot_general_lineWidth)                         | No      | integer         | No         | -          | Initial linewidth                                                 |
+| + [plot_list_jobsPerPage](#ui-defaults_plot_list_jobsPerPage)                           | No      | integer         | No         | -          | Jobs shown per page in job lists                                  |
+| + [plot_view_plotsPerRow](#ui-defaults_plot_view_plotsPerRow)                           | No      | integer         | No         | -          | Number of plots per row in single job view                        |
+| + [plot_view_showPolarplot](#ui-defaults_plot_view_showPolarplot)                       | No      | boolean         | No         | -          | Option to toggle polar plot in single job view                    |
+| + [plot_view_showRoofline](#ui-defaults_plot_view_showRoofline)                         | No      | boolean         | No         | -          | Option to toggle roofline plot in single job view                 |
+| + [plot_view_showStatTable](#ui-defaults_plot_view_showStatTable)                       | No      | boolean         | No         | -          | Option to toggle the node statistic table in single job view      |
+| + [system_view_selectedMetric](#ui-defaults_system_view_selectedMetric)                 | No      | string          | No         | -          | Initial metric shown in system view                               |
+| + [job_view_showFootprint](#ui-defaults_job_view_showFootprint)                         | No      | boolean         | No         | -          | Option to toggle footprint ui in single job view                  |
+| + [job_list_usePaging](#ui-defaults_job_list_usePaging)                                 | No      | boolean         | No         | -          | Option to switch from continous scroll to paging                  |
+| + [analysis_view_histogramMetrics](#ui-defaults_analysis_view_histogramMetrics)         | No      | array of string | No         | -          | Metrics to show as job count histograms in analysis view          |
+| + [analysis_view_scatterPlotMetrics](#ui-defaults_analysis_view_scatterPlotMetrics)     | No      | array of array  | No         | -          | Initial scatter plto configuration in analysis view               |
+| + [job_view_nodestats_selectedMetrics](#ui-defaults_job_view_nodestats_selectedMetrics) | No      | array of string | No         | -          | Initial metrics shown in node statistics table of single job view |
+| + [job_view_selectedMetrics](#ui-defaults_job_view_selectedMetrics)                     | No      | array of string | No         | -          | -                                                                 |
+| + [plot_general_colorscheme](#ui-defaults_plot_general_colorscheme)                     | No      | array of string | No         | -          | Initial color scheme                                              |
+| + [plot_list_selectedMetrics](#ui-defaults_plot_list_selectedMetrics)                   | No      | array of string | No         | -          | Initial metric plots shown in jobs lists                          |
 
 ### <a name="ui-defaults_plot_general_colorBackground"></a>26.1. Property `cc-backend configuration file schema > ui-defaults > plot_general_colorBackground`
 
@@ -1197,5 +1202,6 @@ Must be one of:
 | **Type**     | `string` |
 | **Required** | No       |
 
-----------------------------------------------------------------------------------------------------------------------------
+---
+
 Generated using [json-schema-for-humans](https://github.com/coveooss/json-schema-for-humans) on 2024-12-04 at 16:45:59 +0100

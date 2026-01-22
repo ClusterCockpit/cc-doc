@@ -5,16 +5,27 @@ categories: [cc-metric-collector]
 weight: 3
 ---
 
-{{% pageinfo color="danger" %}}
-Reference information regarding the ClusterCockpit component "cc-metric-collector" is documented only at the [GitHub Repo](https://github.com/ClusterCockpit/cc-metric-collector "See GitHub") at the moment.
+{{% pageinfo %}}
+Reference information regarding the ClusterCockpit component "cc-metric-collector" ([GitHub Repo](https://github.com/ClusterCockpit/cc-metric-collector "See GitHub")).
 {{% /pageinfo %}}
 
-### Quick References
+## Quick Navigation
 
-|Topic|Link|Note|
-|-----|----|----|
-|Overview|[Link](https://github.com/ClusterCockpit/cc-metric-collector/blob/main/README.md)|Overview and example usage scenario|
-|Metric Collector Configuration|[Link](https://github.com/ClusterCockpit/cc-metric-collector/blob/main/docs/configuration.md)|Configure Metric Collector|
-|Active Collector Configuration|[Link](https://github.com/ClusterCockpit/cc-metric-collector/blob/main/collectors/README.md)|Configure which available collectors are used|
-|Active Receiver Configuration|[Link](https://github.com/ClusterCockpit/cc-metric-collector/blob/main/receivers/README.md)|Configure which available receivers are used|
-|Active Sink Configuration|[Link](https://github.com/ClusterCockpit/cc-metric-collector/blob/main/sinks/README.md)|Configure which available sinks are used|
+### Documentation Pages
+
+- [Overview](cc-metric-collector/) - Architecture and features
+- [Configuration](cc-metric-collector/ccmc-configuration/) - Configuration reference
+- [Installation](cc-metric-collector/installation/) - Building and system integration
+- [Usage](cc-metric-collector/usage/) - Running and operating
+- [Router](cc-metric-collector/router/) - Metric processing and routing
+- [Collectors](cc-metric-collector/collectors/) - Available metric collectors
+
+### External References
+
+| Topic                   | Link                                                                                                      | Note                                          |
+| ----------------------- | --------------------------------------------------------------------------------------------------------- | --------------------------------------------- |
+| Collector Details       | [Link](https://github.com/ClusterCockpit/cc-metric-collector/blob/main/collectors/README.md)              | Detailed collector documentation and examples |
+| Sinks Configuration     | [Link](https://github.com/ClusterCockpit/cc-lib/blob/main/sinks/README.md)                                | Configure metric output destinations          |
+| Receivers Configuration | [Link](https://github.com/ClusterCockpit/cc-lib/blob/main/receivers/README.md)                            | Configure metric input sources                |
+| Message Processor       | [Link](https://github.com/ClusterCockpit/cc-lib/blob/main/messageProcessor/README.md)                     | Advanced metric manipulation                  |
+| Metric Specifications   | [Link](https://github.com/ClusterCockpit/cc-specifications/blob/master/interfaces/lineprotocol/README.md) | Supported metrics reference                   |

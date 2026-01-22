@@ -16,12 +16,12 @@ instructions below.
 
 To build `cc-backend` you need:
 
-* A [go compiler](https://go.dev/dl/), version 1.20 or newer. Most recent os
-environments should have a package with a recent enough version. On MacOS we
-recommend to use [Homebrew](https://brew.sh) to install on.
-* A node.js environment including the `npm` package manager.
-* A git revision control client.
-* For the demo shell script you need `wget` to download the example job archive
+- A [go compiler](https://go.dev/dl/), version 1.24 or newer. Most recent os
+  environments should have a package with a recent enough version. On MacOS we
+  recommend to use [Homebrew](https://brew.sh) to install on.
+- A node.js environment including the `npm` package manager.
+- A git revision control client.
+- For the demo shell script you need `wget` to download the example job archive
 
 ## Try it out
 
