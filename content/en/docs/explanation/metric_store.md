@@ -181,7 +181,9 @@ interval of retention-period/2. In the example, it is necessary to check every
 hrs, background worker releases the first 24 hours of data from the in-memory
 database.
 
-- Data check pointing -> This background worker uses `interval` from
+`Note:` We have a dynamic buffer retention feature when using the internal cc-metric-store. Meaning the buffers for jobs running for more than the `retention-in-memory` duration will be kept in the metric-store. Once the jobs complete, the retained buffers will be freed during next retention cycle.
+
+- `Data checkpointing` -> This background worker uses `interval` from
   the `checkpoints` parameter in the `config.json` and sets a looping interval for
   the user-given time. It ticks until the given interval is reached and creates
   local backups of the data from the CCMS to the disk. The check pointed files can
@@ -189,13 +191,14 @@ database.
   parameter in the `config.json` file. Check pointing does not mean removing the
   data from the in-memory database. The data from the memory will only be released
   until retention period is reached.
-- Data archiving -> This background worker uses `interval` from the `archive`
+- `Data cleaning` -> We have 2 modes of data cleanup. Meaning that the checkpoint files from the checkpoint directory will either be deleted or archived. This background worker uses `interval` from the `cleanup`
   parameter in the `config.json` and sets a looping interval for the user-given
   time. It ticks until the given interval is reached and zips all the checkpointed
   files which are before the user-given time in the `interval` sub-parameter. Once
   the checkpointed files are zipped, they are deleted from the checkpointing
-  directory.
-- Graceful shutdown handler -> This is a special background worker that detects
+  directory. If no `interval` is specified, then it ba default uses the `retention-in-memory` duration. If no `cleanup` section is specified, then the default mode is delete mode.
+- `Memory-usage tracker` -> We have a worker that tracks the memory-usage of the CCMS. This worker tracks the memory usage every 1 hour. It just calculates the size of CCMS based on number of buffers and the length of the buffers. This worker depends on the `memory-cap` value from the `config.json`. Once the memory-usage of CCMS reaches above the  `memory-cap` value, it will first free the dynamically retained buffers for longer running jobs. If the memory-usage is still higher than the limit, it will free the last buffer for every level present within the metric-store. 
+- `Graceful shutdown handler` -> This is a special background worker that detects
   system or keyboard interrupts like Ctrl+C or Ctrl+Z. In case of an interrupt, it
   is essential to save the data from the in-memory database. There can be a case
   when the CCMS contains data just in the memory and it has not been checkpointed.

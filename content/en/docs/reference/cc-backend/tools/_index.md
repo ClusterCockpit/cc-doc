@@ -25,6 +25,10 @@ This section documents the command-line tools included with ClusterCockpit for v
 
 - **[grepCCLog.pl](grepcclog)**: Analyze log files to identify non-archived jobs
 
+### Data Generation for cc-metric-store
+
+- **[dataGenerator.sh](dataGenerator)**: Connect to cc-metric-store (external or internal) and push data at 1 minute interval.
+
 ## Building Tools
 
 All Go-based tools follow the same build pattern:

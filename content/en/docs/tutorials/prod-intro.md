@@ -24,6 +24,14 @@ ClusterCockpit requires the following components:
   database for ClusterCockpit. You can setup [LiteStream](https://litestream.io/)
   as a service which performs a continuous replication of the sqlite database to
   multiple storage backends.
+- (Optional) **Metric store**: One or more `cc-metric-store` instances.
+  Advantages for using an external cc-metric-store are:
+  - Independent scaling and resource allocation
+  - Can restart metric store without affecting web interface and the other way
+    around
+  - Enables redundancy with multiple metric store instances
+  - Better isolation for security and resource management
+  - Can run on dedicated hardware optimized for in-memory workloads
 - (Optional) **NATS message broker**: Apart from REST APIs ClusterCockpit also
   supports NATS as a way to connect components. Using NATS brings a number of
   advantages:
@@ -71,6 +79,10 @@ We run `cc-backend` as systemd services.
 We recommended the following order for planning and configuring a ClusterCockpit
 installation:
 
+1. [Decide on overall setup]({{< ref prod-arch >}}): Initially you have to
+   decide on some fundamental design options about how the components
+   communicate with each other and how the data flows from the compute nodes
+   to the backend.
 1. [Setup your metric list]({{< ref prod-metric-list >}}): With two exceptions
    you are in general free which metrics you want choose. Those exceptions are:
    `mem_bw` for main memory bandwidth and `flops_any` for flop throughput (double

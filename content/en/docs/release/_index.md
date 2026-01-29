@@ -50,6 +50,13 @@ You need to:
 - Transfer the checkpoints from the external `cc-metric-store` instance to the
   `cc-backend` `./var/checkpoints` directory
 
+The database migration can take more than one day. To minimize the downtime you
+can copy the existing SQLite database and perform the migration on the copy
+while the production instance is still running. `cc-slurm-adapter` will
+synchronize any missing jobs afterwards. The archive migration should only take
+1-2h. This only applies if you do it on a fast storage medium, e.g. an NVMe
+disk.
+
 ## Configuration changes
 
 GitHub Repository with [complete configuration examples](https://github.com/ClusterCockpit/cc-examples/tree/main/nhr%40fau).
@@ -57,6 +64,39 @@ All configuration options are now checked against a JSON schema.
 The required options are significantly reduced.
 
 ## Transfer `cc-metric-store` checkpoints
+
+We are currently offering option to use cc-metric-store attached with cc-backend. Meaning both cc-backend and cc-metric-store share same configuration as well as they run on the same server. The checkpoints in your internal cc-metric-store resides in var directory of the cc-backend. If you choose to use cc-metric-store-internal as you metric store, then you can do the following to bring your old checkpoints from your external cc-metric-store:
+
+Look out for "checkpoints" key in your CCMS and CCB config.json.
+```json
+"checkpoints": {
+  "interval": "12h",
+  "directory": "./var/checkpoints",
+  "restore": "48h"
+},
+```
+
+Either you can move the checkpoints manually or you can use this script for moving the checkpoints.
+```bash
+#!/bin/bash
+
+# The path to your "directory" configured in CCMS and CCB config.json
+# replace the path as shown with the dummy paths.
+CCMS_CHECKPOINTS_DIR="/home/dummy/cc-metric-store/var/checkpoints"
+CCB_CHECKPOINTS_DIR="/home/dummy/cc-backend/var/checkpoints"
+
+# Check if the source directory actually exists
+if [ -d "$CCMS_DIR" ]; then    
+    if [ ! -d "$CCB_CHECKPOINTS_DIR" ]; then
+        mkdir "$CCB_CHECKPOINTS_DIR"
+    fi
+
+    mv -f $CCMS_CHECKPOINTS_DIR $CCB_CHECKPOINTS_DIR
+    echo "Success: 'checkpoints' moved from $CCMS_CHECKPOINTS_DIR to $CCB_DIR"
+else
+    echo "Error: Directory '$CCMS_CHECKPOINTS_DIR' does not exist."
+fi
+```
 
 ## Known issues
 

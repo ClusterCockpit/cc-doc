@@ -65,9 +65,12 @@ Section must exist.
 - `emission-constant`: Type integer (Optional). Energy Mix CO2 Emission Constant
   [g/kWh]. If entered, UI displays estimated CO2 emission for job based on jobs'
   total Energy.
-- `enable-resampling`: Type object (Optional). If configured, will enable
+- `resampling`: Type object (Optional). If configured, will enable
   dynamic downsampling of metric data using the configured values.
-  - `minimum-points`: Type integer. TODO
+  - `minimum-points`: Type integer. This option allows user to specify the minimum
+  points required for resampling; Example: 600. If minimum-points: 600, assuming
+  frequency of 60 seconds per sample, then a resampling would trigger only for 
+  jobs > 10 hours (600 / 60 = 10).
   - `resolutions`: Type array [integer]. Array of resampling target resolutions,
     in seconds; Example: [600,300,60].
   - `trigger`: Type integer. Trigger next zoom level at less than this many
@@ -177,9 +180,6 @@ Section must exist.
   metrics buffers
   - `file-format`: Type string (Optional). Format to use for checkpoint files.
     Can be JSON or Avro. Default: Avro.
-  - `interval`: Type string (required). Interval at which the metrics should be
-    checkpointed. Expression must be parsable by `time.ParseDuration()`. Usually
-    the unit is hours. E.g. `12h`.
   - `directory`: Type string (Optional). Path in which the checkpoints should be
     placed. Default: `./var/checkpoints`.
 - `cleanup`: Type object (Optional). Configuration for the cleanup process. If
