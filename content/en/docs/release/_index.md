@@ -50,6 +50,13 @@ You need to:
 - Transfer the checkpoints from the external `cc-metric-store` instance to the
   `cc-backend` `./var/checkpoints` directory
 
+The database migration can take more than one day. To minimize the downtime you
+can copy the existing SQLite database and perform the migration on the copy
+while the production instance is still running. `cc-slurm-adapter` will
+synchronize any missing jobs afterwards. The archive migration should only take
+1-2h. This only applies if you do it on a fast storage medium, e.g. an NVMe
+disk.
+
 ## Configuration changes
 
 GitHub Repository with [complete configuration examples](https://github.com/ClusterCockpit/cc-examples/tree/main/nhr%40fau).
