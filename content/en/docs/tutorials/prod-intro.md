@@ -25,6 +25,13 @@ ClusterCockpit requires the following components:
   as a service which performs a continuous replication of the sqlite database to
   multiple storage backends.
 - (Optional) **Metric store**: One or more `cc-metric-store` instances.
+  Advantages for using an external cc-metric-store are:
+  - Independent scaling and resource allocation
+  - Can restart metric store without affecting web interface and the other way
+    around
+  - Enables redundancy with multiple metric store instances
+  - Better isolation for security and resource management
+  - Can run on dedicated hardware optimized for in-memory workloads
 - (Optional) **NATS message broker**: Apart from REST APIs ClusterCockpit also
   supports NATS as a way to connect components. Using NATS brings a number of
   advantages:
