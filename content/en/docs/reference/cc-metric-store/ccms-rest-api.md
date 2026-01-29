@@ -18,30 +18,46 @@ method. The token is provided using the Authorization Bearer header.
 Example script to test the endpoint:
 
 ```bash
-#Only use JWT token if the JWT authentication has been setup
+# Only use JWT token if the JWT authentication has been setup
 JWT="eyJ0eXAiOiJKV1QiLCJhbGciOiJFZERTQSJ9.eyJ1c2VyIjoiYWRtaW4iLCJyb2xlcyI6WyJST0xFX0FETUlOIiwiUk9MRV9BTkFMWVNUIiwiUk9MRV9VU0VSIl19.d-3_3FZTsadPjDEdsWrrQ7nS0edMAR4zjl-eK7rJU3HziNBfI9PDHDIpJVHTNN5E5SlLGLFXctWyKAkwhXL-Dw"
 
-curl -X 'GET' 'http://localhost:8081/api/query/' -H "Authorization: Bearer $JWT" -d "{ \"cluster\": \"alex\", \"from\": 1720879275, \"to\": 1720964715, \"queries\": [{\"metric\": \"cpu_load\",\"host\": \"a0124\"}] }"
+curl -X 'GET' 'http://localhost:8080/api/query/' -H "Authorization: Bearer $JWT" \
+  -d '{ "cluster": "alex", "from": 1720879275, "to": 1720964715, "queries": [{"metric": "cpu_load","host": "a0124"}] }'
 ```
 
 ### NATS
 
-TODO
+As an alternative to the REST API, `cc-metric-store` can receive metrics via
+NATS messaging. See the [NATS configuration]({{< ref "ccms-configuration#nats-section" >}})
+for setup details.
 
 ## Usage of Swagger UI
 
-This Swagger UI is also available as part of `cc-metric-store` if you start it
-with the `dev` option:
+The Swagger UI is available as part of `cc-metric-store` if you start it
+with the `-dev` option:
 
 ```bash
 ./cc-metric-store -dev
 ```
 
-You may access it at [this URL](http://localhost:8082/swagger/).
+You may access it at `http://localhost:8080/swagger/` (adjust port to match your
+`main.addr` configuration).
+
+## API Endpoints
+
+The following REST endpoints are available:
+
+| Endpoint | Method | Description |
+|----------|--------|-------------|
+| `/api/query/` | GET/POST | Query metrics with selectors |
+| `/api/write/` | POST | Write metrics (InfluxDB line protocol) |
+| `/api/free/` | POST | Free buffers up to timestamp |
+| `/api/debug/` | GET | Dump internal state (debugging) |
+| `/api/healthcheck/` | GET | Node health status |
 
 ## Payload format for write endpoint
 
-The data comes in Influx DB line protocol format.
+The data comes in InfluxDB line protocol format.
 
 ```txt
 <metric>,cluster=<cluster>,hostname=<hostname>,type=<node/hwthread/etc> value=<value> <epoch_time_in_ns_or_s>
@@ -53,29 +69,27 @@ Real example:
 proc_run,cluster=fritz,hostname=f2163,type=node value=4i 1725620476214474893
 ```
 
-A more detailed description of the ClusterCockpit flavored Influx DB line protocol and their types can be found
-[here](https://github.com/ClusterCockpit/cc-specifications/blob/9b4ec9809ff66d40c262e0746d6a0be772d03d76/interfaces/lineprotocol/README.md)
+A more detailed description of the ClusterCockpit flavored InfluxDB line protocol and their types can be found
+[here](https://github.com/ClusterCockpit/cc-specifications/blob/master/interfaces/lineprotocol/README.md)
 in CC specification.
 
 Example script to test endpoint:
 
 ```bash
-#Only use JWT token if the JWT authentication has been setup
+# Only use JWT token if the JWT authentication has been setup
 JWT="eyJ0eXAiOiJKV1QiLCJhbGciOiJFZERTQSJ9.eyJ1c2VyIjoiYWRtaW4iLCJyb2xlcyI6WyJST0xFX0FETUlOIiwiUk9MRV9BTkFMWVNUIiwiUk9MRV9VU0VSIl19.d-3_3FZTsadPjDEdsWrrQ7nS0edMAR4zjl-eK7rJU3HziNBfI9PDHDIpJVHTNN5E5SlLGLFXctWyKAkwhXL-Dw"
 
-curl -X 'GET' 'http://localhost:8081/api/write/?cluster=alex' -H "Authorization: Bearer $JWT" -d "proc_run,cluster=fritz,hostname=f2163,type=node value=4i 1725620476214474893"
+curl -X 'POST' 'http://localhost:8080/api/write/' -H "Authorization: Bearer $JWT" \
+  -d "proc_run,cluster=fritz,hostname=f2163,type=node value=4i 1725620476214474893"
 ```
 
-## Usage of Swagger UI
+## Testing with the Metric Generator
 
-This Swagger UI is also available as part of `cc-metric-store` if you start it
-with the `dev` option:
-
-```bash
-./cc-metric-store -dev
-```
-
-You may access it at [this URL](http://localhost:8082/swagger/).
+For comprehensive testing of the write endpoint, a
+[Metric Generator Script]({{< ref "docs/reference/cc-backend/tools/dataGenerator" >}})
+is available. This script simulates high-frequency metric data and supports both
+REST and NATS transport modes, as well as internal (integrated into cc-backend)
+and external (standalone) cc-metric-store deployments.
 
 ## Swagger API Reference
 

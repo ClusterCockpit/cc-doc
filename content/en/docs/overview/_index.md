@@ -40,25 +40,27 @@ demonstrating its maturity and suitability for real-world HPC operations
 
 ## How does it work?
 
+### Simple setup
+
 {{< figure src="cc-arch.png"  width="80%" alt="ClusterCockpit software architecture" >}}
 
-ClusterCockpit consists of the following components:
+In a simple setup ClusterCockpit consists of the following components:
 
 - The web user interface and API backend: [cc-backend](https://github.com/ClusterCockpit/cc-backend)
-- The node-level metric collection agent: [cc-metric-collector](https://github.com/ClusterCockpit/cc-metric-collector)
+- The node-level metric collection agent (one per compute node): [cc-metric-collector](https://github.com/ClusterCockpit/cc-metric-collector)
 - The Slurm scheduler adapter: [cc-slurm-adapter](https://github.com/ClusterCockpit/cc-slurm-adapter)
 
 Node-level metrics are collected continuously by the metric collector and sent
-to the backend at **fixed intervals**. Job metadata is provided by the Slurm
-adapter—or by a custom adapter for other batch job schedulers—and transmitted to
-**cc-backend** via **HTTP or NATS**.
+to the backend at **fixed intervals**. Job metadata is provided by one Slurm
+adapter per Slurm Controller or by a custom adapter for other batch job
+schedulers and is transmitted to **cc-backend** via **HTTP or NATS**.
 
 Job metadata is stored in an **internal SQLite database**. For running jobs,
-cc-backend queries an internal metrics store to retrieve all required
+**cc-backend** queries an internal metrics store to retrieve all required
 time-series data. Once a job has finished, its complete dataset—including
 metadata and metrics—is **persisted to a JSON based job archive**.
 
-cc-backend supports multiple archive backends:
+**cc-backend** supports multiple archive backends:
 
 - A file-based archive
 - A single-file SQLite-based archive
@@ -68,6 +70,24 @@ Finished jobs are loaded on demand from the job archive. The internal metrics
 store uses a **memory pool**, retaining time-series data only as long as used
 by running jobs. This design enables data retention policies and allows
 ClusterCockpit to operate with **minimal maintenance overhead**.
+
+### Alternative setup
+
+{{< figure src="cc-arch-alt.png"  width="80%" alt="Alternative ClusterCockpit software architecture" >}}
+
+A more complicated setup with multiple clusters or stricter requirements with
+regard to security may look as follows:
+
+- The web user interface and API backend (There is always only one backend instance): [cc-backend](https://github.com/ClusterCockpit/cc-backend)
+- The node-level metric collection agent (one per compute node): [cc-metric-collector](https://github.com/ClusterCockpit/cc-metric-collector)
+- The Slurm scheduler adapter (one per Slurm controller): [cc-slurm-adapter](https://github.com/ClusterCockpit/cc-slurm-adapter)
+- Optional: External
+  [cc-metric-store](https://github.com/ClusterCockpit/cc-metric-store). Can be one
+  for all clusters, or any other distribution up to one per subcluster. You can
+  also mix to use the internal metric store for some clusters and one or more external
+  metric stores for others.
+
+The rest of the architecture is the same as above.
 
 ## Where to go next?
 

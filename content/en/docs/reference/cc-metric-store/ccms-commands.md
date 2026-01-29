@@ -27,7 +27,7 @@ _Example:_ `-config ./configfiles/configuration.json`
   -dev
 ```
 
-_Function:_ Enables the Swagger UI REST API documentation and playground
+_Function:_ Enables the Swagger UI REST API documentation and playground at `/swagger/`.
 
 ---
 
@@ -40,20 +40,56 @@ _Function:_ Go server listens via github.com/google/gops/agent (for debugging).
 ---
 
 ```txt
+  -loglevel <level>
+```
+
+_Function:_ Sets the logging level.
+
+_Options:_ `debug`, `info`, `warn` (default), `err`, `crit`
+
+_Example:_ `-loglevel debug`
+
+---
+
+```txt
+  -logdate
+```
+
+_Function:_ Add date and time to log messages.
+
+---
+
+```txt
   -version
 ```
 
 _Function:_ Shows version information and exits.
 
-Example config:
+---
+
+## Running
+
+```bash
+./cc-metric-store                              # Uses ./config.json
+./cc-metric-store -config /path/to/config.json # Custom config path
+./cc-metric-store -dev                         # Enable Swagger UI at /swagger/
+./cc-metric-store -loglevel debug              # Verbose logging
+```
+
+---
+
+## Example Configuration
+
+See [Configuration Reference]({{< ref "ccms-configuration" >}}) for detailed
+descriptions of all options.
 
 ```json
 {
+  "main": {
+    "addr": "localhost:8080",
+    "jwt-public-key": "kzfYrYy+TzpanWZHJ5qSdMj5uKUWgq74BWhQG6copP0="
+  },
   "metrics": {
-    "debug_metric": {
-      "frequency": 60,
-      "aggregation": "avg"
-    },
     "clock": {
       "frequency": 60,
       "aggregation": "avg"
@@ -75,18 +111,6 @@ Example config:
       "aggregation": "avg"
     },
     "cpu_user": {
-      "frequency": 60,
-      "aggregation": "avg"
-    },
-    "nv_mem_util": {
-      "frequency": 60,
-      "aggregation": "avg"
-    },
-    "nv_temp": {
-      "frequency": 60,
-      "aggregation": "avg"
-    },
-    "nv_sm_clock": {
       "frequency": 60,
       "aggregation": "avg"
     },
@@ -122,19 +146,7 @@ Example config:
       "frequency": 60,
       "aggregation": "sum"
     },
-    "ib_recv_pkts": {
-      "frequency": 60,
-      "aggregation": "sum"
-    },
-    "ib_xmit_pkts": {
-      "frequency": 60,
-      "aggregation": "sum"
-    },
     "cpu_power": {
-      "frequency": 60,
-      "aggregation": "sum"
-    },
-    "core_power": {
       "frequency": 60,
       "aggregation": "sum"
     },
@@ -150,67 +162,27 @@ Example config:
       "frequency": 60,
       "aggregation": null
     },
-    "lustre_close": {
-      "frequency": 60,
-      "aggregation": null
-    },
-    "lustre_open": {
-      "frequency": 60,
-      "aggregation": null
-    },
-    "lustre_statfs": {
-      "frequency": 60,
-      "aggregation": null
-    },
-    "lustre_read_bytes": {
-      "frequency": 60,
-      "aggregation": null
-    },
-    "lustre_write_bytes": {
-      "frequency": 60,
-      "aggregation": null
-    },
-    "net_bw": {
-      "frequency": 60,
-      "aggregation": null
-    },
-    "file_bw": {
-      "frequency": 60,
-      "aggregation": null
-    },
     "mem_bw": {
       "frequency": 60,
       "aggregation": "sum"
     },
-    "mem_cached": {
-      "frequency": 60,
-      "aggregation": null
-    },
     "mem_used": {
       "frequency": 60,
       "aggregation": null
-    },
-    "vectorization_ratio": {
-      "frequency": 60,
-      "aggregation": "avg"
     }
   },
-  "checkpoints": {
-    "interval": "1h",
-    "directory": "./var/checkpoints",
-    "restore": "1h"
-  },
-  "archive": {
-    "interval": "24h",
-    "directory": "./var/archive"
-  },
-  "http-api": {
-    "address": "localhost:8082",
-    "https-cert-file": null,
-    "https-key-file": null
-  },
-  "retention-in-memory": "48h",
-  "nats": null,
-  "jwt-public-key": "kzfYrYy+TzpanWZHJ5qSdMj5uKUWgq74BWhQG6copP0="
+  "metric-store": {
+    "checkpoints": {
+      "interval": "12h",
+      "directory": "./var/checkpoints"
+    },
+    "memory-cap": 100,
+    "retention-in-memory": "48h",
+    "cleanup": {
+      "mode": "archive",
+      "interval": "48h",
+      "directory": "./var/archive"
+    }
+  }
 }
 ```
