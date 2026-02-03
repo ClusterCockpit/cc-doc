@@ -180,6 +180,7 @@ Section must exist.
   metrics buffers
   - `file-format`: Type string (Optional). Format to use for checkpoint files.
     Can be JSON or Avro. Default: Avro.
+  - `interval`: Type string (Required). Interval at which the metrics should be checkpointed..
   - `directory`: Type string (Optional). Path in which the checkpoints should be
     placed. Default: `./var/checkpoints`.
 - `cleanup`: Type object (Optional). Configuration for the cleanup process. If
