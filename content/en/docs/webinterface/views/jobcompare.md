@@ -11,9 +11,9 @@ weight: 4
     caption="Job list with compare switch. In this example, filters return 145 jobs, while no job is selected manually."
 >}}
 
-Accessible from the job list primary view, the job compare view allows for the comparison of metric statistics in a pseudo-time-dependent manner.
+Accessible from the general job list as well as the user view job lists, the job compare view allows for the comparison of metric statistics in a pseudo-time-dependent manner.
 
-The "Compare Jobs" button is located in the upper right corner of the job list view. Jobs for comparison are either selected by
+The "Compare Jobs" button is located in the upper right corner of the job list views. Jobs for comparison are either selected by
 
 1) ... a combination of filters resulting in a dataset of _500 jobs or less_.
 2) ... manual job selection by checking the box in the job info card.
@@ -42,7 +42,7 @@ The "Metric Selection" is active and can be used to add additional metric compar
 
 "Return to List" closes the compare view and restores the former job list view.
 
-The "Resource Compare" plot is always shown at the first position. It features a semi-logarithmic view of allocated job resources in a pseudeo-time-dependent manner, as all jobs are sorted by actual start time. The data is colored as follows:
+The resource [compare plot]({{< ref "plots#comparogram" >}}) is always shown at the first position. It features a semi-logarithmic view of allocated job resources in a pseudeo-time-dependent manner, as all jobs are sorted by actual start time. The data is colored as follows:
 
 * Black: Nodes - will always be at least `1` (Note: Also for shared jobs!)
 * Blue: Hardware Threads ( ~ Cores)
@@ -60,7 +60,7 @@ The legend includes further information, such as:
     caption="Job compare view metric plot and table. 'Clock' metric statistics are plotted for every job sorted by their startTime. All information is also shown as sortable table at the bottom of the compare view."
 >}}
 
-Below the resource compare plot, the individual metric compare plots are rendered. For each job, the `Min/Max/Avg` of the respective metric is plotted in a banded manner.
+Below the first plot, the individual metric [compare plots]({{< ref "plots#comparogram" >}}) are rendered. For each job, the `Min/Max/Avg` of the respective metric is plotted in a banded manner.
 
 Zooming is possible, and will be synchronized to all other rendered plots, including the resource comparison.
 

@@ -11,7 +11,7 @@ weight: 1
     caption="Personal User Job View. Similar to the general job list view, this view expands it by user-specific meta data, as well as distributions histograms."
 >}}
 
-The "My Jobs" View is available to all users regardless of authority and displays the users personal jobs, i.e. jobs started by this users username on the cluster systems.
+The "My Jobs" View is available to all users regardless of authority and displays the users *personal jobs*, i.e. jobs started by this users username on the cluster systems.
 
 The view is a personal variant of the [user job view]({{< ref "userjobs" >}} "User Job View") and therefore also consists of three components: Basic Information about the users jobs, selectable statistic histograms of the jobs, and a generalized job list.
 
@@ -51,3 +51,7 @@ The options are as follows: `10 (Default), 20, 50, 100`.
 ## Job List
 
 The job list displays all jobs started by your username on the systems. Additional filters will always respect this limitation. For a detailed description of the job list component, see the [related documentation]({{< ref "joblist" >}} "Job List").
+
+### Job Compare
+
+The job list also allows comparison of either user selected jobs or of all job listed, if the total number of jobs does not exceed 500 matches. For a detailed description of the job list component, see the [related documentation]({{< ref "jobcompare" >}} "Job Compare View").

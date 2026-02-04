@@ -30,6 +30,9 @@ The table can be sorted by clicking the respective icon next to the column heade
 |User Name|The user account jobs are associated with|Links to the users' [job list]({{< ref "userjobs" >}} "User Job List") with preset filter returning only jobs of this user and additional histograms|
 |Name|The name of user||
 |Total Jobs|Users' total of all started jobs||
+|Short Jobs|Users' total of all jobs below short duration threshold||
+|Total Cores|*Conditional, if running jobs*: Users' total of all cores allocated to currently running jobs||
+|Total Accelerators|*Conditional, if running jobs*: Users' total of all accelerators allocated to currently running jobs||
 |Total Walltime|Users' total requested walltime||
 |Total Core Hours|Users' total of all used core hours||
 |Total Accelerator Hours|Users' total of all used accelerator hours|*Please Note*: This column is always shown, and will return `0` for clusters without installed accelerators|
