@@ -88,6 +88,14 @@ If the Job-List was opened via [a ProjectId-Link]({{< ref "#filters" >}} "Job Li
 
 If desired, the fixed project can be removed by pressing the button right of the input field, returning the joblist to its default state.
 
+### Compare Jobs
+
+This button is used to compare either a selected number of jobs or all jobs currently matching the selected filters by switching to the [job comparison view]({{< ref "jobcompare" >}} "Job Compare View").
+
+Users can select the to be compared jobs in the [job info]({{< ref "#job-info" >}} section via the selector checkbox in the upper right corner. Alternatively, every combination of job list filters can be used to generate a comparison set.
+
+{{< alert >}}*Please Note:* The button will be disabled if the total amount of to be compared jobs exceeds 500 matches.{{< /alert >}}
+
 ## Job List Table
 
 The main component of the job list view renders data pulled from the database, the job archive (completed jobs) and the configured metric data source (running jobs).
@@ -107,6 +115,8 @@ The meta data containing general information about the job is represented in the
 |Start Timestamp|`10.1.2024, 10:00:00`|The epoch timestamp the job was started at, formatted for human readability|-|
 |Duration|`0:21:10`|The runtime of the job, will be updated for running jobs on reload. Additionally indicates the [state]({{< ref "filters#job-states" >}} "Job State") of the job as colored pill|-|
 |Walltime|`24:00:00`|The allocated walltime for the job as per job submission script|-|
+
+Two additional functions are located in the upper right corner of each job information segment for each job, namely, a helper to easily copy the respective job ID to the clipboard as well as the selector checkbox to mark the respective job for job comparison (see above).
 
 ### Footprint
 

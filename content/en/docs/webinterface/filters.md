@@ -39,11 +39,24 @@ Select a configured cluster, or a specified partition of a given cluster, and di
 
 {{< figure src="../figures/filter_state.png" alt="Job State Filter" width="100%" class="ccfigure mw-xxs">}}
 
-Select one or more job states, and display only jobs matching the selected criteria.
+Select one or more job states, and display only jobs matching the selected criteria. Additionally, filters for resource sharing as well as processing type can be selected. Combinations *are possible*, for example: `Only Running, Shared, Batch Processed Jobs`.
 
-*Options:* `running, completed, failed, cancelled, stopped, timeout, preempted, out_of_memory`
+A note on sharing option nomenclature: Select options are chosen to be "Human Readable", while the strings used in the backend database column `job.shared` differ as follows:
 
-*Default:* All states
+|Option Name|Database String|
+|---|---|
+|All|No Filter Applied|
+|Exclusive|`none`|
+|Shared|`multi_user`|
+|Multitask|`single_user`|
+
+* *State Options:* `Pending, Running, Completed, Failed, Timeout, Deadline, Preempted, Suspended, Cancelled, Out_of_memory, Boot_fail, Node_fail`
+* *Sharing Options:* `All, Exclusive, Shared, Multitask`
+* *Processing Options:* `All, Interactive, Batch Processed`
+
+*Default:* All states, all sharing types, all processing types
+
+{{< alert >}}**BETA Warning:** *Currently, processing type filters depend simply on `meta_data.jobName == 'interactive'`!* If interactive jobs are permitted on your site, but use a different naminig scheme or a different method to differentiate them from batch processed jobs, please contact or support mail adress.{{< /alert >}}
 
 ### Start Time
 

@@ -91,11 +91,28 @@ Histograms display (binned) data allowing distributions of the repective data so
 
 A roofline plot, or roofline model, represents the utilization of available resources as the relation between computation and memory usage.
 
-### Dotted Roofline
+### Bubble Roofline
 
-Roofline models rendered as dotted plots display the utilization of hardware resources over time.
+The roofline models shown in the status dashboard views are rendered as bubble scatterplots. Utilization data represents either the job-average or the node-average of the last 5 minutes of sampled data, i.e running jobs or reported node metrics.
 
-{{< alert >}}*Please Note:* The roofline models rendered in the status view are *not* job-derived, but display the utilization of single nodes at the moment of data-collection. Therefore, no time information is required, and alle dots are colored blue.{{< /alert >}}
+Additional information is rendered by color and size of the bubbles, depending on the data source:
+
+|Type|Color|Size|
+|---|---|---|
+|Node Roofline|The current scheduler state of the node.|The current number of parallel jobs currently running on the node.|
+|Job Roofline|The current job duration.|The amount of resources used by the job (Number of allocated nodes OR number of allocated accelerators).|
+
+Clicking on a bubble will open a new tab with either the respective jobs' detail view, or the respective nodes' metric overview.
+
+#### Example
+
+{{< figure src="../figures/roofline_bubbles.png" alt="Bubble Roofline Examples" width="100%" class="ccfigure mw-xl"
+    caption="Roofline models as shown for a subcluster. Legend on hover displays additional information as written text."
+>}}
+
+### Scatter Roofline
+
+The roofline model shown in the job detail view is rendered as dotted scatterplot. It renders every sampled utilization data point colored by time.
 
 #### Example
 
@@ -105,7 +122,7 @@ Roofline models rendered as dotted plots display the utilization of hardware res
 
 ### Heatmap Roofline
 
-The roofline model shown in the analysis view, as the single exception, is rendered as a heatmap. This is due to the data being displayed is derived from a number of jobs greater than one, since the analysis view returns all jobs matching the selected filters. The roofline therefore colors regions of accumulated activity in increasing shades of red, depicting the regions below the roofs in which the returned jobs primarily perform.
+The roofline model shown in the analysis view is rendered as a heatmap. This is due to the data being displayed is derived from a number of jobs greater than one, since the analysis view returns all jobs matching the selected filters. The roofline therefore colors regions of accumulated activity in increasing shades of red, depicting the regions below the roofs in which the returned jobs primarily perform.
 
 {{< alert >}}*Please note:* The plot *is* rendered in double-logarithmic scaling, yet the lines in the background seem linear: The heatmap roofline is rendered manually (and directly) using only HTML canvas, while the dotted roofline model is rendered with the help of the [uPlot](https://github.com/leeoniya/uPlot) package, which allows easy display of double-log scales.{{< /alert >}}
 
@@ -113,6 +130,41 @@ The roofline model shown in the analysis view, as the single exception, is rende
 
 {{< figure src="../figures/roofline_heatmap.png" alt="Heatmap Roofline Example" width="100%" class="ccfigure mw-xs"
     caption="In this example, the selected jobs perform in near optimal, as depicted by increased job activity right below the first 'knee' of the roofline model."
+>}}
+
+## Double Metric Plot
+
+Variant of the default metric plot rendering data on Y1 and Y2 axes over time. Currently only used in status dashboards to display cluster-wide memory bandwidth and flops per second sums, scaled to Tera (10<sup>12</sup>), as a measure of cluster utilization.
+
+#### Example
+
+{{< figure src="../figures/double-metric.png" alt="Double Metric Plot Example" width="100%" class="ccfigure mw-sm"
+    caption="`mem_bw` (blue) and `flops_any` (red) metrics as time-dependent sums over all nodes of cluster alex. In this example, the data is shown for the last 8 hours of 80 nodes."
+>}}
+
+## Stacked State Plot
+
+For indicating the development of reported cluster scheduler node states, or metric health states, a stacked representation of the counts over time is used. The sum of all timeseries Y-values is representative of the total sum of reporting nodes.
+
+|Color|<span style="background-color: rgba(0, 128, 0, 0.6);">&nbsp;&nbsp;&nbsp;</span>&nbsp;Green|<span style="background-color: rgba(255, 215, 0, 0.6);">&nbsp;&nbsp;&nbsp;</span>&nbsp;Yellow|<span style="background-color: rgba(255, 0, 0, 0.6);">&nbsp;&nbsp;&nbsp;</span>&nbsp;Red|<span style="background-color: rgba(0, 0, 255, 0.6);">&nbsp;&nbsp;&nbsp;</span>&nbsp;Blue|<span style="background-color: rgba(255, 0, 255, 0.6);">&nbsp;&nbsp;&nbsp;</span>&nbsp;Magenta|<span style="background-color: rgba(0, 0, 0, 0.6);">&nbsp;&nbsp;&nbsp;</span>&nbsp;Black|
+|---|---|---|---|---|---|---|
+|**Scheduler States**|Allocated|Mixed|Down|Idle|Reserved|Unknown|
+|**Health States**|Full|Partial|Failed|-|-|-|
+
+#### Example
+
+{{< figure src="../figures/stacked-states.png" alt="Stacked State Plot Example" width="100%" class="ccfigure mw-xl"
+    caption="In this example, a total of 250 nodes reported their respective state information for the last four hours. 'Node States' report minor fluctuations of four states currently present within the cluster. 'Health States' report optimal quality of the transmitted metrics during an identical timeframe."
+>}}
+
+## Pie Charts
+
+Current distributions of, for example, top usage information for clusters, or the latest state of node health (see above), will be rendered using classic pie chart representation. Pie charts in ClusterCockpit are always accompanied by a color legend as well as a table representation of the data. Entities such as users or projects are always linked and will lead to the respective view in a new tab.
+
+#### Example
+
+{{< figure src="../figures/pie-chart.png" alt="Pie Chart Example" width="100%" class="ccfigure mw-xl"
+    caption="Pie charts representing top usage by job count for single users and project groups, respectively (Name scrambling is active). Color scheme of pie charts will change if color blind mode is enabled."
 >}}
 
 ## Polar Plots
@@ -127,6 +179,22 @@ By clicking on one of the two legends, the respective dataset will be hidden. Th
     caption="In this example, the selected job performs quite well, as depicted in the acceptable and equally distributed usage of core metrics. On average, all three metrics are utilized at about 20% (0.2) of the configured hardware maximum. At a point in time, the maximum even reached close to 100% (1.0) of the memory bandwidth (mem_bw)."
 >}}
 
+## Comparogram
+
+A special plot coined "Comparogram" to display information about multiple jobs, sorted by `start_time`-timestamp, for comparison purposes.
+
+Used in  the "Job Compare"-functionality, the top plot always shows the allocated resources of the compared jobs in a semi-logarithmic manner, with X the `JobID` and Y the resource count. Three types of resources are rendered, if found: Nodes (Black line, always at least with a value of 1), Threads (Blue line, always at least with a value of 1), and Accelerators (Red line, can be 0).
+
+The resource compare plot is always accompanied by (at least) one metric comparison plot. For the selected metric, the job statistics calculated over the full runtime of the respective job are rendered, and plotted according to job start timestamp.
+
+To make localization of interesting artifacts easier, the pointer is synchronized between all rendered compare plots in the compare view.
+
+#### Example
+
+{{< figure src="../figures/comparogram.png" alt="Comparogram Example" width="100%" class="ccfigure mw-lg"
+    caption="Example of compare plot usage. Top plot shows resource usage of jobs running on a CPU-Only cluster, with additional information in the legend per hovered job. The second plot shows the `mem_used` metric statistics for each compared job with an easily recognizable peak, probably due to the high resource allocation of the respective job."
+>}}
+
 ## Scatter / Bubble Plot
 
 Bubble scatter plots show the position of the averages of two selected metrics in relation to each other.
@@ -135,6 +203,6 @@ Each circle represents one job, while the size of a circle is proportional to it
 
 #### Example
 
-{{< figure src="../figures/scatterplot.png" alt="Scatter Plot Example" width="100%" class="ccfigure mw-xxs"
+{{< figure src="../figures/scatterplot.png" alt="Scatter Plot Example" width="100%" class="ccfigure mw-xs"
     caption="In this example, the selected metrics are accelerator clock on the X-axis and accelerator temperature on the Y-axis. Expectedly, long running, high-clock jobs accumulate in the top-right corner, while jobs with less demanding (less clocking) jobs remain cooler."
 >}}

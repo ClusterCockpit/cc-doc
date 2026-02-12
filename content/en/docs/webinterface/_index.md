@@ -17,9 +17,9 @@ The entrypoint for each login via the login mask is a table containing each conf
   - Clicking the Link will forward to the [job list]({{< ref "views/joblist" >}} "Job List") with preset filters for cluster and running jobs
 - **Total Jobs**: Number of Jobs in the respective job-archive
   - Clicking the Link will forward to the [job list]({{< ref "views/joblist" >}} "Job List") with preset filter for cluster
-- **Status View**: Link to the [status view]({{< ref "views/status" >}} "Status View") of the respective cluster
+- **Status View**: Link to the [status dashboard]({{< ref "views/status" >}} "Status Dashboard") of the respective cluster
   - This column is only shown for users with [admin]({{< ref "roles#administrator-role" >}} "Nodes View") authority.
-- **Systems View**: Link to the [nodes view]({{< ref "views/nodes" >}} "Nodes View") view of the respective cluster
+- **Systems View**: Link to the [node overview]({{< ref "views/nodes" >}} "Nodes View") of the respective cluster
   - This column is only shown for users with [admin]({{< ref "roles#administrator-role" >}} "Nodes View") authority.
 
 ## Navigation Bar

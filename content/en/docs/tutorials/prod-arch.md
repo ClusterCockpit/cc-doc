@@ -141,7 +141,9 @@ configuration and lifecycle.
 
 **Disadvantages:**
 
-- Metric store restart requires cc-backend restart
+- Metric store restart requires cc-backend restart and the other way around
+- A cc-backend restart can take very long since the metric store checkpoints
+  have to loaded on startup
 - Resource contention between web serving and metric ingestion
 - No horizontal scaling of metric ingestion
 - Single point of failure for entire system
@@ -166,7 +168,8 @@ its REST API.
 **Advantages:**
 
 - Independent scaling and resource allocation
-- Can restart metric store without affecting web interface
+- Can restart metric store without affecting web interface and the other way
+  around
 - Enables redundancy with multiple metric store instances
 - Better isolation for security and resource management
 - Can run on dedicated hardware optimized for in-memory workloads

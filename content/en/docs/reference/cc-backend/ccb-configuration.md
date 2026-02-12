@@ -78,9 +78,39 @@ Section must exist.
 - `machine-state-dir`: Type string (Optional). Where to store MachineState
   files. TODO: Explain in more detail!
 - `api-subjects`: Type object (Optional). NATS subjects configuration for
-  subscribing to job and node events. Default: No NATS API.
-  - `subject-job-event`: Type string. NATS subject for job events (start_job, stop_job).
-  - `subject-node-state`: Type string. NATS subject for node state updates.
+  subscribing to job and node events. When configured, the REST API endpoints
+  for `start_job` and `stop_job` are disabled in favor of NATS messaging.
+  Default: No NATS API.
+  - `subject-job-event`: Type string (required). NATS subject for job events (start_job, stop_job).
+  - `subject-node-state`: Type string (required). NATS subject for node state updates.
+- `nodestate-retention`: Type object (Optional). Configuration for automatic
+  cleanup of old node state records from the database. Runs hourly. Default: No
+  retention (node states accumulate indefinitely).
+  - `policy`: Type string (required). Retention policy. Possible values:
+    `delete` (remove old records), `parquet` (archive to Parquet format then
+    delete).
+  - `age`: Type integer (Optional). Retention age in hours. Records older than
+    this are affected. Default: `24`.
+  - `target-kind`: Type string (Optional). Target storage kind for parquet
+    archiving: `file` or `s3`. Only applicable for `parquet` policy. Default:
+    `file`.
+  - `target-path`: Type string (Optional). Filesystem path for parquet file
+    storage. Only applicable for `target-kind` `file`.
+  - `target-endpoint`: Type string (Optional). S3 endpoint URL. Only applicable
+    for `target-kind` `s3`.
+  - `target-bucket`: Type string (Optional). S3 bucket name. Only applicable
+    for `target-kind` `s3`.
+  - `target-access-key`: Type string (Optional). S3 access key. Only applicable
+    for `target-kind` `s3`.
+  - `target-secret-key`: Type string (Optional). S3 secret key. Only applicable
+    for `target-kind` `s3`.
+  - `target-region`: Type string (Optional). S3 region. Only applicable
+    for `target-kind` `s3`.
+  - `target-use-path-style`: Type bool (Optional). Use path-style S3 addressing.
+    Required for MinIO and some S3-compatible services. Only applicable for
+    `target-kind` `s3`.
+  - `max-file-size-mb`: Type integer (Optional). Maximum parquet file size in MB
+    before splitting into a new file. Default: `128`.
 
 ### Section `nats`
 
@@ -107,21 +137,54 @@ Section is optional. If section is not provided, the default is `kind` set to
 
 - `kind`: Type string (required). Set archive backend. Supported values: `file`,
   `s3`, `sqlite`.
-- `path`: Type string (Optional). Path to the job-archive. Default: `./var/job-archive`.
+- `path`: Type string (Optional). Path to the job-archive. Only applicable for
+  `file` backend. Default: `./var/job-archive`.
+- `db-path`: Type string (Optional). Path to SQLite database file. Only
+  applicable for `sqlite` backend.
+- `endpoint`: Type string (Optional). S3 endpoint URL. Only applicable for `s3`
+  backend. Required for S3-compatible services like MinIO.
+- `access-key`: Type string (Optional). S3 access key ID. Only applicable for
+  `s3` backend.
+- `secret-key`: Type string (Optional). S3 secret access key. Only applicable
+  for `s3` backend.
+- `bucket`: Type string (Optional). S3 bucket name. Only applicable for `s3`
+  backend.
+- `region`: Type string (Optional). S3 region. Only applicable for `s3` backend.
+- `use-path-style`: Type bool (Optional). Use path-style S3 URLs. Required for
+  MinIO and some S3-compatible services. Only applicable for `s3` backend.
 - `compression`: Type integer (Optional). Setup automatic compression for jobs
-  older than number of days.
+  older than number of days. Default: `7`.
 - `retention`: Type object (Optional). Enable retention policy for archive and
   database.
-  - `policy`: Type string (required). Retention policy. Possible values none,
-    delete, move.
+  - `policy`: Type string (required). Retention policy. Possible values: `none`,
+    `delete`, `move`, `parquet`.
   - `include-db`: Type bool (Optional). Also remove jobs from database. Default:
     `true`.
+  - `omit-tagged`: Type bool (Optional). Skip jobs that have tags when applying
+    the retention policy. Default: `false`.
   - `age`: Type integer (Optional). Act on jobs with startTime older than age
-    (in days).
-    Default: 7 days.
+    (in days). Default: `7`.
   - `location`: Type string (Optional). The target directory for retention. Only
-    applicable
-    for retention policy move. Only applies for move policy.
+    applicable for retention policy `move`.
+  - `target-kind`: Type string (Optional). Target storage kind for parquet
+    archiving: `file` or `s3`. Only applicable for retention policy `parquet`.
+  - `target-path`: Type string (Optional). Filesystem path for parquet file
+    storage. Only applicable for `target-kind` `file`.
+  - `target-endpoint`: Type string (Optional). S3 endpoint URL for parquet
+    target. Only applicable for `target-kind` `s3`.
+  - `target-bucket`: Type string (Optional). S3 bucket name for parquet target.
+    Only applicable for `target-kind` `s3`.
+  - `target-access-key`: Type string (Optional). S3 access key for parquet
+    target. Only applicable for `target-kind` `s3`.
+  - `target-secret-key`: Type string (Optional). S3 secret key for parquet
+    target. Only applicable for `target-kind` `s3`.
+  - `target-region`: Type string (Optional). S3 region for parquet target. Only
+    applicable for `target-kind` `s3`.
+  - `target-use-path-style`: Type bool (Optional). Use path-style S3 URLs for
+    parquet target. Only applicable for `target-kind` `s3`.
+  - `max-file-size-mb`: Type integer (Optional). Maximum parquet file size in MB
+    before splitting into a new file. Only applicable for retention policy
+    `parquet`. Default: `512`.
 
 ### Section `auth`
 
@@ -180,6 +243,7 @@ Section must exist.
   metrics buffers
   - `file-format`: Type string (Optional). Format to use for checkpoint files.
     Can be JSON or Avro. Default: Avro.
+  - `interval`: Type string (Required). Interval at which the metrics should be checkpointed..
   - `directory`: Type string (Optional). Path in which the checkpoints should be
     placed. Default: `./var/checkpoints`.
 - `cleanup`: Type object (Optional). Configuration for the cleanup process. If
@@ -197,6 +261,41 @@ Section must exist.
   - `subscribe-to`: Type string (required). NATS subject to subscribe to.
   - `cluster-tag`: Type string (Optional). Allow lines without a cluster tag,
     use this as default.
+
+### Section `metric-store-external`
+
+Section is optional. Configures external cc-metric-store instances for reading
+metric data. This is an array of objects, each mapping a scope (cluster name or
+`*` wildcard) to an external metric store URL. When configured alongside the
+internal `metric-store` section, the external stores extend the available metric
+sources.
+
+Each array entry has the following properties:
+
+- `scope`: Type string (required). Scope identifier for routing metric queries.
+  Use a cluster name to route queries for that specific cluster, or `*` as a
+  default fallback for any unmatched cluster.
+- `url`: Type string (required). URL of the external cc-metric-store endpoint
+  (e.g., `http://host:8082`).
+- `token`: Type string (required). Authentication token (JWT) for the external
+  metric store.
+
+Example:
+
+```json
+"metric-store-external": [
+  {
+    "scope": "*",
+    "url": "http://metricstore-default:8082",
+    "token": "eyJhbGci..."
+  },
+  {
+    "scope": "fritz",
+    "url": "http://metricstore-fritz:8084",
+    "token": "eyJhbGci..."
+  }
+]
+```
 
 ### Section `ui`
 

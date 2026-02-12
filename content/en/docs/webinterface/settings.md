@@ -9,9 +9,13 @@ weight: 1
 
 The settings view allows [non-privileged users]({{< ref "roles#user-role" >}} "User Role") to choose their preferred paging style, to customize how metric plots are rendered, and to generate personalized tokes for use with the [API]({{< relref "../reference/cc-backend/rest-api.md" >}} "CC-Backend API"). Customization options include line width, number of plots per row (where applicable), whether backgrounds should be colored, and the color scheme of multi-line metric plots.
 
+If required, users can also enable a color blind friendly mode here. Different variants of color schemes for timeseries plots will be displayed and can be chosen as before. Other adaptions for better clarity include: Timeseries plot colored backgrounds, statistics data rendering, pie and stacked chart color schemes.
+
 [Privileged users]({{< ref "roles#support-role" >}} "Support Role") will find an [additional interface]({{< ref "#support-options" >}} "Support Options") for choosing the preferred paging style used in the [node list view]({{< ref "nodes#node-list" >}} "Node List").
 
 [Administrators]({{< ref "roles#administrator-role" >}} "Admin Role") will also find an [administrative interface]({{< ref "#administration-options" >}} "Administration Options") for handling local user accounts. This includes creating local accounts from the interface, editing user roles, listing and deleting existing users, generating JSON Web Tokens for API usage, and delegating managed projects for [manager role]({{< ref "roles#manager-role" >}} "Manager Role") users.
+
+Apart from user management options, administrators have acces to multiple tools such as presentation mode, resampling information (if configured), homepage notice editing, and access to the public cluster status dashboards (BETA).
 
 ## User Options
 
@@ -245,6 +249,12 @@ Then press the respective button to remove or add the selected project from the 
 ### Scramble Names (Presentation Mode)
 
 Activating this switch will replace all user names, person names, and project names with random strings. Intended for presentations on a production system while retaining critical information from a publc audience.
+
+### Public Dashboard Links (BETA)
+
+Collected here are links per cluster leading to the "Public" version of cluster status dashboards. These are intended to be displayed on publicly displayed screens to inform users of the current cluster health in publicly accessible areas.
+
+{{< alert >}}**BETA Warning:** *Currently, administrator authority is required to use these views!* An active administrator session *needs to be and will be kept open* while displaying the view on public displays. At the moment, this view is intended for testing the layout, selection and performance of the collected information. As such, we tag this functionality in **BETA** status as of now.{{< /alert >}}
 
 ### Metric Plot Resampling
 

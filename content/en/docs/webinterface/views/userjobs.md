@@ -11,7 +11,7 @@ weight: 2
     caption="User Job View. Similar to the general job list view, this view expands it by user-specific meta data, as well as distribution histograms."
 >}}
 
-The "User Jobs" View is only available to management and supporting staff and displays jobs of the selected user, i.e. jobs started by this users username on the cluster systems.
+The "User Jobs" View is only available to management and supporting staff and displays jobs belonging to a single user *other than the active user*, i.e. jobs started by other users on the cluster systems can be reviewed in detail by the supporting staff or administrators.
 
 The view consists of three components: Basic Information about the users jobs, selectable statistic histograms of the jobs, and a generalized job list.
 
@@ -53,3 +53,7 @@ The options are as follows: `10 (Default), 20, 50, 100`.
 ## Job List
 
 The job list displays all jobs started by this users username on the systems. Additional filters will always respect this limitation. For a detailed description of the job list component, see the [related documentation]({{< ref "joblist" >}} "Job List").
+
+### Job Compare
+
+The job list also allows comparison of either user selected jobs or of all job listed, if the total number of jobs does not exceed 500 matches. For a detailed description of the job list component, see the [related documentation]({{< ref "jobcompare" >}} "Job Compare View").
