@@ -66,6 +66,27 @@ the `dev` option:
 
 You may access it at [this URL](http://localhost:8080/swagger/).
 
+## Conditional Endpoints
+
+When `api-subjects` is configured in the `main` section of `config.json` (i.e.,
+NATS messaging is enabled for job events), the REST API endpoints
+`/api/jobs/start_job/` and `/api/jobs/stop_job/` are **disabled**. Job
+start/stop operations are then handled exclusively via NATS. All other REST
+endpoints remain available regardless of NATS configuration.
+
+## API Endpoint Groups
+
+The REST API is organized into several route groups:
+
+- **Admin API** (`/api/`): Full job and cluster management, requires admin/API role JWT.
+- **User API** (`/userapi/`): Read-only job query endpoints for regular users.
+- **Metric Store API** (`/metricstore/`): Metric data ingestion, health checks,
+  and debugging endpoints.
+- **Config API** (`/config/`): User management and configuration, uses session
+  authentication.
+- **Frontend API** (`/frontend/`): JWT generation and user config updates, uses
+  session authentication.
+
 ## Swagger API Reference
 
 {{< alert title="Non-Interactive Documentation" >}}
