@@ -19,11 +19,12 @@ The node overview is always called in respect to one specified cluster. It displ
 
 ### Overview Selection Bar
 
-{{< figure src="../../figures/nodesview_navbar.png" alt="Nodes View" width="100%" class="ccfigure mw-xl">}}
+{{< figure src="../../figures/node-overview-tools.png" alt="Nodes Overview Toolbar" width="100%" class="ccfigure mw-xl">}}
 
 Selections regarding the display, and update, of the plots rendered in the node table can be performed here:
 
 * *Find Node:*: Filter the node table by hostname. Partial queries are possible.
+* *State:*: Filter the node table by last reported node state.
 * *Displayed Timerange:* Select the timeframe to be rendered in the node table
   * `Custom`: Select timestamp `from` and `to` in which the data should be fetched. It is possible to select date and time.
   * `15 Minutes, 30 Minutes, 1 Hour, 2 Hours, 4 Hours, 12 Hours, 24 Hours`
@@ -36,6 +37,8 @@ Selections regarding the display, and update, of the plots rendered in the node 
 Nodes (hosts) are ordered alphanumerically in this table, rendering the selected metric in the selected timeframe.
 
 Each heading links to the singular [node view]({{< ref "node" >}} "Node View") of the respective host.
+
+A colored pill indicates the currently reported node state for that node.
 
 ## Node List
 
@@ -52,23 +55,37 @@ The always visible "Node Info"-Card displays the following information. "List"-B
 |Field|Example|Description|Destination|
 |-----|-------|-----------|----|
 |Card Header|`Node a0421 Alex A40`|Hostname and Cluster|[Node View]({{< ref "node" >}} "Node View")|
-|Status Indicator|`Status Exclusive`|Indicates the host state via keywords, see below|-|
+|Job Indicator|`Exclusive`|Indicates the joba nd metric states via keywords, see below|-|
+|State Indicator|`Allocated`|Indicates the host state via keywords, see below|-|
 |Activity|`2 Jobs`|Number of Jobs currently running on host|[Job List]({{< ref "joblist" >}} "Job List")|
 |Users|`2 Users`|Number and IDs of users currently running jobs|[User Table]({{< ref "users" >}} "User Table")|
 |Projects|`1 Project`|Number and IDs of projects currently running jobs|[Project Table]({{< ref "projects" >}} "Project Table")|
 
-In order to give an idea of the currentnode state, the following indicators are possible:
+In order to give an idea of the current job states, the following indicators are possible for the job indicator:
 
-|Node Status|Type|Description|
+|Job Indicator|Type|Description|
 |-----|-------|------|
-|Exclusive|Job-Info|One *exclusive* job is currently running, utilizing all of the nodes' hardware|
-|Shared|Job-Info|One or more *shared* jobs are currently running, utilizing allocated amounts of the nodes' hardware|
-|Allocated|Fallback|If more jobs than one are running, but all jobs are marked as 'exclusive', this fallback is used|
-|Idle|Job-Info|No currently active jobs|
-|Warning|Warning|At least one of the selected metrics does not return data successfully. Can hint to configuration problems.|
-|Unhealthy|Warning|None of the selected metrics return data successfully. Node could be offline or misconfigured.|
+|Fetching|Info|Data for selected metrics is currently fetched from the backend metric store.|
+|Missing Metrics|<span style="background-color: rgba(255, 193, 7, 1);">&nbsp;&nbsp;&nbsp;</span>&nbsp;Warning|At least one of the *selected metrics* does not return data successfully. Can hint to configuration problems.|
+|No Metrics|<span style="background-color: rgba(220, 53, 69, 1);">&nbsp;&nbsp;&nbsp;</span>&nbsp;Error|None of the *selected metrics* return data successfully. Node could be offline or misconfigured.|
+|Exclusive|<span style="background-color: rgba(25, 135, 84, 1);">&nbsp;&nbsp;&nbsp;</span>&nbsp;Job-Info|One *exclusive* job is currently running, utilizing all of the nodes' hardware.|
+|Shared|<span style="background-color: rgba(25, 135, 84, 1);">&nbsp;&nbsp;&nbsp;</span>&nbsp;Job-Info|One or more *shared* jobs are currently running, utilizing allocated amounts of the nodes' hardware.|
+|Running|<span style="background-color: rgba(25, 135, 84, 1);">&nbsp;&nbsp;&nbsp;</span>&nbsp;Job-Info|If more jobs than one are running, but all jobs are marked as 'exclusive', this fallback is used.|
+|None|<span style="background-color: rgba(108, 117, 125, 1);">&nbsp;&nbsp;&nbsp;</span>&nbsp;Job-Info|No currently active jobs.|
 
-{{< alert >}}*Please note:* All "Warning States" are estimated on the basis of returned metric data from the metric data repository. **No** actual hardware health information is queried or handled in any way or form.{{< /alert >}}
+{{< alert >}}*Please note:* Job indicator "Warning States" are estimated on the basis of returned metric data from the metric data repository.{{< /alert >}}
+
+The node hardware states are shown as reported by the scheduler and adapter interface. The following indicators are possible for the node state indicator:
+
+|Node Indicator|Color|Description|
+|-----|-------|------|
+|Allocated|<span style="background-color: rgba(25, 135, 84, 1);">&nbsp;&nbsp;&nbsp;</span>|The node has been allocated to one or more jobs.|
+|Reserved|<span style="background-color: rgba(97, 220, 245, 1);">&nbsp;&nbsp;&nbsp;</span>|The node is in an advanced reservation and not generally available.|
+|Idle|<span style="background-color: rgba(97, 160, 253, 1);">&nbsp;&nbsp;&nbsp;</span>|The node is not allocated to any jobs and is available for use.|
+|Mixed|<span style="background-color: rgba(255, 193, 7, 1);">&nbsp;&nbsp;&nbsp;</span>|The node has some of its CPUs allocated while others are idle.|
+|Down|<span style="background-color: rgba(220, 53, 69, 1);">&nbsp;&nbsp;&nbsp;</span>|The node is unavailable for use. Nodes report this state if some failure occurs.|
+|Unknown|<span style="background-color: rgba(110, 112, 115, 1);">&nbsp;&nbsp;&nbsp;</span>|The scheduler has just started and the node's state has not yet been determined.|
+|Not in DB|<span style="background-color: rgba(159, 164, 179, 1);">&nbsp;&nbsp;&nbsp;</span>|The node not known in database, but returned metric data.|
 
 ### List Selection Bar
 
@@ -80,15 +97,12 @@ The selection header allows for configuration of the displayed data in terms of 
 
 |Field|Example|Description|
 |-----|-------|-----------|----|
-|Metrics|`4 Selected`|Menu for and Number of Metrics currently selected|
-|Resolution|`600`|Resolution of the metric plots rendered for each node|
+|Metrics|`4 Selected`|Menu for and Number of Metrics currently selected.|
+|Resolution|`600`|Resolution of the metric plots rendered for each node.|
 |Find Node(s)|`a0421`|Filter for hostnames|
-|Range|`Last 12hrs`|Time range to be displayed as X-Axis|
-|Refresh|`60 Seconds`|Enable automatic refresh of metric plots|
-
-|Field|Example|Description|Destination|
-|-----|-------|-----------|----|
-|Job Id|`123456`|The JobId of the job assigned by the scheduling daemon. The icon on the right allows for easy copy to clipboard.|[Job View]({{< ref "job" >}} "Job View")|
+|State|`idle`|Filter the node table by last reported node state.|
+|Range|`Last 12hrs`|Time range to be displayed as X-Axis.|
+|Refresh|`60 Seconds`|Enable automatic refresh of metric plots.|
 
 ### Extended Legend
 

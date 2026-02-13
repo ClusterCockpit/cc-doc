@@ -19,7 +19,9 @@ The top bar of each job view replicates the "Job Info" and "Footprint" seen in t
 
 For shared jobs, a list of jobs which run (or ran) concurrently is shown as well.
 
-### Job Info
+### Job Information Tabs
+
+#### Job Info
 
 Identical to the job list equivalent, this component displays meta data containing general information about the job. From here, users can navigate to the detailed view of one specific job as well as the user or project specific job lists.
 
@@ -37,7 +39,7 @@ Identical to the job list equivalent, this component displays meta data containi
 
 At the bottom, all tags attached to the job are listed. Users can [manage]({{< ref "#tagging" >}} "Tagging") attachted tags via the "manage X Tag(s)" button.
 
-### Concurrent Jobs
+#### Concurrent Jobs
 
 In the case of a shared job, a second tab next to the job info will display all jobs which were run on the same hardware at the same time. "At the same time" is defined as "has a starting or ending time which lies between the starting and ending time of the reference job" for this purpose.
 
@@ -45,7 +47,15 @@ A cautious period of five minutes is applied to both limits, in order to restric
 
 Each overlapping job is listed with its `jobId` as a link leading to this jobs detailed job view.
 
-### Footprint
+#### Admin Note
+
+Optional Tab that only shows if the supporting staff added a note to the job manually, or by the automatic tagging feature.
+
+Usually contains information about notable job behaviours such as resource under-utilization.
+
+### Job Utilization Tabs
+
+#### Footprint
 
 Identical to the job list equivalent, this component will show base metrics for job performance at a glance, and will hint to job quality and problems in regard to configurable metric thresholds. In contrast to the job list, it is always active and shown in the detailed job view.
 
@@ -89,13 +99,13 @@ Metric values colored in blue, however, usually report performance above the exp
     caption="Footprint of a job with performance averages way above the expected maxima - Look for artifacts!"
 >}}
 
-### Polar Representation
+#### Polar Representation
 
 Next to the footprints, a second tab will render the [polar plot]({{< ref "plots#polar-plots" >}} "Polar Plot") representation of the configured footprint metrics. Minimum, Average and Maximum ranges are rendered.
 
 ### Roofline Representation
 
-A [roofline plot]({{< ref "plots#roofline-plot" >}} "Roofline Plot") representing the utilization of available resources as the relation between computation and memory usage over time (color scale blue -> red).
+A [roofline plot]({{< ref "plots#roofline-plot" >}} "Roofline Plot") representing the utilization of available resources as the relation between computation and memory usage over time (color scale blue -> red). This plot is always shown separately.
 
 ## Energy Summary
 
@@ -143,7 +153,7 @@ New tags can be created by entering a new `type:name` combination in the search 
     caption="Statistics Table. 'cpu_power' granularity is set to 'socket'. Tabs above switch the contents to the job script or slurm information, both read from the jobs metadata field."
 >}}
 
-On the bottom of the job view, additional information about the job is collected. By default, the statistics of selected metrics are shown in tabular form, each in their metrics' native granularity.
+On the bottom of the job view, additional information about the job is collected. By default, the statistics of selected metrics are shown in tabular form, each in their metrics' native granularity. Metrics are selected independently for the statistics table.
 
 ### Statistics Table
 
@@ -161,4 +171,8 @@ This tab displays the job script with which whis job was started on the systems.
 
 ### Slurm Info
 
-THis tab displays information returned drom the SLURM batch process management software.
+This tab displays information returned drom the SLURM batch process management software.
+
+### Missing Metrics or Resources
+
+If mismatches between the supposed availability of metrics and the returned data are detected, an optional tab will list all details for missing metrics and/or missing hardware nodes, which were not found in the metricdata stores.

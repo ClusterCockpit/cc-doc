@@ -29,7 +29,7 @@ The table can be sorted by clicking the respective icon next to the column heade
 |-----|-----------|----|
 |Project Name|The project (usergoup) jobs are associated with|Links to a [job list]({{< ref "joblist" >}} "Project Job List") with preset filter returning only jobs of this project|
 |Total Jobs|Project total of all started Jobs||
-|Short Jobs|Project total of all jobs below short duration threshold||
+|Short Jobs|Project total of all jobs below short duration threshold (as defined by [the configuration]({{< ref "ccb-configuration#configuration-options">}}))||
 |Total Cores|*Conditional, if running jobs*: Project total of all cores allocated to currently running jobs||
 |Total Accelerators|*Conditional, if running jobs*: Project total of all accelerators allocated to currently running jobs||
 |Total Walltime|Project total requested walltime||

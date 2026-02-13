@@ -24,7 +24,7 @@ The top row always displays personal usage information, independent of the selec
 * Username
 * Person Name (if available in DB)
 * Total Jobs
-* Short Jobs (as defined by the configuration, default: less than 300 second runtime)
+* Short Jobs (as defined by [the configuration]({{< ref "ccb-configuration#configuration-options">}}), default: less than 5 minute runtime)
 * Total Walltime
 * Total Core Hours
 

@@ -24,7 +24,7 @@ The general information section of the analysis view is always rendered and cons
 Total counts of collected data based on the returned jobs matching the requested filters:
 
 * Total Jobs
-* Total Short Jobs (By default defined as jobs shorter than 5 minutes)
+* Total Short Jobs (as defined by [the configuration]({{< ref "ccb-configuration#configuration-options">}}), default: less than 5 minute runtime)
 * Total Walltime
 * Total Node Hours
 * Total Core Hours
