@@ -97,6 +97,44 @@ _Note:_ Requires `-src-config` and `-dst-config` options.
 ---
 
 ```txt
+-convert
+```
+
+_Function:_ Convert an archive between JSON and Parquet formats.
+
+_Note:_ Requires `-src-config` and `-dst-config` options. Use `-format` to specify
+the output format.
+
+---
+
+```txt
+-format <format>
+```
+
+_Function:_ Output format for archive conversion.
+
+_Arguments:_ `json | parquet`
+
+_Default:_ `json`
+
+_Example:_ `-format parquet`
+
+---
+
+```txt
+-max-file-size <n>
+```
+
+_Function:_ Maximum Parquet file size in MB before splitting into a new file.
+Only relevant when `-format parquet` is used.
+
+_Default:_ `512`
+
+_Example:_ `-max-file-size 256`
+
+---
+
+```txt
 -src-config <json>
 ```
 
@@ -160,6 +198,22 @@ _Function:_ Set this flag to add date and time to log messages.
   -dst-config '{"kind":"sqlite","dbPath":"./new-archive.db"}'
 ```
 
+### Convert Archive Format
+
+```bash
+# Convert JSON file archive to Parquet format
+./archive-manager -convert \
+  -src-config '{"kind":"file","path":"./job-archive"}' \
+  -dst-config '{"kind":"s3","endpoint":"http://minio:9000","bucket":"parquet-archive","access-key":"key","secret-key":"secret"}' \
+  -format parquet
+
+# Convert Parquet archive back to JSON file archive
+./archive-manager -convert \
+  -src-config '{"kind":"s3","endpoint":"http://minio:9000","bucket":"parquet-archive","access-key":"key","secret-key":"secret"}' \
+  -dst-config '{"kind":"file","path":"./job-archive-restored"}' \
+  -format json
+```
+
 ### Archive Information
 
 ```bash
@@ -172,5 +226,6 @@ _Function:_ Set this flag to add date and time to log messages.
 - **Validation**: Verify job archive integrity against JSON schemas
 - **Cleaning**: Remove jobs by date range or cluster
 - **Import/Export**: Transfer jobs between different archive backend types
+- **Format Conversion**: Convert archives between JSON and Parquet formats
 - **Statistics**: Display archive information and job counts
 - **Progress Tracking**: Real-time progress reporting for long operations

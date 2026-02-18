@@ -76,7 +76,9 @@ Section must exist.
   - `trigger`: Type integer. Trigger next zoom level at less than this many
     visible datapoints.
 - `machine-state-dir`: Type string (Optional). Where to store MachineState
-  files. TODO: Explain in more detail!
+  files. Used for persisting machine state between restarts.
+- `systemd-unit`: Type string (Optional). Systemd unit name used for the
+  system log viewer integration. Default: `clustercockpit`.
 - `api-subjects`: Type object (Optional). NATS subjects configuration for
   subscribing to job and node events. When configured, the REST API endpoints
   for `start_job` and `stop_job` are disabled in favor of NATS messaging.
@@ -84,17 +86,17 @@ Section must exist.
   - `subject-job-event`: Type string (required). NATS subject for job events (start_job, stop_job).
   - `subject-node-state`: Type string (required). NATS subject for node state updates.
 - `nodestate-retention`: Type object (Optional). Configuration for automatic
-  cleanup of old node state records from the database. Runs hourly. Default: No
+  cleanup of old node state records from the database. Runs daily. Default: No
   retention (node states accumulate indefinitely).
   - `policy`: Type string (required). Retention policy. Possible values:
-    `delete` (remove old records), `parquet` (archive to Parquet format then
+    `delete` (remove old records), `move` (archive to Parquet format then
     delete).
   - `age`: Type integer (Optional). Retention age in hours. Records older than
     this are affected. Default: `24`.
-  - `target-kind`: Type string (Optional). Target storage kind for parquet
-    archiving: `file` or `s3`. Only applicable for `parquet` policy. Default:
+  - `target-kind`: Type string (Optional). Target storage kind for Parquet
+    archiving: `file` or `s3`. Only applicable for `move` policy. Default:
     `file`.
-  - `target-path`: Type string (Optional). Filesystem path for parquet file
+  - `target-path`: Type string (Optional). Filesystem path for Parquet file
     storage. Only applicable for `target-kind` `file`.
   - `target-endpoint`: Type string (Optional). S3 endpoint URL. Only applicable
     for `target-kind` `s3`.
@@ -109,7 +111,7 @@ Section must exist.
   - `target-use-path-style`: Type bool (Optional). Use path-style S3 addressing.
     Required for MinIO and some S3-compatible services. Only applicable for
     `target-kind` `s3`.
-  - `max-file-size-mb`: Type integer (Optional). Maximum parquet file size in MB
+  - `max-file-size-mb`: Type integer (Optional). Maximum Parquet file size in MB
     before splitting into a new file. Default: `128`.
 
 ### Section `nats`
@@ -155,36 +157,39 @@ Section is optional. If section is not provided, the default is `kind` set to
 - `compression`: Type integer (Optional). Setup automatic compression for jobs
   older than number of days. Default: `7`.
 - `retention`: Type object (Optional). Enable retention policy for archive and
-  database.
-  - `policy`: Type string (required). Retention policy. Possible values: `none`,
-    `delete`, `move`, `parquet`.
-  - `include-db`: Type bool (Optional). Also remove jobs from database. Default:
-    `true`.
+  database. Retention jobs run once daily at fixed times.
+  - `policy`: Type string (required). Retention policy. Possible values: `none`
+    (disabled), `delete` (remove from archive and optionally DB), `copy` (copy
+    to target without removing source), `move` (copy to target then remove
+    source).
+  - `format`: Type string (Optional). Output format for `copy` and `move`
+    policies. Possible values: `json` (standard archive format, default),
+    `parquet` (columnar Parquet format for long-term storage).
+  - `include-db`: Type bool (Optional). Also remove jobs from database when
+    deleting from archive. Default: `true`.
   - `omit-tagged`: Type bool (Optional). Skip jobs that have tags when applying
     the retention policy. Default: `false`.
   - `age`: Type integer (Optional). Act on jobs with startTime older than age
     (in days). Default: `7`.
-  - `location`: Type string (Optional). The target directory for retention. Only
-    applicable for retention policy `move`.
-  - `target-kind`: Type string (Optional). Target storage kind for parquet
-    archiving: `file` or `s3`. Only applicable for retention policy `parquet`.
-  - `target-path`: Type string (Optional). Filesystem path for parquet file
+  - `target-kind`: Type string (Optional). Target storage kind for `copy` and
+    `move` policies: `file` or `s3`. Default: `file`.
+  - `target-path`: Type string (Optional). Filesystem path for the target
     storage. Only applicable for `target-kind` `file`.
-  - `target-endpoint`: Type string (Optional). S3 endpoint URL for parquet
-    target. Only applicable for `target-kind` `s3`.
-  - `target-bucket`: Type string (Optional). S3 bucket name for parquet target.
+  - `target-endpoint`: Type string (Optional). S3 endpoint URL for target.
     Only applicable for `target-kind` `s3`.
-  - `target-access-key`: Type string (Optional). S3 access key for parquet
-    target. Only applicable for `target-kind` `s3`.
-  - `target-secret-key`: Type string (Optional). S3 secret key for parquet
-    target. Only applicable for `target-kind` `s3`.
-  - `target-region`: Type string (Optional). S3 region for parquet target. Only
+  - `target-bucket`: Type string (Optional). S3 bucket name for target.
+    Only applicable for `target-kind` `s3`.
+  - `target-access-key`: Type string (Optional). S3 access key for target.
+    Only applicable for `target-kind` `s3`.
+  - `target-secret-key`: Type string (Optional). S3 secret key for target.
+    Only applicable for `target-kind` `s3`.
+  - `target-region`: Type string (Optional). S3 region for target. Only
     applicable for `target-kind` `s3`.
   - `target-use-path-style`: Type bool (Optional). Use path-style S3 URLs for
-    parquet target. Only applicable for `target-kind` `s3`.
-  - `max-file-size-mb`: Type integer (Optional). Maximum parquet file size in MB
-    before splitting into a new file. Only applicable for retention policy
-    `parquet`. Default: `512`.
+    target. Only applicable for `target-kind` `s3`.
+  - `max-file-size-mb`: Type integer (Optional). Maximum Parquet file size in MB
+    before splitting into a new file. Only applicable when `format` is `parquet`.
+    Default: `512`.
 
 ### Section `auth`
 

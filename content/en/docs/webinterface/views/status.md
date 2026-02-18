@@ -64,3 +64,27 @@ Several [histograms]({{< ref "plots#histograms" >}} "Histograms") depicting the 
 Additional Histograms showing specified footprint metrics across all systems can be selected via the "Select histograms" menu next to the refresher tool.
 
 {{< alert >}}*Please note:* Metric statistics available here for selection are configured. All metrics, for which the `footprint` flag is set in the respective metrics' configuration will be shown.{{< /alert >}}
+
+## Metric Status Tab
+
+The status details panel contains a second tab labeled **Metric Status** that provides an overview of node health conditions across the cluster.
+
+### Node State Distribution
+
+Two pie charts display the current distribution of:
+
+- **Scheduler States**: The allocation state of nodes as reported by the scheduler (e.g., `allocated`, `idle`, `down`).
+- **Health States**: The metric monitoring health state of nodes (e.g., `ok`, `warn`, `critical`, `unknown`).
+
+Each chart is paired with a summary table listing each state and the number of nodes in that state.
+
+### Node Health Table
+
+A filterable table lists individual nodes with the following columns:
+
+- **Hostname**: Node identifier, linked to the [node detail view]({{< ref "nodeview" >}}).
+- **Scheduler State**: The current scheduler allocation state.
+- **Health State**: The current metric monitoring health state.
+- **Faulty Metrics**: List of metrics that are missing or reporting unhealthy values.
+
+The table can be filtered by hostname, scheduler state, or health state using the filter inputs above each column.
