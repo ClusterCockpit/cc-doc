@@ -33,7 +33,8 @@ Changes to the original JSON schema found in the repository are not automaticall
   - [10.3. Property `cc-backend configuration file schema > archive > compression`](#archive_compression)
   - [10.4. Property `cc-backend configuration file schema > archive > retention`](#archive_retention)
     - [10.4.1. Property `cc-backend configuration file schema > archive > retention > policy`](#archive_retention_policy)
-    - [10.4.2. Property `cc-backend configuration file schema > archive > retention > includeDB`](#archive_retention_includeDB)
+    - [10.4.2. Property `cc-backend configuration file schema > archive > retention > include-db`](#archive_retention_include-db)
+    - [10.4.3b. Property `cc-backend configuration file schema > archive > retention > omit-tagged`](#archive_retention_omit-tagged)
     - [10.4.3. Property `cc-backend configuration file schema > archive > retention > age`](#archive_retention_age)
     - [10.4.4. Property `cc-backend configuration file schema > archive > retention > location`](#archive_retention_location)
 - [11. Property `cc-backend configuration file schema > disable-archive`](#disable-archive)
@@ -316,7 +317,8 @@ Must be one of:
 | Property                                    | Pattern | Type             | Deprecated | Definition | Title/Description                                                       |
 | ------------------------------------------- | ------- | ---------------- | ---------- | ---------- | ----------------------------------------------------------------------- |
 | + [policy](#archive_retention_policy)       | No      | enum (of string) | No         | -          | Retention policy                                                        |
-| - [includeDB](#archive_retention_includeDB) | No      | boolean          | No         | -          | Also remove jobs from database                                          |
+| - [include-db](#archive_retention_include-db) | No      | boolean          | No         | -          | Also remove jobs from database                                          |
+| - [omit-tagged](#archive_retention_omit-tagged) | No    | enum (of string) | No         | -          | Skip tagged jobs from retention                                         |
 | - [age](#archive_retention_age)             | No      | integer          | No         | -          | Act on jobs with startTime older than age (in days)                     |
 | - [location](#archive_retention_location)   | No      | string           | No         | -          | The target directory for retention. Only applicable for retention move. |
 
@@ -335,7 +337,7 @@ Must be one of:
 - "delete"
 - "move"
 
-#### <a name="archive_retention_includeDB"></a>10.4.2. Property `cc-backend configuration file schema > archive > retention > includeDB`
+#### <a name="archive_retention_include-db"></a>10.4.2. Property `cc-backend configuration file schema > archive > retention > include-db`
 
 |              |           |
 | ------------ | --------- |
@@ -343,6 +345,21 @@ Must be one of:
 | **Required** | No        |
 
 **Description:** Also remove jobs from database
+
+#### <a name="archive_retention_omit-tagged"></a>10.4.3b. Property `cc-backend configuration file schema > archive > retention > omit-tagged`
+
+|              |                    |
+| ------------ | ------------------ |
+| **Type**     | `enum (of string)` |
+| **Required** | No                 |
+
+**Description:** Control which tagged jobs are excluded from the retention policy.
+
+Must be one of:
+
+- `"none"` — apply retention to all jobs (default)
+- `"all"` — skip any job that has at least one tag
+- `"user"` — skip jobs with user-created tags; auto-tagger tags of type `app` or `jobClass` are not considered user tags
 
 #### <a name="archive_retention_age"></a>10.4.3. Property `cc-backend configuration file schema > archive > retention > age`
 

@@ -133,13 +133,23 @@ Specify ranges of metric statistics, and display only jobs matching the selected
 
 *Default:* Full metric statistics ranges as configured
 
-### Start Time Quick Selections
+### Short Jobs Quick Selections
 
-{{< alert >}}*Please note:* Not available in all views!{{< /alert >}}
+{{< alert >}}*Please note:* Not available in all views! Additionally, at least one active filter is required.{{< /alert >}}
+
+Quickly select whether to only show or exclude short jobs with a duration of less than a configured runtime. Will display as a normal [duration filter]({{< ref "#duration" >}} "Duration Filter").
+
+If no [other setting]({{< ref "ccb-configuration#configuration-options">}}) for `short-running-jobs-duration` is used, *the default cutoff is 5 minutes*.
+
+*Options:* `Only Short Jobs, Exclude Short Jobs`
+
+*Default:* No selection
+
+### Start Time Quick Selections
 
 Quickly select a preconfigured range of job start times. Will display as named [start time filter]({{< ref "#starttime" >}} "Starttime Filter").
 
-When the returned URL is copied and shared, and the named filter value will transfer over.
+When the returned URL is copied and shared, the named filter value will transfer over.
 
 *Options:* `Last 6 hours, Last 24 hours, Last 7 Days, Last 30 Days`
 

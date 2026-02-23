@@ -66,7 +66,7 @@ and the database.
     "retention": {
       "policy": "delete",
       "age": 365,
-      "includeDB": true
+      "include-db": true
     }
   }
 }
@@ -100,7 +100,7 @@ from the active database.
       "policy": "move",
       "age": 365,
       "location": "/mnt/archive/old-jobs",
-      "includeDB": true
+      "include-db": true
     }
   }
 }
@@ -116,12 +116,13 @@ This configuration will:
 
 ### `archive.retention` section
 
-| Parameter   | Type    | Required   | Default | Description                                              |
-| ----------- | ------- | ---------- | ------- | -------------------------------------------------------- |
-| `policy`    | string  | Yes        | -       | Retention policy: `none`, `delete`, or `move`            |
-| `age`       | integer | No         | 7       | Age threshold in days. Jobs older than this are affected |
-| `includeDB` | boolean | No         | true    | Also remove jobs from the database (not just archive)    |
-| `location`  | string  | For `move` | -       | Target directory for moved jobs (only for `move` policy) |
+| Parameter     | Type    | Required            | Default | Description                                                                                                                                               |
+| ------------- | ------- | ------------------- | ------- | --------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `policy`      | string  | Yes                 | -       | Retention policy: `none`, `delete`, `copy`, or `move`                                                                                                     |
+| `age`         | integer | No                  | 7       | Age threshold in days. Jobs older than this are affected                                                                                                  |
+| `include-db`  | boolean | No                  | true    | Also remove jobs from the database (not just archive)                                                                                                     |
+| `omit-tagged` | string  | No                  | `none`  | Skip tagged jobs: `none` = apply to all jobs, `all` = skip any tagged job, `user` = skip jobs with user-created tags (auto-tagger tags are not user tags) |
+| `location`    | string  | For `move`/`copy`   | -       | Target directory for moved/copied jobs                                                                                                                    |
 
 ## Complete configuration examples
 
@@ -137,7 +138,7 @@ Suitable for environments with limited storage:
     "retention": {
       "policy": "delete",
       "age": 365,
-      "includeDB": true
+      "include-db": true
     }
   }
 }
@@ -156,7 +157,7 @@ Keep 6 months active, move older data to long-term storage:
       "policy": "move",
       "age": 180,
       "location": "/mnt/slow-storage/archive",
-      "includeDB": true
+      "include-db": true
     }
   }
 }
@@ -177,7 +178,7 @@ Using S3 object storage with one-year retention:
     "retention": {
       "policy": "delete",
       "age": 365,
-      "includeDB": true
+      "include-db": true
     }
   }
 }
@@ -188,7 +189,8 @@ Using S3 object storage with one-year retention:
 1. **Automatic execution**: Retention policies run automatically based on the configured interval
 2. **Age calculation**: Jobs are evaluated based on their `startTime` field
 3. **Batch processing**: All jobs older than the specified age are processed in one operation
-4. **Database cleanup**: When `includeDB: true`, corresponding database entries are removed
+4. **Database cleanup**: When `include-db: true`, corresponding database entries are removed
+5. **Tagged job handling**: Controlled by `omit-tagged` — use `user` to preserve jobs tagged by users while still processing auto-tagged jobs
 5. **Archive handling**: Based on policy (`delete` removes, `move` relocates)
 
 ## Best practices
@@ -297,7 +299,7 @@ Jobs moved to the retention location can be restored:
 
 **Possible causes:**
 
-- `includeDB: false` - Database entries are not being removed
+- `include-db: false` — Database entries are not being removed
 - SQLite doesn't automatically reclaim space - run `VACUUM`:
 
   ```bash

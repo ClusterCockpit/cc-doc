@@ -30,7 +30,7 @@ The table can be sorted by clicking the respective icon next to the column heade
 |User Name|The user account jobs are associated with|Links to the users' [job list]({{< ref "userjobs" >}} "User Job List") with preset filter returning only jobs of this user and additional histograms|
 |Name|The name of user||
 |Total Jobs|Users' total of all started jobs||
-|Short Jobs|Users' total of all jobs below short duration threshold||
+|Short Jobs|Users' total of all jobs below short duration threshold (as defined by [the configuration]({{< ref "ccb-configuration#configuration-options">}}))||
 |Total Cores|*Conditional, if running jobs*: Users' total of all cores allocated to currently running jobs||
 |Total Accelerators|*Conditional, if running jobs*: Users' total of all accelerators allocated to currently running jobs||
 |Total Walltime|Users' total requested walltime||

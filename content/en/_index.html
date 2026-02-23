@@ -32,8 +32,9 @@ Supports heterogeneous clusters with and without node sharing.</p>
 {{% /blocks/feature %}}
 
 {{% blocks/feature icon="fas fa-display" title="Modern Web UI" url="./docs/webinterface/" %}}
-<p>Responsive web interface with job specific, node, user, and system views. Provides metric plots, aggregate statistics,
-  roofline plots and ressource table, and access to job script. Fully user configurable. </p>
+<p>Responsive web interface with job-specific, node, user, and system views. Provides metric plots, aggregate statistics,
+  roofline plots, resource table, and access to job scripts. Fully user configurable.
+  A public dashboard is available for unauthenticated external users.</p>
 {{% /blocks/feature %}}
 
 {{% blocks/feature icon="fas fa-chart-simple" title="Global access to metric data" url="./docs/tutorials/prod-metric-list/" %}}
@@ -50,7 +51,7 @@ Supports heterogeneous clusters with and without node sharing.</p>
 
 {{% blocks/feature icon="fas fa-users" title="User roles" url="./docs/explanation/roles/" %}}
 <p>Supports roles for users, project managers, support personnel, and administrators.
-  Users can only see their own jobs.
+  Users can only see their own jobs. Metrics can be restricted to specific roles for fine-grained access control.
 {{% /blocks/feature %}}
 
 {{% blocks/feature icon="fas fa-filter" title="Job sorting and filtering" url="./docs/webinterface/filters/" %}}
@@ -64,7 +65,26 @@ Supports heterogeneous clusters with and without node sharing.</p>
 {{% /blocks/feature %}}
 
 {{% blocks/feature icon="fas fa-tag" title="Job tagging" url="./docs/webinterface/views/tags/" %}}
-<p>Jobs can be tagged. Job tags are grouped by type and can have a configurable visibility using a scope attribute.
+<p>Jobs can be tagged manually or automatically. The built-in job tagger detects known applications (e.g. MATLAB, GROMACS) and flags pathological jobs automatically.
+  Tags are grouped by type and have a configurable scope attribute for visibility control.
+</p>
+{{% /blocks/feature %}}
+
+{{% blocks/feature icon="fas fa-heart-pulse" title="Node state monitoring" url="./docs/webinterface/views/systems/" %}}
+<p>Live node health tracking with per-metric status and historical state retention.
+  The systems view provides node lists with filtering, paging, and a health status overview per cluster and subcluster.
+</p>
+{{% /blocks/feature %}}
+
+{{% blocks/feature icon="fas fa-database" title="Flexible job archive" url="./docs/reference/cc-backend/configuration/" %}}
+<p>Supports multiple archive backends: JSON files, columnar Parquet files (with zstd compression), SQLite blob storage, and S3-compatible object storage.
+  Cluster- and subcluster-specific retention policies are supported.
+</p>
+{{% /blocks/feature %}}
+
+{{% blocks/feature icon="fas fa-tower-broadcast" title="Real-time NATS API" url="./docs/reference/cc-backend/api/" %}}
+<p>Publish and subscribe to real-time job start/stop events and node state changes via NATS messaging.
+  Enables event-driven integrations and live dashboards without polling.
 </p>
 {{% /blocks/feature %}}
 
