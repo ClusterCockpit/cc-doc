@@ -167,8 +167,11 @@ Section is optional. If section is not provided, the default is `kind` set to
     `parquet` (columnar Parquet format for long-term storage).
   - `include-db`: Type bool (Optional). Also remove jobs from database when
     deleting from archive. Default: `true`.
-  - `omit-tagged`: Type bool (Optional). Skip jobs that have tags when applying
-    the retention policy. Default: `false`.
+  - `omit-tagged`: Type string (Optional). Control which tagged jobs are skipped
+    by the retention policy. Possible values: `none` (apply retention to all
+    jobs, default), `all` (skip any job that has at least one tag), `user` (skip
+    jobs that have user-created tags; auto-tagger tags of type `app` or
+    `jobClass` do not count as user tags).
   - `age`: Type integer (Optional). Act on jobs with startTime older than age
     (in days). Default: `7`.
   - `target-kind`: Type string (Optional). Target storage kind for `copy` and
