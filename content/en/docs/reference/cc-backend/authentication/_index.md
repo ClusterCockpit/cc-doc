@@ -9,12 +9,12 @@ weight: 5
 
 `cc-backend` supports the following authentication methods:
 
-- Local login with credentials stored in SQL database
-- Login with authentication to a LDAP directory
-- Authentication via JSON Web Token (JWT):
+- [Local login]({{< ref "#local-authentication">}}), with credentials stored in SQL database
+- [LDAP login]({{< ref "#ldap-authentication">}}), with authentication to a LDAP directory
+- [OpenID Connect login]({{< ref "#openid-connect-authentication">}}), with authentication against a KeyCloak instance
+- [JWT login]({{< ref "#jwt-token-authentication">}}), with authentication via JSON Web Token:
   - With token provided in HTML request header
   - With token provided in cookie
-- Login via OpenID Connect (against a KeyCloak instance)
 
 All above methods create a session cookie that is then used for subsequent
 authentication of requests. Multiple authentication methods can be configured at
@@ -26,9 +26,15 @@ methods using the ability of KeyCloak to act as an Identity Broker.
 The REST API uses stateless authentication via a JWT token, which means that
 every requests must be authenticated.
 
+## Authorization control
+
+`cc-backend` uses roles to decide if a user is authorized to access certain
+information. The roles and their rights are described in more detail [here]({{< ref "roles" >}} "Roles Explanation").
+
 ## General configuration options
 
 All configuration is part of the `cc-backend` configuration file `config.json`.
+The primary key for authentication configuration options is `auth`.
 All security sensitive options as passwords and tokens are passed in terms of
 environment variables. `cc-backend` supports to read an `.env` file upon startup
 and set the environment variables contained there.
@@ -36,127 +42,20 @@ and set the environment variables contained there.
 ### Duration of session
 
 Per default the maximum duration of a session is 7 days. To change this the
-option `session-max-age` has to be set to a string that can be parsed by the
+option `main.session-max-age` has to be set to a string that can be parsed by the
 Golang [time.ParseDuration()](https://pkg.go.dev/time#ParseDuration) function.
 For most use cases the largest unit `h` is the only relevant option.
-Example:
 
-``` json
-"session-max-age": "24h",
-```
-
-To enable unlimited session duration set `session-max-age` either to 0 or empty
+To enable unlimited session duration set `main.session-max-age` either to 0 or empty
 string.
 
-## LDAP authentication
+#### Example
 
-### Configuration
-
-To enable LDAP authentication the following set of options are required as
-attributes of the `ldap` JSON object:
-
-- `url`: URL of the LDAP directory server. This must be a complete URL including
-  the protocol and not only the host name. Example: `ldaps://ldsrv.mydomain.com`.
-- `user_base`: Base DN of user tree root. Example: `ou=people,ou=users,dc=rz,dc=mydomain,dc=com`.
-- `search_dn`: DN for authenticating an LDAP admin account with general read
-rights. This is required for the sync on login and the sync options. Example:
-`cn=monitoring,ou=adm,ou=profile,ou=manager,dc=rz,dc=mydomain,dc=com`
-- `user_bind`: Expression used to authenticate users via LDAP bind. Must contain
-`uid={username}`. Example:
-`uid={username},ou=people,ou=users,dc=rz,dc=mydomain,dc=com`.
-- `user_filter`:  Filter to extract users for syncing. Example: `(&(objectclass=posixAccount))`.
-
-Optional configuration options are:
-
-- `username_attr`:  Attribute with full user name. Defaults to `gecos` if not provided.
-- `sync_interval`:  Interval used for syncing SQL user table with LDAP
-directory. Parsed using time.ParseDuration. The sync interval is always relative
-to the time `cc-backend` was started. Example: `24h`.
-- `sync_del_old_users`: Type boolean. Delete users in SQL database if not in
-LDAP directory anymore. This of course only applies to users that were added
-from LDAP.
-- `syncUserOnLogin`: Type boolean. Add non-existent user to DB at login attempt
-if user exists in LDAP directory. This option enables that users can login at
-once after they are added to the LDAP directory.
-
-The LDAP authentication method requires the environment variable
-`LDAP_ADMIN_PASSWORD` for the `search_dn` account that is used to sync users.
-
-### Usage
-
-If LDAP is configured it is the first authentication method that is tried if a
-user logs in using the login form. A sync with the LDAP directory can also be
-triggered from the command line using the flag `-sync-ldap`.
-
-## OpenID Connect authentication
-
-### Configuration
-
-To enable OpenID Connect authentication the following set of options are
-required below a top-level `oicd` key:
-
-- `provider`: The base URL of your OpenID Connect provider. Example:
-`https://auth.example.com/realms/mycloud`.
-
-Full example:
-
+``` json
+"main": {
+  "session-max-age": "24h",
+}
 ```
-"oidc": {
-  "provider": "https://auth.server.com:8080/realms/nhr-cloud"
-},
-```
-
-Furthermore the following environment variables have to be set (in the `.env`
-file):
-
-- `OID_CLIENT_ID`: Set this to the Client ID you configured in Keycloak.
-- `OID_CLIENT_SECRET`: Set this to the Client ID secret available in you
-Keycloak Open ID Client configuration.
-
-### Required settings in KeyCloak
-
-The OpenID Connect implementation was only tested against the KeyCloak
-provider.
-
-Steps to setup KeyCloak:
-
-- Create a new realm. This will determine the provider URL.
-- Create a new OpenID Connect client
-- Set a Client ID, the Client ID secret is automatically generated and
-   available at the `Credentials` tab.
-- For Access settings set:
-
-  - `Root URL`: This is the base URL of your cc-backend instance.
-  - `Valid redirect URLs`: Set this to `oidc-callback`. Wildcards did not work
-  for me.
-  - `Web origins`: Set this also to the base URL of your cc-backend instance.
-{{< figure src="access-settings.png" alt="Keycloak Access settings" width="100%" class="ccfigure"
-    caption="Keycloak client Access settings"
-
->}}
-
-- Enable PKCE:
-
-  - Click on Advanced tab. Further click on Advanced settings on the right side.
-  - Set the option `Proof Key for Code Exchange Code Challenge Method` to
-  `S256`.
-
-{{< figure src="pkce-settings.png" alt="Set PKCE Keycloak option" width="100%" class="ccfigure"
-    caption="Keycloak advanced client settings for PKCE"
->}}
-
-Everything else can be left to the default. Do not forget to create users in
-your realm before testing.
-
-### Usage
-
-If the `oicd` config key is correctly set and the required environment variables
-are available, an additional button for OpenID Connect Login is shown below the
-login mask. If pressed this button will redirect to the OpenID Connect login.
-
-{{< figure src="oidc-login.png" alt="OpenID Connect login mask" width="100%" class="ccfigure"
-    caption="Login mask with OpenID Connect enabled"
->}}
 
 ## Local authentication
 
@@ -189,6 +88,159 @@ Users can be deleted using the flag `-del-user`:
 The option `-del-user` as currently implemented will delete **ALL** users that
 match the username independent of its origin. This means it will also delete
 user records that were added from LDAP or JWT tokens.
+{{< /alert >}}
+
+## LDAP authentication
+
+### Configuration
+
+To enable LDAP authentication the following set of options are required as
+attributes of the `auth.ldap` JSON object:
+
+- `url`: URL of the LDAP directory server. This must be a complete URL including
+  the protocol and not only the host name. Example: `ldaps://ldsrv.mydomain.com`.
+- `user-base`: Base DN of user tree root. Example: `ou=people,ou=users,dc=rz,dc=mydomain,dc=com`.
+- `search-dn`: DN for authenticating an LDAP admin account with general read
+rights. This is required for the sync on login and the sync options. Example:
+`cn=monitoring,ou=adm,ou=profile,ou=manager,dc=rz,dc=mydomain,dc=com`
+- `user-bind`: Expression used to authenticate users via LDAP bind. Must contain
+`uid={username}`. Example:
+`uid={username},ou=people,ou=users,dc=rz,dc=mydomain,dc=com`.
+- `user-filter`:  Filter to extract users for syncing. Example: `(&(objectclass=posixAccount))`.
+
+Optional configuration options are:
+
+- `username-attr`:  Attribute with full user name. Defaults to `gecos` if not provided.
+- `sync-interval`:  Interval used for syncing SQL user table with LDAP
+directory. Parsed using time.ParseDuration. The sync interval is always relative
+to the time `cc-backend` was started. Example: `24h`.
+- `sync-del-old-users`: Type boolean. Delete users in SQL database if not in
+LDAP directory anymore. This of course only applies to users that were added
+from LDAP.
+- `sync-user-on-login`: Type boolean. Add non-existent user to database at login attempt
+if user exists in LDAP directory. This option enables that users can login at
+once after they are added to the LDAP directory. _Does not update user on recurring LDAP logins_.
+- `update-user-on-login`: Type boolean. Update existent users in DB at login attempt
+if user exists in LDAP directory. This option updates changed source attributes, for example the name, if the database value differs. _Does not add users on first-time LDAP login_.
+
+#### Example
+
+``` json
+"auth": {
+  "ldap": {
+    "url": "ldaps://ldsrv.mydomain.com",
+    "user-base": "ou=people,ou=users,dc=rz,dc=mydomain,dc=com",
+    "search-dn": "cn=monitoring,ou=adm,ou=profile,ou=manager,dc=rz,dc=mydomain,dc=com",
+    "user-bind": "uid={username},ou=people,ou=users,dc=rz,dc=mydomain,dc=com",
+    "user-filter": "(&(objectclass=posixAccount))"
+  },
+}
+```
+
+### Environment
+
+The LDAP authentication method requires the environment variable
+`LDAP_ADMIN_PASSWORD` for the `search-dn` account that is used to sync users.
+
+### Usage
+
+If LDAP is configured it is the first authentication method that is tried if a
+user logs in using the login form. A sync with the LDAP directory can also be
+triggered from the command line using the flag `-sync-ldap`.
+
+## OpenID Connect authentication
+
+### Configuration
+
+To enable OpenID Connect authentication the following set of options are
+required below a top-level `auth.oidc` key:
+
+- `provider`: The base URL of your OpenID Connect provider. Example:
+`https://auth.example.com/realms/mycloud`.
+
+Optional configuration options are:
+
+- `sync-user-on-login`: Type boolean. Add non-existent user to DB at login attempt
+if user exists in KeyCloak realm. This option enables that users can login at
+once after they are added to the KeyCloak realm. _Does not update user on recurring OIDC logins_.
+- `update-user-on-login`: Type boolean. Update existent users in DB at login attempt
+if user exists in KeyCloak realm. This option updates changed source attributes, for example the name, if the database value differs. _Does not add users on first-time OIDC login_.
+
+#### Example
+
+```json
+"oidc": {
+  "provider": "https://auth.server.com:8080/realms/nhr-cloud"
+},
+```
+
+### Environment
+
+Furthermore the following environment variables have to be set (in the `.env`
+file):
+
+- `OID_CLIENT_ID`: Set this to the Client ID you configured in Keycloak (see below).
+- `OID_CLIENT_SECRET`: Set this to the Client ID secret available in your
+Keycloak Open ID Client configuration at the `Credentials` tab (see below).
+
+### Required settings in KeyCloak
+
+The OpenID Connect implementation was only tested against the KeyCloak
+provider.
+
+Steps to setup KeyCloak:
+
+- Create a new realm. This will determine the provider URL.
+- Create a new OpenID Connect client
+  - Set a Client ID
+    - The Client ID secret is automatically generated after the client has been created.
+  - Enable `client authentication`
+  - For Access settings set:
+    - `Root URL`: This is the base URL of your cc-backend instance.
+    - `Valid redirect URLs`: Set this to `oidc-callback`.
+      - Add an additional URL including the full HTTP path, e.g. `http://localhost:8088/oidc-callback`
+      - If HTTPS is used, also add the HTTPS path, e.g. `https://localhost:8088/oidc-callback`
+    - `Web origins`: Set this also to the base URL of your cc-backend instance.
+
+{{< figure src="access-settings.png" alt="Keycloak Access settings" width="100%" class="ccfigure mw-lg"
+    caption="Keycloak client Access settings"
+
+>}}
+
+- Enable PKCE:
+  - Click on Advanced tab. Further click on Advanced Settings on the right side.
+  - Set the option `Proof Key for Code Exchange Code Challenge Method` to
+  `S256`.
+
+{{< figure src="pkce-settings.png" alt="Set PKCE Keycloak option" width="100%" class="ccfigure mw-lg"
+    caption="Keycloak advanced client settings for PKCE"
+>}}
+
+Everything else can be left to the default.
+
+Do not forget to create users in your realm before testing.
+
+### Usage
+
+If the `auth.oidc` config key is correctly set and the required environment variables
+are available, an additional button for OpenID Connect Login is shown below the
+login mask. If pressed this button will redirect to the OpenID Connect login.
+
+{{< figure src="oidc-login.png" alt="OpenID Connect login mask" width="100%" class="ccfigure mw-lg"
+    caption="Login mask with OpenID Connect enabled"
+>}}
+
+{{< alert title="Info" >}}
+If you are using a modified `login.tmpl` in `./var/`. check for the following condition, else, add it below the submit button:
+
+```html
+[... CONTENT ...]
+  <button type="submit" class="btn btn-success">Submit</button>
+  {{if .Infos.hasOpenIDConnect}}
+      <a class="btn btn-primary" href="/oidc-login">OpenID Connect Login</a>
+  {{end}}
+[...CONTENT...]
+```
 {{< /alert >}}
 
 ## JWT token authentication
@@ -249,18 +301,18 @@ Tokens are signed with: `Ed25519/EdDSA`
 
 To enable JWT authentication via cookie the following set of options are required as attributes of the `jwts` JSON object:
 
-- `cookieName` (String): Specifies which cookie should be checked for a JWT token (if no authorization header is present)
-- `trustedIssuer` (String):  Specifies which issuer should be accepted when validating external JWTs (`iss`-claim)
+- `cookie-name` (String): Specifies which cookie should be checked for a JWT token (if no authorization header is present)
+- `trusted-issuer` (String):  Specifies which issuer should be accepted when validating external JWTs (`iss`-claim)
 
 In addition, the Cookie Session Authenticator method requires the following environment variable:
 
-- `CROSS_LOGIN_JWT_PUBLIC_KEY`: Primary public key for this method, validates identity of tokens received from `trustedIssuer` and must therefore match accordingly.
+- `CROSS_LOGIN_JWT_PUBLIC_KEY`: Primary public key for this method, validates identity of tokens received from `trusted-issuer` and must therefore match accordingly.
 
 - [3] Optional configuration attributes of the `jwts` JSON object, valid for both [1] and [2], are:
 
-- `validateUser` (Bool): Load user by username encoded in `sub`-claim from database, including roles, denying login if not matched in database. _Ignores all other claims_. By design not combinable with both `syncUserOnLogin` and/or `updateUserOnLogin` options.
-- `syncUserOnLogin` (Bool): If user encoded in token does not exist in database, add a new user entry. _Does not update user on recurring JWT logins_.
-- `updateUserOnLogin` (Bool): If user encoded in token does exist in database, update the user entry with all encoded information. _Does not add users on first-time JWT login_.
+- `validate-user` (Bool): Load user by username encoded in `sub`-claim from database, including roles, denying login if not matched in database. _Ignores all other claims_. By design not combinable with both `sync-user-on-login` and/or `update-user-on-login` options.
+- `sync-user-on-login` (Bool): If user encoded in token does not exist in database, add a new user entry. _Does not update user on recurring JWT logins_.
+- `update-user-on-login` (Bool): If user encoded in token does exist in database, update the user entry with all encoded information. _Does not add users on first-time JWT login_.
 
 ### JWT Usage
 
@@ -273,7 +325,7 @@ For login with JWT request parameter, the external website has to submit an acti
 
 In both cases, the JWT should contain the following parameters:
 
-- `sub`: The subject, in this case this is the username. Will be used for user matching if `validateUser` is set.
+- `sub`: The subject, in this case this is the username. Will be used for user matching if `validate-user` is set.
 - `exp`: Expiration in Unix epoch time. Can be small as the token is only used during login.
 - `name`: The full name of the person assigned to this account. Will be used to update user table.
 - `roles`: String array with roles of user.
@@ -281,16 +333,11 @@ In both cases, the JWT should contain the following parameters:
 
 - [2] Usage for JWT Cookie Session Authenticator:
 
-The token must be set within a cookie with a name matching the configured `cookieName`.
+The token must be set within a cookie with a name matching the configured `cookie-name`.
 
 The JWT should then contain the following parameters:
 
-- `sub`: The subject, in this case this is the username. Will be used for user matching if `validateUser` is set.
+- `sub`: The subject, in this case this is the username. Will be used for user matching if `validate-user` is set.
 - `exp`: Expiration in Unix epoch time. Can be small as the token is only used during login.
 - `name`: The full name of the person assigned to this account. Will be used to update user table.
 - `roles`: String array with roles of user.
-
-## Authorization control
-
-`cc-backend` uses roles to decide if a user is authorized to access certain
-information. The roles and their rights are described in more detail [here](/docs/concepts/roles/).
