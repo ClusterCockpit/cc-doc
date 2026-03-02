@@ -50,11 +50,11 @@ You need to:
 - Transfer the checkpoints from the external `cc-metric-store` instance to the
   `cc-backend` `./var/checkpoints` directory
 
-The database migration can take more than one day. To minimize the downtime you
+The database migration can take more than one day. To minimize downtime, you
 can copy the existing SQLite database and perform the migration on the copy
 while the production instance is still running. `cc-slurm-adapter` will
 synchronize any missing jobs afterwards. The archive migration should only take
-1-2h. This only applies if you do it on a fast storage medium, e.g. an NVMe
+1-2 hours. This only applies if you do it on a fast storage medium, e.g., an NVMe
 disk.
 
 ## Configuration changes
@@ -65,9 +65,10 @@ The required options are significantly reduced.
 
 ## Transfer `cc-metric-store` checkpoints
 
-We are currently offering option to use cc-metric-store attached with cc-backend. Meaning both cc-backend and cc-metric-store share same configuration as well as they run on the same server. The checkpoints in your internal cc-metric-store resides in var directory of the cc-backend. If you choose to use cc-metric-store-internal as you metric store, then you can do the following to bring your old checkpoints from your external cc-metric-store:
+We are currently offering option to use cc-metric-store attached with cc-backend. Meaning both cc-backend and cc-metric-store share same configuration as well as they run on the same server. The checkpoints in your internal cc-metric-store resides in var directory of the cc-backend. If you choose to use cc-metric-store-internal as your metric store, then you can do the following to bring your old checkpoints from your external cc-metric-store:
 
 Look out for "checkpoints" key in your CCMS and CCB config.json.
+
 ```json
 "checkpoints": {
   "interval": "12h",
@@ -77,6 +78,7 @@ Look out for "checkpoints" key in your CCMS and CCB config.json.
 ```
 
 Either you can move the checkpoints manually or you can use this script for moving the checkpoints.
+
 ```bash
 #!/bin/bash
 
