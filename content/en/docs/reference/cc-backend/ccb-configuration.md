@@ -8,11 +8,14 @@ weight: 2
 ---
 
 `cc-backend` requires a JSON configuration file. The configuration files is
-structured into components. Every component is configured either in a separate
-JSON object or using a separate file. When a section is put in a separate file
-the section key has to have a `-file` suffix.
+structured into sections. Every section is configured either in a separate
+JSON object or using a separate file. Sections are split into two categories:
 
-Example:
+* [Required sections]({{< ref "#required-sections" >}} "Required Configuration Options") define integral settings, which are required for `cc-backend` to start, and work, properly.
+* [Optional Sections]({{< ref "#optional-sections" >}} "Optional Configuration Options") define additional options for specific use-cases or on-site requirements. *We recommend to read through the available optional settings, e.g. [the file archive config]({{< ref "#section-archive" >}} "File Archive Config").*
+
+When a section is put in a separate file
+the section key has to have a `-file` suffix, example:
 
 ```json
 "auth-file": "./var/auth.json"
@@ -23,9 +26,13 @@ configuration file with the `-config <file path>` command line option.
 
 ## Configuration Options
 
-### Section `main`
+### Required Sections
 
-Section must exist.
+Primary configuration sections, which key (e.g. `main`) has to exist on `cc-backend` start, or the application will shut down with an error.
+
+Subsequent settings within the primary sections might be optional.
+
+#### Section `main`
 
 - `addr`: Type string (Optional). Address where the http (or https) server will
   listen on (for example: '0.0.0.0:80'). Default `localhost:8080`.
@@ -114,28 +121,94 @@ Section must exist.
   - `max-file-size-mb`: Type integer (Optional). Maximum Parquet file size in MB
     before splitting into a new file. Default: `128`.
 
-### Section `nats`
+#### Section `auth`
 
-Section is optional.
+- `jwts`: Type object (required). For JWT Authentication.
+  - `max-age`: Type string (required). Configure how long a token is valid. As
+    string parsable by time.ParseDuration().
+  - `cookie-name`: Type string (Optional). Cookie that should be checked for a
+    JWT token.
+  - `validate-user`: Type bool (Optional). Deny login for users not in database
+    (but defined in JWT). Overwrite roles in JWT with database roles.
+  - `trusted-issuer`: Type string (Optional). Issuer that should be accepted when
+    validating external JWTs.
+  - `sync-user-on-login`: Type bool (Optional). Add non-existent user to DB at
+    login attempt with values provided in JWT.
+  - `update-user-on-login`: Type bool (Optional). Update existent user in DB at
+    login attempt with values provided in JWT. Name, Roles (excluding admin) and Projects are updated.
+- `ldap`: Type object (Optional). For LDAP Authentication and user
+  synchronisation. Default `nil`.
+  - `url`: Type string (required). URL of LDAP directory server.
+  - `user-base`: Type string (required). Base DN of user tree root.
+  - `search-dn`: Type string (required). DN for authenticating LDAP admin
+    account with general read rights.
+  - `user-bind`: Type string (required). Expression used to authenticate users
+    via LDAP bind. Must contain `uid={username}`.
+  - `user-filter`: Type string (required). Filter to extract users for syncing.
+  - `username-attr`: Type string (Optional). Attribute with full user name.
+    Defaults to `gecos` if not provided.
+  - `sync-interval`: Type string (Optional). Interval used for syncing local
+    user table with LDAP directory. Parsed using time.ParseDuration.
+  - `uid-attr`: Type string (Optional). LDAP attribute used as login username.
+    Defaults to `uid` if not provided.
+  - `sync-del-old-users`: Type bool (Optional). Delete obsolete users in database.
+  - `sync-user-on-login`: Type bool (Optional). Add non-existent user to DB at
+    login attempt if user exists in LDAP directory.
+  - `update-user-on-login`: Type bool. Update existent user in DB at login attempt
+    with values provided.  Name, Roles (excluding admin) and Projects are updated.
+- `oidc`: Type object (Optional). For OpenID Connect Authentication. Default `nil`.
+  - `provider`: Type string (required). OpenID Connect provider URL.
+  - `sync-user-on-login`: Type bool. Add non-existent user to DB at login attempt
+    with values provided.
+  - `update-user-on-login`: Type bool. Update existent user in DB at login attempt
+    with values provided.  Name, Roles (excluding admin) and Projects are updated.
 
-- `address`: Type string. Address of the NATS server (e.g., `nats://localhost:4222`).
-- `username`: Type string (Optional). Username for NATS authentication.
-- `password`: Type string (Optional). Password for NATS authentication (optional).
-- `creds-file-path`: Type string (Optional). Path to NATS credentials file for
-  authentication (optional).
+#### Section `metric-store`
 
-### Section `cron`
+- `retention-in-memory`: Type string (required). Keep the metrics within memory
+  for given time interval. Retention for X hours, then the metrics would be freed.
+  Buffers that are still used by running jobs will be kept.
+- `memory-cap`: Type integer (required). If memory used exceeds value in GB,
+  buffers still used by long running jobs will be freed.
+- `num-workers`: Type integer (Optional). Number of concurrent workers for
+  checkpoint and archive operations. Default: If not set defaults to
+  `min(runtime.NumCPU()/2+1, 10)`
+- `checkpoints`: Type object (required). Configuration for checkpointing the
+  metrics buffers
+  - `file-format`: Type string (Optional). Format to use for checkpoint files.
+    Can be `json` (human-readable, periodic) or `wal` (binary snapshot + Write-Ahead
+    Log, crash-safe). Default: `wal`.
+  - `directory`: Type string (Optional). Path in which the checkpoints should be
+    placed. Default: `./var/checkpoints`.
+- `cleanup`: Type object (Optional). Configuration for the cleanup process.
+  The cleanup interval always equals the `retention-in-memory` interval.
+  If not set, the `mode` defaults to `delete`.
+  - `mode`: Type string (Optional). The mode for cleanup. Can be `delete` or
+    `archive`. Default: `delete`.
+  - `directory`: Type string (required if mode is `archive`). Directory where to
+    put the archive files.
+- `nats-subscriptions`: Type array (Optional). List of NATS subjects the metric
+  store should subscribe to. Items are of type object with the following
+  attributes:
+  - `subscribe-to`: Type string (required). NATS subject to subscribe to.
+  - `cluster-tag`: Type string (Optional). Allow lines without a cluster tag,
+    use this as default.
 
-Section must exist.
+#### Section `cron`
 
 - `commit-job-worker`: Type string. Frequency of commit job worker. Default: `2m`
 - `duration-worker`: Type string. Frequency of duration worker. Default: `5m`
 - `footprint-worker`: Type string. Frequency of footprint. Default: `10m`
 
-### Section `archive`
+### Optional Sections
 
-Section is optional. If section is not provided, the default is `kind` set to
-`file` with `path` set to `./var/job-archive`.
+Secondary configuration sections, which key (e.g. `nats`) can be missing from the configuration without interfering with `cc-backend` starts.
+
+Subsequent settings within the secondary sections might be optional.
+
+#### Section `archive`
+
+If section is not provided, the default is `kind` set to `file` with `path` set to `./var/job-archive`.
 
 - `kind`: Type string (required). Set archive backend. Supported values: `file`,
   `s3`, `sqlite`.
@@ -194,85 +267,17 @@ Section is optional. If section is not provided, the default is `kind` set to
     before splitting into a new file. Only applicable when `format` is `parquet`.
     Default: `512`.
 
-### Section `auth`
+#### Section `nats`
 
-Section must exist.
-
-- `jwts`: Type object (required). For JWT Authentication.
-  - `max-age`: Type string (required). Configure how long a token is valid. As
-    string parsable by time.ParseDuration().
-  - `cookie-name`: Type string (Optional). Cookie that should be checked for a
-    JWT token.
-  - `vaidate-user`: Type bool (Optional). Deny login for users not in database
-    (but defined in JWT). Overwrite roles in JWT with database roles.
-  - `trusted-issuer`: Type string (Optional). Issuer that should be accepted when
-    validating external JWTs.
-  - `sync-user-on-login`: Type bool (Optional). Add non-existent user to DB at
-    login attempt with values provided in JWT.
-  - `update-user-on-login`: Type bool (Optional). Update existent user in DB at
-    login attempt with values provided in JWT. Currently only the person name is
-    updated.
-- `ldap`: Type object (Optional). For LDAP Authentication and user
-  synchronisation. Default `nil`.
-  - `url`: Type string (required). URL of LDAP directory server.
-  - `user-base`: Type string (required). Base DN of user tree root.
-  - `search-dn`: Type string (required). DN for authenticating LDAP admin
-    account with general read rights.
-  - `user-bind`: Type string (required). Expression used to authenticate users
-    via LDAP bind. Must contain `uid={username}`.
-  - `user-filter`: Type string (required). Filter to extract users for syncing.
-  - `username-attr`: Type string (Optional). Attribute with full user name.
-    Defaults to `gecos` if not provided.
-  - `sync-interval`: Type string (Optional). Interval used for syncing local
-    user table with LDAP directory. Parsed using time.ParseDuration.
-  - `sync-del-old-users`: Type bool (Optional). Delete obsolete users in database.
-  - `sync-user-on-login`: Type bool (Optional). Add non-existent user to DB at
-    login attempt if user exists in LDAP directory.
-- `oidc`: Type object (Optional). For OpenID Connect Authentication. Default `nil`.
-  - `provider`: Type string (required). OpenID Connect provider URL.
-  - `sync-user-on-login`: Type bool. Add non-existent user to DB at login attempt
-    with values provided.
-  - `update-user-on-login`: Type bool. Update existent user in DB at login attempt
-    with values provided. Currently only the person name is updated.
-
-### Section `metric-store`
-
-Section must exist.
-
-- `retention-in-memory`: Type string (required). Keep the metrics within memory
-  for given time interval. Retention for X hours, then the metrics would be freed.
-  Buffers that are still used by running jobs will be kept.
-- `memory-cap`: Type integer (required). If memory used exceeds value in GB,
-  buffers still used by long running jobs will be freed.
-- `num-workers`: Type integer (Optional). Number of concurrent workers for
-  checkpoint and archive operations. Default: If not set defaults to
-  `min(runtime.NumCPU()/2+1, 10)`
-- `checkpoints`: Type object (required). Configuration for checkpointing the
-  metrics buffers
-  - `file-format`: Type string (Optional). Format to use for checkpoint files.
-    Can be JSON or Avro. Default: Avro.
-  - `interval`: Type string (Required). Interval at which the metrics should be checkpointed..
-  - `directory`: Type string (Optional). Path in which the checkpoints should be
-    placed. Default: `./var/checkpoints`.
-- `cleanup`: Type object (Optional). Configuration for the cleanup process. If
-  not set the `mode` is `delete` with `interval` set to the `retention-in-memory`
-  interval.
-  - `mode`: Type string (Optional). The mode for cleanup. Can be `delete` or
-    `archive`. Default: `delete`.
-  - `interval`: Type string (Optional). Interval at which the cleanup runs.
-  - `directory`: Type string (required if mode is `archive`). Directory where to
-    put the archive
-    files.
-- `nats-subscriptions`: Type array (Optional). List of NATS subjects the metric
-  store should subscribe to. Items are of type object with the following
-  attributes:
-  - `subscribe-to`: Type string (required). NATS subject to subscribe to.
-  - `cluster-tag`: Type string (Optional). Allow lines without a cluster tag,
-    use this as default.
+- `address`: Type string. Address of the NATS server (e.g., `nats://localhost:4222`).
+- `username`: Type string (Optional). Username for NATS authentication.
+- `password`: Type string (Optional). Password for NATS authentication (optional).
+- `creds-file-path`: Type string (Optional). Path to NATS credentials file for
+  authentication (optional).
 
 ### Section `metric-store-external`
 
-Section is optional. Configures external cc-metric-store instances for reading
+Configures external cc-metric-store instances for reading
 metric data. This is an array of objects, each mapping a scope (cluster name or
 `*` wildcard) to an external metric store URL. When configured alongside the
 internal `metric-store` section, the external stores extend the available metric
@@ -305,7 +310,7 @@ Example:
 ]
 ```
 
-### Section `ui`
+#### Section `ui`
 
 The `ui` section specifies defaults for the web user interface. The defaults
 which metrics to show in different views can be overwritten per cluster or

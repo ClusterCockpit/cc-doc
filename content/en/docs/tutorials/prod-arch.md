@@ -280,13 +280,12 @@ Single cc-backend with internal metric store, collectors using REST:
 ```json
 // cc-backend config
 {
-  "metricstore": {
-    "enabled": true,
+  "metric-store": {
+    "retention-in-memory": "48h",
+    "memory-cap": 100,
     "checkpoints": {
-      "interval": "12h",
       "directory": "./var/checkpoints"
-    },
-    "retention-in-memory": "48h"
+    }
   }
 }
 ```
@@ -311,12 +310,10 @@ Separate cc-metric-store with NATS transport:
     "retention-in-memory": "48h",
     "memory-cap": 80,
     "checkpoints": {
-      "interval": "12h",
       "directory": "/data/checkpoints"
     },
     "cleanup": {
       "mode": "archive",
-      "interval": "48h",
       "directory": "/data/archive"
     },
     "nats-subscriptions": [

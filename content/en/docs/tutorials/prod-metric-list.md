@@ -108,4 +108,4 @@ system type names suggested are:
 
 ### File system file close: `close`
 
-### File system file syncs: `seek`
+### File system file seeks: `seek`
