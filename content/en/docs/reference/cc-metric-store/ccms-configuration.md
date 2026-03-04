@@ -64,18 +64,25 @@ The configuration is organized into four main sections: `main`, `metrics`,
 ## Metric-Store Section
 
 - `metric-store`: Storage engine configuration (required)
-  - `checkpoints`: Checkpoint configuration (required)
-    - `interval`: Create checkpoints every X seconds/minutes/hours (required)
-    - `directory`: Path to checkpoint directory (required)
   - `retention-in-memory`: Keep all values in memory for at least that amount of
   time. Should be long enough to cover common job durations (required)
-  - `memory-cap`: Maximum percentage of system memory to use (optional)
-  - `cleanup`: Cleanup/archiving configuration (required)
-    - `mode`: Either `"archive"` (move and compress old checkpoints) or
-    `"delete"` (remove old checkpoints) (required)
-    - `interval`: Perform cleanup every X seconds/minutes/hours (required)
+  - `memory-cap`: Upper memory capacity limit used by the metric store in GB
+  (required). If exceeded, buffers still in use by long-running jobs will be freed.
+  - `num-workers`: Number of concurrent workers for checkpoint and archive
+  operations (optional). Defaults to `min(NumCPU/2+1, 10)`.
+  - `checkpoints`: Checkpoint configuration (optional)
+    - `file-format`: Format for checkpoint files. Either `"json"`
+    (human-readable, periodic) or `"wal"` (binary snapshot + Write-Ahead Log,
+    crash-safe). Default: `"wal"` (optional)
+    - `directory`: Path to checkpoint directory. Default: `./var/checkpoints`
+    (optional)
+  - `cleanup`: Cleanup/archiving configuration (optional). The cleanup interval
+  always equals `retention-in-memory`. Defaults to `mode: delete` if not set.
+    - `mode`: Either `"archive"` (move old checkpoints to archive directory) or
+    `"delete"` (remove old checkpoints). Default: `"delete"` (optional)
     - `directory`: Path to archive directory (required if mode is `"archive"`)
   - `nats-subscriptions`: Array of NATS subscription configurations (optional,
   requires `nats` section)
     - `subscribe-to`: NATS subject to subscribe to (required)
-    - `cluster-tag`: Default cluster tag for incoming metrics (required)
+    - `cluster-tag`: Default cluster tag for metrics without a cluster tag
+    (optional)

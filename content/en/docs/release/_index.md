@@ -9,11 +9,11 @@ weight: 1
 - **Metric store integration**: The previously external `cc-metric-store`
   component was integrated into `cc-backend`. In this process the configuration
   for the metric store was made much simpler. It is not possible to use an
-  external time-series database. It is possible though to either send the metric
-  data to multiple time-series backends or to forward all metric-data to
-  `cc-backend`. We also dropped support for the Prometheus metric data base.
+  external time-series database directly. It is possible though to either send the
+  metric data to multiple time-series backends or to forward all metric-data to
+  `cc-backend`. All support for third party time-series databases was dropped.
 - **Drop support for MySQL/MariaDB**: We only support SQLite from now on. SQLite
-  performance better and requires less administration.
+  performs better and requires less administration.
 - **New slurm adapter**: We provide now an official slurm batch job adapter with
   tighter slurm integration. The REST API should still work but was extended to
   also provide Slurm node and job states. The job and node-state API is offered
@@ -26,6 +26,12 @@ weight: 1
   environment variables must be provided in an `.env` file which has to exist. We
   switched to the [godotenv](https://github.com/joho/godotenv) package, which is
   more flexible about where and how to provide the environment variables.
+- **Unified archive file format**: The `parquet` file format is used for all
+  long-term archiving. This applies for the nodestate retention, the metricstore
+  cleanup archive functionality and the long-term retention archive for the
+  job-archive.
+- **NATS support**: cc-slurm-adapter and metricstore support NATS for
+  communication.
 
 ### New experimental features
 
@@ -47,8 +53,9 @@ You need to:
   migration](/docs/how-to-guides/database-migration/)).
 - Migrate your job archive to version 3 (see [Job Archive
   migration](/docs/how-to-guides/archive-migration/)).
-- Transfer the checkpoints from the external `cc-metric-store` instance to the
-  `cc-backend` `./var/checkpoints` directory
+- Upgrade external or migrate to internal cc-metric-store. Transfer the
+  checkpoints from the external `cc-metric-store` instance to the `cc-backend`
+  `./var/checkpoints` directory
 
 The database migration can take more than one day. To minimize downtime, you
 can copy the existing SQLite database and perform the migration on the copy
@@ -56,6 +63,12 @@ while the production instance is still running. `cc-slurm-adapter` will
 synchronize any missing jobs afterwards. The archive migration should only take
 1-2 hours. This only applies if you do it on a fast storage medium, e.g., an NVMe
 disk.
+
+For performance reasons it is recommended to use the internal cc-metric-store.
+The ClusterCockpit documentation provides a
+[discussion](https://clustercockpit.org/docs/tutorials/prod-arch/#metric-store-internal-vs-external)
+about the pros and cons for external vs internal cc-metric-store, and REST API
+vs NATS communication.
 
 ## Configuration changes
 
@@ -65,19 +78,24 @@ The required options are significantly reduced.
 
 ## Transfer `cc-metric-store` checkpoints
 
-We are currently offering option to use cc-metric-store attached with cc-backend. Meaning both cc-backend and cc-metric-store share same configuration as well as they run on the same server. The checkpoints in your internal cc-metric-store resides in var directory of the cc-backend. If you choose to use cc-metric-store-internal as your metric store, then you can do the following to bring your old checkpoints from your external cc-metric-store:
+We are currently offering option to use cc-metric-store attached with
+cc-backend. Meaning both cc-backend and cc-metric-store share same configuration
+as well as they run on the same server. The checkpoints in your internal
+cc-metric-store resides in var directory of the cc-backend. If you choose to use
+cc-metric-store-internal as your metric store, then you can do the following to
+bring your old checkpoints from your external cc-metric-store:
 
 Look out for "checkpoints" key in your CCMS and CCB config.json.
 
 ```json
 "checkpoints": {
-  "interval": "12h",
   "directory": "./var/checkpoints",
   "restore": "48h"
 },
 ```
 
-Either you can move the checkpoints manually or you can use this script for moving the checkpoints.
+Either you can move the checkpoints manually or you can use this script for
+moving the checkpoints.
 
 ```bash
 #!/bin/bash
@@ -88,7 +106,7 @@ CCMS_CHECKPOINTS_DIR="/home/dummy/cc-metric-store/var/checkpoints"
 CCB_CHECKPOINTS_DIR="/home/dummy/cc-backend/var/checkpoints"
 
 # Check if the source directory actually exists
-if [ -d "$CCMS_DIR" ]; then    
+if [ -d "$CCMS_DIR" ]; then
     if [ ! -d "$CCB_CHECKPOINTS_DIR" ]; then
         mkdir "$CCB_CHECKPOINTS_DIR"
     fi

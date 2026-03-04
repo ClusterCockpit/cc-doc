@@ -128,7 +128,7 @@ Subsequent settings within the primary sections might be optional.
     string parsable by time.ParseDuration().
   - `cookie-name`: Type string (Optional). Cookie that should be checked for a
     JWT token.
-  - `vaidate-user`: Type bool (Optional). Deny login for users not in database
+  - `validate-user`: Type bool (Optional). Deny login for users not in database
     (but defined in JWT). Overwrite roles in JWT with database roles.
   - `trusted-issuer`: Type string (Optional). Issuer that should be accepted when
     validating external JWTs.
@@ -149,6 +149,8 @@ Subsequent settings within the primary sections might be optional.
     Defaults to `gecos` if not provided.
   - `sync-interval`: Type string (Optional). Interval used for syncing local
     user table with LDAP directory. Parsed using time.ParseDuration.
+  - `uid-attr`: Type string (Optional). LDAP attribute used as login username.
+    Defaults to `uid` if not provided.
   - `sync-del-old-users`: Type bool (Optional). Delete obsolete users in database.
   - `sync-user-on-login`: Type bool (Optional). Add non-existent user to DB at
     login attempt if user exists in LDAP directory.
@@ -174,19 +176,17 @@ Subsequent settings within the primary sections might be optional.
 - `checkpoints`: Type object (required). Configuration for checkpointing the
   metrics buffers
   - `file-format`: Type string (Optional). Format to use for checkpoint files.
-    Can be JSON or Avro. Default: Avro.
-  - `interval`: Type string (Required). Interval at which the metrics should be checkpointed..
+    Can be `json` (human-readable, periodic) or `wal` (binary snapshot + Write-Ahead
+    Log, crash-safe). Default: `wal`.
   - `directory`: Type string (Optional). Path in which the checkpoints should be
     placed. Default: `./var/checkpoints`.
-- `cleanup`: Type object (Optional). Configuration for the cleanup process. If
-  not set the `mode` is `delete` with `interval` set to the `retention-in-memory`
-  interval.
+- `cleanup`: Type object (Optional). Configuration for the cleanup process.
+  The cleanup interval always equals the `retention-in-memory` interval.
+  If not set, the `mode` defaults to `delete`.
   - `mode`: Type string (Optional). The mode for cleanup. Can be `delete` or
     `archive`. Default: `delete`.
-  - `interval`: Type string (Optional). Interval at which the cleanup runs.
   - `directory`: Type string (required if mode is `archive`). Directory where to
-    put the archive
-    files.
+    put the archive files.
 - `nats-subscriptions`: Type array (Optional). List of NATS subjects the metric
   store should subscribe to. Items are of type object with the following
   attributes:
