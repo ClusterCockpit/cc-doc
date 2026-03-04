@@ -60,7 +60,7 @@ ClusterCockpit requires the following components:
 
 `cc-backend` is threaded and therefore profits from multiple cores.
 Enough memory is required to hold the metric data cache. For most setups 128GB
-should be enough. You can set an upper limit for the memory capacity used b ythe
+should be enough. You can set an upper limit for the memory capacity used by the
 internal metric in-memory cache.
 It is possible to run it in a virtual machine. For best
 performance the `./var` folder of `cc-backend` which contains the sqlite
@@ -89,6 +89,7 @@ installation:
    precision flops are upscaled to single precision rates). The metric list is an
    integral component for the configuration of all ClusterCockpit components.
 1. [Planning of deployment]({{< ref prod-deploy >}})
+1. (Optional) [Configure and deploy]({{< ref prod-ccms >}}) `cc-metric-store`
 1. [Configure and deploy]({{< ref prod-ccmc >}}) `cc-metric-collector`
 1. [Configure and deploy]({{< ref prod-cc-backend >}}) `cc-backend`
 1. [Configure and deploy](/docs/reference/cc-slurm-adapter/) `cc-slurm-adapter` or

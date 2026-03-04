@@ -1,7 +1,7 @@
 ---
 title: Deployment
 weight: 15
-description: Plan and implement deployhment workflow
+description: Plan and implement deployment workflow
 categories: [cc-backend cc-metric-store]
 tags: [Admin]
 ---

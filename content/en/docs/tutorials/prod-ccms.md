@@ -59,15 +59,13 @@ Minimal example of a configuration file:
     }
   },
   "metric-store": {
+    "retention-in-memory": "48h",
+    "memory-cap": 100,
     "checkpoints": {
-      "interval": "12h",
       "directory": "./var/checkpoints"
     },
-    "memory-cap": 100,
-    "retention-in-memory": "48h",
     "cleanup": {
       "mode": "archive",
-      "interval": "48h",
       "directory": "./var/archive"
     }
   }
@@ -103,7 +101,7 @@ Metrics that are only available at node scope should set aggregation to `null`.
 The most important configuration option is the `retention-in-memory` setting. It
 specifies for which duration back in time metrics should be provided. This
 should be long enough to cover common job durations plus a safety margin. The
-`memory-cap` option sets the maximum memory percentage to use.
+`memory-cap` option sets the maximum memory capacity in GB to use.
 The memory footprint scales with the number of nodes, the number of native
 metric scopes (cores, sockets), the number of metrics, and the memory retention
 time divided by the frequency.

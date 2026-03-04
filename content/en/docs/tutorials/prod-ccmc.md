@@ -39,7 +39,7 @@ NVIDIA GPUs. The general recommendation is to first decide on the metrics you
 need and then figure out which collectors are required. For hardware performance
 counter metrics you may want to have a look at `likwid-perfctr`
 [performance groups](https://github.com/RRZE-HPC/likwid/tree/master/groups)
-for inspiration on how to computer the required derived metrics on your
+for inspiration on how to compute the required derived metrics on your
 target processor architecture.
 
 ## Router
@@ -75,7 +75,8 @@ name to the new name.
         "lustre_read_bytes_diff" : "lustre_read_bytes",
         "lustre_read_requests_diff" : "lustre_read_requests",
         "lustre_write_bytes_diff" : "lustre_write_bytes",
-        "lustre_write_requests_diff" : "lustre_write_requests",
+        "lustre_write_requests_diff" : "lustre_write_requests"
+    }
 }
 ```
 
@@ -97,7 +98,7 @@ its metric list are also silently dropped.
        "load_fifteen",
        "proc_run",
        "proc_total"
-   ],
+   ]
 }
 ```
 
@@ -108,25 +109,25 @@ set to true which is the default. The metric value is not altered!
 
 ```json
 "process_messages" : {
-   "normalize_units": true
+    "normalize_units": true
 }
 ```
 
 ### Change metric unit
 
 The collectors usually do not alter the unit of a metric. To change the unit set
-the `change_uni_prefix` key. The value is automatically scaled correctly,
+the `change_unit_prefix` key. The value is automatically scaled correctly,
 depending on the old unit prefix.
 
 ```json
 "process_messages" : {
-   "change_unit_prefix": {
-       "name == 'mem_used'": "G",
-       "name == 'swap_used'": "G",
-       "name == 'mem_total'": "G",
-       "name == 'swap_total'": "G",
-       "name == 'cpufreq'": "M"
-   }
+    "change_unit_prefix": {
+        "name == 'mem_used'": "G",
+        "name == 'swap_used'": "G",
+        "name == 'mem_total'": "G",
+        "name == 'swap_total'": "G",
+        "name == 'cpufreq'": "M"
+    }
 }
 ```
 
@@ -148,7 +149,7 @@ within the ClusterCockpit framework!
         "value": "alex",
         "if": "true"
       }
-    ],
+    ]
 }
 ```
 
