@@ -16,7 +16,7 @@ instructions below.
 
 To build `cc-backend` you need:
 
-- A [go compiler](https://go.dev/dl/), version 1.24 or newer. Most recent os
+- A [go compiler](https://go.dev/dl/), version 1.25 or newer. Most recent os
   environments should have a package with a recent enough version. On MacOS we
   recommend to use [Homebrew](https://brew.sh) to install on.
 - A node.js environment including the `npm` package manager.

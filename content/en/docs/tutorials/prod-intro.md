@@ -18,10 +18,10 @@ ClusterCockpit requires the following components:
   database and ensure the metric data is send or forwarded to `cc-backend`.
 - The **api and web interface backend** `cc-backend`. Only one instance of
   `cc-backend` is required. This will provide the HTTP server at the desired
-  monitoring URL for serving the web interface. It also integrates a in-memory
+  monitoring URL for serving the web interface. It also integrates an in-memory
   metric store.
 - A **SQL database**. The only supported option is to use the builtin sqlite
-  database for ClusterCockpit. You can setup [LiteStream](https://litestream.io/)
+  database for ClusterCockpit. It is recommended to setup [LiteStream](https://litestream.io/)
   as a service which performs a continuous replication of the sqlite database to
   multiple storage backends.
 - (Optional) **Metric store**: One or more `cc-metric-store` instances.
@@ -49,7 +49,7 @@ ClusterCockpit requires the following components:
   - Slurm: Golang based solution
     ([cc-slurm-adapter](https://github.com/ClusterCockpit/cc-slurm-adapter)) maintained
     by NHR@FAU. This is the recommended option in case you use Slurm. All
-    options in `cc-backend` are supported.
+    functionality in `cc-backend` is supported.
   - Slurm: Python based solution
     ([cc-slurm-sync](https://github.com/ClusterCockpit/cc-slurm-sync)) maintained
     by PC2 Paderborn
@@ -72,7 +72,9 @@ and around 1.4TB for the job archive. In case you have very high job counts, we
 recommend to use a retention policy to keep the database and the job archive at
 a manageable size. In case you archive old jobs the database can be easily
 restored using cc-backend.
-We run `cc-backend` as systemd services.
+It is recommended to run `cc-backend` as a systemd service. Example systemd unit
+files are available in the ClusterCockpit component repositories and in the
+[cc-examples](https://github.com/ClusterCockpit/cc-examples) repository.
 
 ## Planning and initial configuration
 
@@ -92,8 +94,8 @@ installation:
 1. (Optional) [Configure and deploy]({{< ref prod-ccms >}}) `cc-metric-store`
 1. [Configure and deploy]({{< ref prod-ccmc >}}) `cc-metric-collector`
 1. [Configure and deploy]({{< ref prod-cc-backend >}}) `cc-backend`
-1. [Configure and deploy](/docs/reference/cc-slurm-adapter/) `cc-slurm-adapter` or
-   another job scheduler adapter of your choice
+1. [Configure and deploy](/docs/reference/cc-slurm-adapter/) `cc-slurm-adapter`
+   or another job scheduler adapter of your choice
 
 You can find complete example production configurations in the
 [cc-examples](https://github.com/ClusterCockpit/cc-examples) repository.
@@ -132,8 +134,9 @@ will not be found.
 
 If you have GPU accelerators `cc-slurm-adapter` should use the PCI-E device
 addresses as ids. The option `gpuPciAddrs` for the nvidia and
-rocm-smi collectors in the collector configuration must be configured.
-To validate and debug problems you can use the `cc-backend` debug endpoint:
+`rocm-smi` collectors in the collector configuration must be configured.
+To validate and debug problems you can use the `cc-backend` or `cc-metric-store`
+debug endpoint:
 
 ```bash
 curl -H "Authorization: Bearer $JWT" -D - "http://localhost:8080/api/debug"
