@@ -61,7 +61,10 @@ ClusterCockpit requires the following components:
 `cc-backend` is threaded and therefore profits from multiple cores.
 Enough memory is required to hold the metric data cache. For most setups 128GB
 should be enough. You can set an upper limit for the memory capacity used by the
-internal metric in-memory cache.
+internal metric in-memory cache. How much memory is required depends apart from
+the resource count also on the frequency of the timeseries data. Starting with
+`cc-backend` v1.5.0 you do not need a safety margin anymore for memory
+retention.
 It is possible to run it in a virtual machine. For best
 performance the `./var` folder of `cc-backend` which contains the sqlite
 database file and the file based job archive should be located on a fast storage
