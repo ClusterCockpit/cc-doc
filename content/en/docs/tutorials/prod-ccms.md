@@ -29,7 +29,7 @@ Minimal example of a configuration file:
 ```json
 {
   "main": {
-    "addr": "localhost:8080",
+    "addr": "0.0.0.0:8082",
     "jwt-public-key": "kzfYrYy+TzpanWZHJ5qSdMj5uKUWgq74BWhQG6copP0="
   },
   "metrics": {
@@ -62,6 +62,7 @@ Minimal example of a configuration file:
     "retention-in-memory": "48h",
     "memory-cap": 100,
     "checkpoints": {
+      "file-format": "wal",
       "directory": "./var/checkpoints"
     },
     "cleanup": {
@@ -78,9 +79,10 @@ The `main` section specifies the address and port on which the server should
 listen (`addr`). Optionally, for HTTPS, paths to TLS cert and key files can be
 specified via `https-cert-file` and `https-key-file`. If using a privileged
 port (e.g., 443), you can specify `user` and `group` to drop root permissions
-after binding. The `backend-url` option allows connecting to cc-backend for
-querying job information. The REST API uses JWT token based authentication.
-The option `jwt-public-key` provides the Ed25519 public key to verify signed
+after binding. The `backend-url` option allows connecting to `cc-backend` for
+querying job information. This is required to enable the dynamic memory
+retention in `cc-metric-store`. The REST API uses JWT token based authentication.
+The option `jwt-public-key` provides the ED25519 public key to verify signed
 JWT tokens.
 
 ### Metrics Section
@@ -100,19 +102,67 @@ Metrics that are only available at node scope should set aggregation to `null`.
 
 The most important configuration option is the `retention-in-memory` setting. It
 specifies for which duration back in time metrics should be provided. This
-should be long enough to cover common job durations plus a safety margin. The
-`memory-cap` option sets the maximum memory capacity in GB to use.
-The memory footprint scales with the number of nodes, the number of native
-metric scopes (cores, sockets), the number of metrics, and the memory retention
-time divided by the frequency.
+should be long enough to cover common job durations. The `memory-cap` option
+sets the approximate maximum memory capacity in GB to use. The memory footprint
+scales with the number of nodes, the number of native metric scopes (cores,
+sockets), the number of metrics, and the memory retention time divided by the
+frequency.
+
+The `num-workers` option controls the number of parallel workers used for
+checkpoint and archive I/O. Setting it to `0` (the default) enables automatic
+setup, capped at 10.
 
 The `cc-metric-store` supports checkpoints and cleanup/archiving. Checkpoints
 are always performed on shutdown. To not lose data on a crash or other failure,
-checkpoints are written regularly in fixed intervals. Checkpoints that are not
-needed anymore can either be archived (moved and compressed) or deleted,
-controlled by the `cleanup.mode` setting (`archive` or `delete`). The cleanup
-happens at the interval specified in `cleanup.interval`. You may want to set up
-a cron job to delete older archive files.
+checkpoints are written at regular intervals configured via
+`checkpoints.interval` (e.g. `"12h"`). The `checkpoints.file-format` option
+selects the persistence format: `"json"` (human-readable) or `"wal"` (binary
+Write-Ahead Log, crash-safe, default). See [Checkpoint
+Formats](#checkpoint-formats) below. Checkpoints that are not needed anymore can
+either be archived or deleted, controlled by the `cleanup.mode` setting
+(`archive` or `delete`). The cleanup runs at the interval specified in
+`cleanup.interval`.
+
+## Checkpoint Formats
+
+The `checkpoints.file-format` field controls how in-memory data is persisted to
+disk.
+
+**`"json"`** — Human-readable JSON snapshots written
+periodically. Each snapshot is stored as
+`<dir>/<cluster>/<host>/<timestamp>.json`. Easy to inspect and recover manually,
+but larger on disk and slower to write.
+
+**`"wal"` (recommended)** — Binary Write-Ahead Log format designed for crash
+safety. Two file types are used per host:
+
+- `current.wal` — append-only binary log; every incoming data point is appended
+  immediately. Truncated trailing records from unclean shutdowns are silently
+  skipped on restart.
+- `<timestamp>.bin` — binary snapshot written at each checkpoint interval,
+  containing the complete metric state. Written atomically via a `.tmp` rename.
+
+On startup the most recent `.bin` snapshot is loaded, then remaining WAL entries
+are replayed on top. The WAL is rotated after each successful snapshot. The
+`"wal"` format will become the only supported option in a future release. If you
+are migrating from an older installation using JSON checkpoints, switch to `"wal"`
+after a clean restart.
+
+## Parquet Archive
+
+When `cleanup.mode` is `"archive"`, data that ages out of the in-memory
+retention window is written to [Apache Parquet](https://parquet.apache.org/)
+files before being freed, organized as:
+
+```
+<cleanup.directory>/
+  <cluster>/
+    <timestamp>.parquet
+```
+
+One Parquet file is produced per cluster per cleanup run, consolidating all
+hosts. Files are compressed with Zstandard and sorted by cluster, hostname,
+metric, and timestamp for efficient columnar reads.
 
 ## Authentication
 
@@ -158,4 +208,4 @@ and `nats-subscriptions` in the `metric-store` section:
 The `nats` section configures the NATS server connection with address and
 credentials. The `nats-subscriptions` within `metric-store` define which
 subjects to subscribe to and how to tag incoming metrics with cluster
-information.
+information in case this is not already done.

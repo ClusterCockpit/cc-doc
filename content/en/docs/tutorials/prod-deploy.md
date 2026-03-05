@@ -21,10 +21,10 @@ It is recommended to install all ClusterCockpit components in a common
 directory, e.g. `/opt/monitoring`, `var/monitoring` or `var/clustercockpit`. In
 the following we use `/opt/monitoring`.
 
-Two Systemd services run on the central monitoring server:
+A Systemd service runs on the central monitoring server:
 
-- clustercockpit : binary cc-backend in `/opt/monitoring/cc-backend`.
-- cc-metric-store : Binary cc-metric-store in `/opt/monitoring/cc-metric-store`.
+- clustercockpit : Binary cc-backend in `/opt/monitoring/cc-backend`.
+- (Optional with external metric-store) cc-metric-store : Binary cc-metric-store in `/opt/monitoring/cc-metric-store`.
 
 ClusterCockpit is deployed as a single binary that embeds all static assets.
 We recommend keeping all `cc-backend` binary versions in a folder `archive` and
@@ -37,11 +37,16 @@ This allows for easy roll-back in case something doesn't work.
 which case `cc-backend` will drop root permissions once the ports are taken.
 You have to take care, that the ownership of the `./var` folder and
 its contents are set accordingly.
+You also can run `cc-backend` behind a reverse proxy. In this case it can be
+started with an unprivileged user and the reverse proxy takes care of TLS
+encryption. This also enables to automatically show a maintenance page in case
+ClusterCockpit is not reachable.
 {{< /alert >}}
 
 ### Workflow to deploy new version
 
-This example assumes the DB and job archive versions did not change.
+This example assumes you are deploying ClusterCockpit for the first time or the
+DB and job archive versions did not change between versions.
 
 - Stop systemd service:
 
@@ -49,7 +54,8 @@ This example assumes the DB and job archive versions did not change.
 sudo systemctl stop clustercockpit.service
 ```
 
-- Backup the sqlite DB file! This is as simple as to copy it.
+- Backup the sqlite DB file! This is as simple as to copy it. You can also use a
+  continuous replication service as e.g. litestream.
 - Copy new `cc-backend` binary to `/opt/monitoring/cc-backend/archive` (Tip: Use a
   date tag like `YYYYMMDD-cc-backend`). Here is an example:
 
@@ -75,7 +81,7 @@ sudo systemctl start clustercockpit.service
 sudo systemctl status clustercockpit.service
 ```
 
-- Check log for issues:
+- Check log for errors:
 
 ```sh
 sudo journalctl -u clustercockpit.service

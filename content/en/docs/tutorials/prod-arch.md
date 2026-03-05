@@ -17,7 +17,8 @@ need to be made:
    cc-backend vs external standalone)
 
 This guide helps you understand the trade-offs to make informed decisions based
-on your cluster size, administrative capabilities, and requirements.
+on your cluster size, administrative capabilities, and requirements. You may
+also use a mix of above options.
 
 ## Transport: REST API vs NATS
 
@@ -75,7 +76,7 @@ subscribes to receive them.
 **Advantages:**
 
 - Decoupled architecture: collectors and metric store are independent
-- Built-in buffering and message persistence (with JetStream)
+- Built-in buffering and message persistence
 - Better scalability for large clusters (1000+ nodes)
 - Supports multiple subscribers (e.g., external metric store for redundancy)
 - Collectors continue working even if metric store is temporarily down
@@ -142,8 +143,8 @@ configuration and lifecycle.
 **Disadvantages:**
 
 - Metric store restart requires cc-backend restart and the other way around
-- A cc-backend restart can take very long since the metric store checkpoints
-  have to loaded on startup
+- A cc-backend restart can take more then a minute since the metric store checkpoints
+  have to be loaded on startup
 - Resource contention between web serving and metric ingestion
 - No horizontal scaling of metric ingestion
 - Single point of failure for entire system
@@ -176,7 +177,7 @@ its REST API.
 
 **Disadvantages:**
 
-- Two processes to deploy and manage
+- Two services to deploy and manage
 - Separate configuration files
 - Additional network communication between components
 - More complex setup and monitoring
@@ -201,9 +202,9 @@ its REST API.
 | NATS Server  | N/A                            | Exposed to all collectors and metric stores |
 | cc-backend   | Exposed to users               | Exposed to users                            |
 
-With NATS, the metric store can be isolated from the compute network, reducing
+With NATS, the metric store can be isolated from the cluster network, reducing
 attack surface. The NATS server becomes the single point of ingress for metrics.
-Another option to isolate the web backend from the compute network is to setup
+Another option to isolate the web backend from the cluster network is to setup
 [cc-metric-collector proxies]({{< ref hierarchical-collection >}}).
 
 ### Authentication
@@ -270,6 +271,8 @@ Checkpoints are written periodically. For large deployments:
 - Use fast storage (SSD) for checkpoint directory
 - Consider separate disks for checkpoints and archives
 - Monitor disk space for archive growth
+- ClusterCockpit supports to store archives on an external S3 compatible object
+  store
 
 ## Example Configurations
 
