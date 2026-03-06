@@ -4,86 +4,134 @@ description: Settings and issues specific to the current release
 weight: 1
 ---
 
-## Major changes
+## `cc-backend` version 1.5.0
 
-- **Metric store integration**: The previously external `cc-metric-store`
-  component was integrated into `cc-backend`. In this process the configuration
-  for the metric store was made much simpler. It is not possible to use an
-  external time-series database directly. It is possible though to either send the
-  metric data to multiple time-series backends or to forward all metric-data to
-  `cc-backend`. All support for third party time-series databases was dropped.
-- **Drop support for MySQL/MariaDB**: We only support SQLite from now on. SQLite
-  performs better and requires less administration.
-- **New slurm adapter**: We provide now an official slurm batch job adapter with
-  tighter slurm integration. The REST API should still work but was extended to
-  also provide Slurm node and job states. The job and node-state API is offered
-  as REST API or via NATS.
-- **Revised configuration**: The structure of the configuration was unified and
-  consolidated. It can now be distributed via multiple files. The UI
-  configuration can be selectively configured. Defaults for the metric plots can
-  be configured per cluster/subcluster.
-- **Switch to more flexible .env handling**: In previous releases the
-  environment variables must be provided in an `.env` file which has to exist. We
-  switched to the [godotenv](https://github.com/joho/godotenv) package, which is
-  more flexible about where and how to provide the environment variables.
-- **Unified archive file format**: The `parquet` file format is used for all
-  long-term archiving. This applies for the nodestate retention, the metricstore
-  cleanup archive functionality and the long-term retention archive for the
-  job-archive.
-- **NATS support**: cc-slurm-adapter and metricstore support NATS for
-  communication.
+Supports job archive version 3 and database version 10.
 
-### New experimental features
+## Breaking changes
 
-- **Automatic Job taggers**: It is possible to automatically detect application
-  types and classify pathological jobs and tag jobs accordingly. The tagger
-  rules are specified in rules.
-- **Alternative job-archive backends**: As alternatives to the file-based job
-  archives there exist now an **SQLite** and **S3** compatible object store backends.
+### Configuration changes
+
+- **JSON attribute naming**: All JSON configuration attributes now use `kebab-case`
+  style consistently (e.g., `api-allowed-ips` instead of `apiAllowedIPs`).
+  Update your `config.json` accordingly.
+- **Removed `disable-archive` option**: This obsolete configuration option has been removed.
+- **Removed `clusters` config section**: The separate clusters configuration section
+  has been removed. Cluster information is now derived from the job archive.
+- **`apiAllowedIPs` is now optional**: If not specified, defaults to not restricted.
+
+### Architecture changes
+
+- **MySQL/MariaDB support removed**: Only SQLite is now supported as the database backend.
+- **Web framework replaced**: Migrated from `gorilla/mux` to `chi` as the HTTP
+  router. A proper 404 handler is now in place.
+- **MetricStore moved**: The `metricstore` package has been moved from `internal/`
+  to `pkg/` as it is now part of the public API.
+- **`minRunningFor` filter removed**: This undocumented filter has been removed
+  from the API and frontend. A new **Short jobs** quick-filter button replaces it.
+
+## Major new features
+
+- **NATS API Integration**: Subscribe to real-time job start/stop events and node
+  state changes via NATS. NATS subjects are configurable via `api-subjects`.
+- **Public Dashboard**: New public-facing dashboard route at `/public` for external users.
+- **Enhanced Node Management**: New node state tracking table with timestamp
+  tracking, filtering, and configurable retention/archiving to Parquet format.
+- **Health Monitoring**: New dedicated **Health** tab in the status details view
+  showing per-node metric health across the cluster. Supports querying external
+  cc-metric-store (CCMS) health status via the API.
+- **Web-based Log Viewer**: Inspect backend log output directly from the browser
+  via the admin interface without requiring shell access.
+- **Job Tagging System**: Automatic detection of applications (MATLAB, GROMACS,
+  etc.) and pathological job classification. Taggers can be triggered on-demand
+  from the admin web interface.
+- **Parquet Archive Format**: New Parquet file format for job archiving with
+  columnar storage and efficient zstd compression. Full S3 and SQLite blob
+  backends are also supported.
+- **Unified Archive Retention**: Job archive retention supports both JSON and
+  Parquet as target formats under a single consistent policy configuration.
 
 ## What you need to do
 
-You need to:
-
-- Adapt your central `config.json` to the new [configuration
-  option]({{< ref "ccb-configuration" >}}) systematic.
-- Revise all of your `cluster.json` files in the job archive to reflect the
-  [current options](/docs/how-to-guides/clusterconfig/).
-- Migrate your job database to version 10 (see [Database
+- **Update `config.json`**: Rename all configuration attributes to `kebab-case`
+  (e.g., `apiAllowedIPs` → `api-allowed-ips`). See the [configuration
+  reference]({{< ref "ccb-configuration" >}}) for the full list of options.
+- **Review cluster configuration**: Cluster information is now derived from the
+  job archive. Remove the `clusters` section from `config.json` and ensure your
+  `cluster.json` files in the job archive are up to date.
+- **Migrate your job database** to version 10 (see [Database
   migration](/docs/how-to-guides/database-migration/)).
-- Migrate your job archive to version 3 (see [Job Archive
+- **Migrate your job archive** to version 3 (see [Job Archive
   migration](/docs/how-to-guides/archive-migration/)).
-- Upgrade external or migrate to internal cc-metric-store. Transfer the
-  checkpoints from the external `cc-metric-store` instance to the `cc-backend`
-  `./var/checkpoints` directory
-
-The database migration can take more than one day. To minimize downtime, you
-can copy the existing SQLite database and perform the migration on the copy
-while the production instance is still running. `cc-slurm-adapter` will
-synchronize any missing jobs afterwards. The archive migration should only take
-1-2 hours. This only applies if you do it on a fast storage medium, e.g., an NVMe
-disk.
-
-For performance reasons it is recommended to use the internal cc-metric-store.
-The ClusterCockpit documentation provides a
-[discussion](https://clustercockpit.org/docs/tutorials/prod-arch/#metric-store-internal-vs-external)
-about the pros and cons for external vs internal cc-metric-store, and REST API
-vs NATS communication.
+- If using **NATS**, configure the new `nats` and `api-subjects` sections.
+- If using **archive retention**, configure the `target-format` option to choose
+  between `json` (default) and `parquet` output formats.
+- Consider enabling **nodestate retention** if you track node states over time.
 
 ## Configuration changes
 
 GitHub Repository with [complete configuration examples](https://github.com/ClusterCockpit/cc-examples/tree/main/nhr%40fau).
-All configuration options are now checked against a JSON schema.
-The required options are significantly reduced.
+All configuration options are checked against a JSON schema.
+
+### New configuration options
+
+```json
+{
+  "main": {
+    "enable-job-taggers": true,
+    "resampling": {
+      "minimum-points": 600,
+      "trigger": 180,
+      "resolutions": [240, 60]
+    },
+    "api-subjects": {
+      "subject-job-event": "cc.job.event",
+      "subject-node-state": "cc.node.state"
+    }
+  },
+  "nats": {
+    "address": "nats://0.0.0.0:4222",
+    "username": "root",
+    "password": "root"
+  },
+  "cron": {
+    "commit-job-worker": "1m",
+    "duration-worker": "5m",
+    "footprint-worker": "10m"
+  },
+  "metric-store": {
+    "cleanup": {
+      "mode": "archive",
+      "interval": "48h",
+      "directory": "./var/archive"
+    }
+  },
+  "archive": {
+    "retention": {
+      "policy": "delete",
+      "age": "6months",
+      "target-format": "parquet"
+    }
+  },
+  "nodestate": {
+    "retention": {
+      "policy": "archive",
+      "age": "30d",
+      "archive-path": "./var/nodestate-archive"
+    }
+  }
+}
+```
 
 ## Transfer `cc-metric-store` checkpoints
 
-We are currently offering option to use cc-metric-store attached with
+We are currently offering the option to use the metric-store integrated in
 cc-backend. Meaning both cc-backend and cc-metric-store share same configuration
-as well as they run on the same server. The checkpoints in your internal
-cc-metric-store resides in var directory of the cc-backend. If you choose to use
+as well as they run on the same server. The checkpoints in an internal
+cc-metric-store reside in the `var` directory of cc-backend. If you choose to use
 cc-metric-store-internal as your metric store, then you can do the following to
-bring your old checkpoints from your external cc-metric-store:
+bring your old checkpoints from your previous external cc-metric-store
+installation:
 
 Look out for "checkpoints" key in your CCMS and CCB config.json.
 
@@ -120,6 +168,8 @@ fi
 
 ## Known issues
 
+- The new dynamic memory management is not bullet proof yet across restarts. We
+  will fix that in a subsequent patch release.
 - Currently energy footprint metrics of type energy are ignored for calculating
   total energy.
 - With energy footprint metrics of type power the unit is ignored and it is
