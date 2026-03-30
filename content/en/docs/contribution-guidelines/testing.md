@@ -1,41 +1,58 @@
 ---
-title: Unit tests
-description: >
-  How to do software testing
+title: Unit Tests
+weight: 20
+description: Go test conventions and how to run the test suite locally
 tags: [Developer]
 ---
+
 ## Overview
 
-We use the standard golang testing environment.
+ClusterCockpit uses the standard Go testing environment. Run the full test
+suite locally before pushing to avoid CI failures — this is part of the
+[pre-PR checklist]({{< ref "_index#pre-pr-checklist" >}}).
 
-The following conventions are used:
+---
 
-* *White box unit tests*: Tests for internal functionality are placed in files
-* *Black box unit tests*: Tests for public interfaces are placed in files
-with `<package name>_test.go` and belong to the package `<package_name>_test`.
-There only exists one package test file per package.
-* *Integration tests*: Tests that use multiple componenents are placed in a
-package test file. These are named `<package name>_test.go` and belong to the
-package `<package_name>_test`.
-* *Test assets*: Any required files are placed in a directory `./testdata`
-within each package directory.
+## Conventions
 
-## Executing tests
+- **White-box unit tests** — tests for internal (unexported) functionality are
+  placed in the same file as the code under test, within the same package.
+- **Black-box unit tests** — tests for public interfaces are placed in a
+  separate file named `<package_name>_test.go` and belong to the package
+  `<package_name>_test`. There is at most one such file per package.
+- **Integration tests** — tests that exercise multiple components are also
+  placed in the `<package_name>_test.go` file under the `<package_name>_test`
+  package.
+- **Test assets** — any required fixture files are placed in a `./testdata/`
+  directory within the package directory.
 
-Visual Studio Code has a very good golang test integration.
-For debugging a test this is the recommended solution.
+---
 
-The Makefile provided by us has a `test` target that executes:
+## Running Tests
 
-```sh
-> go clean -testcache
-> go build ./...
-> go vet ./...
-> go test ./...
+The project `Makefile` provides a `test` target that runs:
+
+```bash
+go clean -testcache
+go build ./...
+go vet ./...
+go test ./...
 ```
 
-Of course the commands can also be used on the command line.
-For details about golang testing refer to the standard documentation:
+Run it with:
 
-* [Testing package](https://pkg.go.dev/testing)
-* [go test command](https://pkg.go.dev/cmd/go#hdr-Test_packages)
+```bash
+make test
+```
+
+You can also run any of the individual commands directly from the command line.
+
+For debugging individual tests, Visual Studio Code has excellent Go test
+integration including breakpoint support.
+
+---
+
+## Further Reading
+
+- [Testing package](https://pkg.go.dev/testing)
+- [go test command](https://pkg.go.dev/cmd/go#hdr-Test_packages)

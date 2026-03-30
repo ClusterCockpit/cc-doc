@@ -1,46 +1,77 @@
 ---
-title: Tips for cc-backend frontend development
-weight: 99
-description: >
-  How to setup cc-backend for easiert frontend development
+title: Frontend Development Setup
+weight: 30
+description: How to set up cc-backend for fast frontend development iteration
 categories: [cc-backend]
 tags: [Developer]
 ---
 
-## ClusterCockpit web frontend
+## Overview
 
-The frontend assets including the Svelte js files are per default embedded in
-the go binary. To enable a quick turnaround cycle for web development of the
-frontend disable embedding of static assets in `config.json`:
+The cc-backend web frontend is built with Svelte. By default, the compiled
+frontend assets are embedded directly in the Go binary. During frontend
+development this is impractical — use the setup below to enable fast
+rebuild-on-save iteration without recompiling the backend.
+
+For all other aspects of the development process (branching, commits, PRs)
+follow the [Developer Workflow]({{< ref "_index" >}}) guide.
+
+---
+
+## Setup
+
+### 1. Disable embedded static files
+
+In `config.json`, set:
 
 ```json
 "embed-static-files": false,
-"static-files": "./web/frontend/public/",
-
+"static-files": "./web/frontend/public/"
 ```
 
-Start the node build process (in directory `./web/frontend`) in development mode:
+This tells cc-backend to serve assets from disk rather than from the embedded
+filesystem.
 
-```sh
-> npm run dev
+### 2. Start the frontend build in watch mode
+
+In the `./web/frontend` directory:
+
+```bash
+npm run dev
 ```
 
-This will start the build process in listen mode. Whenever you change a source
-files the depending javascript targets will be automatically rebuild.
-In case the javascript files are minified you may need to set the production
-flag by hand to false in `./web/frontend/rollup.config.mjs`:
+This starts the Rollup build in listen mode. Whenever you save a source file,
+the affected JavaScript targets are rebuilt automatically.
+
+If the output is minified when you expect it not to be, set the production flag
+manually in `./web/frontend/rollup.config.mjs`:
 
 ```mjs
 const production = false
 ```
 
-Usually this should work automatically.
+This should normally be set automatically based on the npm script, but the
+override is available if needed.
 
-Because the files are still served by ./cc-backend you have to reload the view
-explicitly in your browser.
+### 3. Start cc-backend
 
-A common setup is to have three terminals open:
+From the repository root:
 
-* One running cc-backend (working directory repository root): `./cc-backend -server -dev`
-* Another running npm in developer mode (working directory `./web/frontend`): `npm run dev`
-* And the last one editing the frontend source files
+```bash
+./cc-backend -server -dev
+```
+
+Because assets are served by cc-backend (not a separate dev server), you must
+reload the page in your browser manually after each frontend rebuild.
+
+---
+
+## Recommended Terminal Layout
+
+A common setup is three terminals running concurrently:
+
+| Terminal | Directory | Command |
+|---|---|---|
+| 1 | repository root | `./cc-backend -server -dev` |
+| 2 | `./web/frontend` | `npm run dev` |
+| 3 | any | editor / shell for source edits |

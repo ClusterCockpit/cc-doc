@@ -10,7 +10,7 @@ weight: 3
 
 ### Prerequisites
 
-- Go 1.16 or higher
+- Go 1.25 or higher
 - Git
 - Make
 - Standard build tools (gcc, etc.)
