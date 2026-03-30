@@ -30,6 +30,14 @@ _Function:_ Run taggers on all completed jobs and exit.
 ---
 
 ```txt
+  -cleanup-checkpoints
+```
+
+_Function:_ Trigger checkpoint cleanup without starting the server, then exit. Useful for maintenance windows or automated cleanup scripts.
+
+---
+
+```txt
   -config <path>
 ```
 
@@ -141,6 +149,14 @@ _Example:_ `-loglevel debug`
 ```
 
 _Function:_ Migrate database to supported version and exit.
+
+---
+
+```txt
+  -optimize-db
+```
+
+_Function:_ Run SQLite `VACUUM` and `ANALYZE` to optimize the database, then exit.
 
 ---
 

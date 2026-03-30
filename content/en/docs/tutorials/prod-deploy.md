@@ -69,6 +69,15 @@ cp ~/cc-backend /opt/monitoring/cc-backend/archive/20231124-cc-backend
 ln -s  /opt/monitoring/cc-backend/archive/20231124-cc-backend /opt/monitoring/cc-backend/cc-backend
 ```
 
+- If the new version requires a database migration, run it before starting the service:
+
+```sh
+cd /opt/monitoring/cc-backend
+./cc-backend -migrate-db
+```
+
+  Check the release notes to find out whether a migration is needed.
+
 - Start systemd service:
 
 ```sh

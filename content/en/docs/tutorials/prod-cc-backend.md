@@ -89,11 +89,11 @@ Not included below but set by the default settings:
     },
     "ldap": {
       "url": "ldaps://hpcldap.rrze.uni-erlangen.de",
-      "user_base": "ou=people,ou=hpc,dc=rz,dc=uni,dc=de",
-      "search_dn": "cn=hpcmonitoring,ou=roadm,ou=profile,ou=hpc,dc=rz,dc=uni,dc=de",
-      "user_bind": "uid={username},ou=people,ou=hpc,dc=rrze,dc=uni,dc=de",
-      "user_filter": "(&(objectclass=posixAccount))",
-      "sync_interval": "24h"
+      "user-base": "ou=people,ou=hpc,dc=rz,dc=uni,dc=de",
+      "search-dn": "cn=hpcmonitoring,ou=roadm,ou=profile,ou=hpc,dc=rz,dc=uni,dc=de",
+      "user-bind": "uid={username},ou=people,ou=hpc,dc=rrze,dc=uni,dc=de",
+      "user-filter": "(&(objectclass=posixAccount))",
+      "sync-interval": "24h"
     }
   },
   "cron": {
@@ -110,7 +110,7 @@ Not included below but set by the default settings:
     "retention": {
       "policy": "move",
       "age": 365,
-      "location": "./var/archive"
+      "target-path": "./var/archive"
     }
   },
   "metric-store": {
@@ -135,11 +135,17 @@ Not included below but set by the default settings:
 }
 ```
 
+The `metric-store` block configures the built-in in-memory metric store. The
+same options are used by the standalone `cc-metric-store` service. See the
+[metric store setup tutorial]({{< ref "prod-ccms" >}}) for a full description of
+all `metric-store` configuration options.
+
 Further reading:
 
 - [Configuration reference]({{< ref "ccb-configuration" >}})
 - [Authentication Handbook]({{< ref "docs/reference/cc-backend/authentication" >}})
 - [Job-Archive Handbook]({{< ref "docs/reference/cc-backend/jobarchive" >}})
+- [Metric store setup]({{< ref "prod-ccms" >}})
 
 ## Environment variables
 
