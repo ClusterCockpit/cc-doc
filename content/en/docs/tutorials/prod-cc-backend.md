@@ -135,11 +135,17 @@ Not included below but set by the default settings:
 }
 ```
 
+The `metric-store` block configures the built-in in-memory metric store. The
+same options are used by the standalone `cc-metric-store` service. See the
+[metric store setup tutorial]({{< ref "prod-ccms" >}}) for a full description of
+all `metric-store` configuration options.
+
 Further reading:
 
 - [Configuration reference]({{< ref "ccb-configuration" >}})
 - [Authentication Handbook]({{< ref "docs/reference/cc-backend/authentication" >}})
 - [Job-Archive Handbook]({{< ref "docs/reference/cc-backend/jobarchive" >}})
+- [Metric store setup]({{< ref "prod-ccms" >}})
 
 ## Environment variables
 

@@ -94,10 +94,10 @@ installation:
    precision flops are upscaled to single precision rates). The metric list is an
    integral component for the configuration of all ClusterCockpit components.
 1. [Planning of deployment]({{< ref prod-deploy >}})
-1. (Optional) [Configure and deploy]({{< ref prod-ccms >}}) `cc-metric-store`
+1. [Configure and deploy]({{< ref prod-ccms >}}) the internal metric store and optionally an external `cc-metric-store`
 1. [Configure and deploy]({{< ref prod-ccmc >}}) `cc-metric-collector`
 1. [Configure and deploy]({{< ref prod-cc-backend >}}) `cc-backend`
-1. [Configure and deploy](/docs/reference/cc-slurm-adapter/) `cc-slurm-adapter`
+1. [Configure and deploy]({{< ref prod-slurm-adapter >}}) `cc-slurm-adapter`
    or another job scheduler adapter of your choice
 
 You can find complete example production configurations in the
