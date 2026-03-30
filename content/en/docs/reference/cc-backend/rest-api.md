@@ -98,4 +98,4 @@ This means that all interactivity ("Try It Out") will not return actual data. Ho
 Endpoints displayed here correspond to the administrator `/api/` endpoints, but user-accessible `/userapi/` endpoints are functionally identical. See [these lists]({{< ref "userest" >}} "How-To REST API") for information about accessibility.
 {{< /alert >}}
 
-{{< swagger-ui "<https://raw.githubusercontent.com/ClusterCockpit/cc-backend/refs/heads/master/api/swagger.json>" >}}
+{{< swagger-ui "https://raw.githubusercontent.com/ClusterCockpit/cc-backend/refs/heads/master/api/swagger.json" >}}
