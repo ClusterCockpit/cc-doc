@@ -28,7 +28,9 @@ infrastructure beyond HTTP connectivity.
 
 {{< alert title="Important" >}}
 cc-metric-store only stores metrics that are listed in its
-[`metrics` configuration section]({{< ref "../reference/cc-metric-store/ccms-configuration" >}}).
+[`metrics` configuration section]({{< ref "../reference/cc-metric-store/ccms-configuration" >}})
+for the external `cc-metric-store` or in the `cluster.json` files in the job
+archive for the internal `metric-store`.
 Any metric name sent via `/api/write/` that is not configured will be silently
 dropped. Plan your metric name mapping carefully before deploying.
 {{< /alert >}}
@@ -62,11 +64,11 @@ flowchart LR
 
 ### Approach Comparison
 
-| Approach | Source | Mechanism | Latency | Complexity |
-|---|---|---|---|---|
-| Cron-based sync script | Prometheus or InfluxDB | Periodic query + POST | ~60s | Low |
-| Prometheus remote_write proxy | Prometheus | Continuous push | ~seconds | Medium |
-| Telegraf HTTP output | InfluxDB | Telegraf pipeline | ~seconds | Medium |
+| Approach                      | Source                 | Mechanism             | Latency  | Complexity |
+| ----------------------------- | ---------------------- | --------------------- | -------- | ---------- |
+| Cron-based sync script        | Prometheus or InfluxDB | Periodic query + POST | ~60s     | Low        |
+| Prometheus remote_write proxy | Prometheus             | Continuous push       | ~seconds | Medium     |
+| Telegraf HTTP output          | InfluxDB               | Telegraf pipeline     | ~seconds | Medium     |
 
 For most HPC sites, the **cron-based sync script** is recommended. It is the
 simplest to deploy and maintain, and 60-second latency is perfectly adequate for
@@ -90,21 +92,20 @@ must translate between them.
 
 The following table shows mappings for common node-level metrics:
 
-| CC Metric | Prometheus Query | InfluxDB / Telegraf | Unit | Aggregation |
-|---|---|---|---|---|
-| `cpu_load` | `node_load1` | `system.load1` | - | avg |
-| `cpu_user` | `100 * rate(node_cpu_seconds_total{mode="user"}[1m])` | `cpu.usage_user` | % | avg |
-| `mem_used` | `(node_memory_MemTotal_bytes - node_memory_MemAvailable_bytes) / (1024*1024)` | `mem.used / (1024*1024)` | MB | - |
-| `net_bw` | `rate(node_network_receive_bytes_total[1m]) + rate(node_network_transmit_bytes_total[1m])` | `net.bytes_recv + net.bytes_sent` | bytes/s | sum |
-| `cpu_power` | `node_rapl_package_joules_total` (rate) | `ipmi_sensors` (if available) | W | sum |
+| CC Metric   | Prometheus Query                                                                           | InfluxDB / Telegraf               | Unit    | Aggregation |
+| ----------- | ------------------------------------------------------------------------------------------ | --------------------------------- | ------- | ----------- |
+| `cpu_load`  | `node_load1`                                                                               | `system.load1`                    | -       | avg         |
+| `cpu_user`  | `100 * rate(node_cpu_seconds_total{mode="user"}[1m])`                                      | `cpu.usage_user`                  | %       | avg         |
+| `mem_used`  | `(node_memory_MemTotal_bytes - node_memory_MemAvailable_bytes) / (1024*1024)`              | `mem.used / (1024*1024)`          | MB      | -           |
+| `net_bw`    | `rate(node_network_receive_bytes_total[1m]) + rate(node_network_transmit_bytes_total[1m])` | `net.bytes_recv + net.bytes_sent` | bytes/s | sum         |
+| `cpu_power` | `node_rapl_package_joules_total` (rate)                                                    | `ipmi_sensors` (if available)     | W       | sum         |
 
 {{< alert color="warning" title="Limitation" >}}
 HPC-specific metrics like `flops_any`, `mem_bw`, and `ipc` require hardware
 performance counter access (e.g., via LIKWID). These are **not** available from
-standard Prometheus node_exporter or Telegraf. This integration supplements but
-does not replace
-[cc-metric-collector]({{< ref "../reference/cc-metric-collector" >}}) for
-hardware counter metrics.
+standard Prometheus node_exporter or Telegraf. You have to ensure to extend
+those or use a third party node collector as, e.g. `collectd` with a suitable
+plugin to provide hardware performance counter metrics.
 {{< /alert >}}
 
 ## cc-metric-store Configuration
@@ -116,10 +117,10 @@ runs (in seconds).
 ```json
 {
   "metrics": {
-    "cpu_load":  { "frequency": 60, "aggregation": "avg" },
-    "cpu_user":  { "frequency": 60, "aggregation": "avg" },
-    "mem_used":  { "frequency": 60, "aggregation": null },
-    "net_bw":    { "frequency": 60, "aggregation": "sum" }
+    "cpu_load": { "frequency": 60, "aggregation": "avg" },
+    "cpu_user": { "frequency": 60, "aggregation": "avg" },
+    "mem_used": { "frequency": 60, "aggregation": null },
+    "net_bw": { "frequency": 60, "aggregation": "sum" }
   }
 }
 ```
@@ -493,7 +494,7 @@ using the `outputs.http` plugin:
 {{< alert color="warning" title="Caveat" >}}
 Telegraf's native tag structure may not match cc-metric-store's expected format
 exactly. The `processors.rename` and `processors.override` plugins help, but
-metric *names* (measurement + field) still differ from CC conventions. For full
+metric _names_ (measurement + field) still differ from CC conventions. For full
 control over the mapping, the Python script approach is more transparent.
 {{< /alert >}}
 
@@ -585,14 +586,14 @@ journalctl -u cc-metric-store -f | grep -i "unknown\|drop\|error"
 
 ## Troubleshooting
 
-| Symptom | Cause | Solution |
-|---|---|---|
-| Metrics not appearing in cc-backend | Metric name not in cc-metric-store `metrics` config | Add the metric to the `metrics` section and restart cc-metric-store |
-| `401 Unauthorized` from `/api/write/` | Invalid or expired JWT token | Regenerate JWT with the correct Ed25519 private key |
-| Data gaps or irregular intervals | Cron interval does not match configured `frequency` | Align cron/timer schedule with the `frequency` value in cc-metric-store config |
+| Symptom                                     | Cause                                                                             | Solution                                                                              |
+| ------------------------------------------- | --------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------- |
+| Metrics not appearing in cc-backend         | Metric name not in cc-metric-store `metrics` config                               | Add the metric to the `metrics` section and restart cc-metric-store                   |
+| `401 Unauthorized` from `/api/write/`       | Invalid or expired JWT token                                                      | Regenerate JWT with the correct Ed25519 private key                                   |
+| Data gaps or irregular intervals            | Cron interval does not match configured `frequency`                               | Align cron/timer schedule with the `frequency` value in cc-metric-store config        |
 | Hostname mismatch (no data for known nodes) | Prometheus `instance` label includes port, or InfluxDB uses different host naming | Adjust hostname extraction in the adapter script to match cc-backend's `cluster.json` |
-| Wrong values after aggregation | `aggregation` set to `sum` instead of `avg` or vice versa | Check the `aggregation` field in cc-metric-store config matches the metric semantics |
-| Script runs but pushes 0 lines | Source TSDB returns empty results | Verify the source query works independently (e.g., test PromQL in Prometheus UI) |
+| Wrong values after aggregation              | `aggregation` set to `sum` instead of `avg` or vice versa                         | Check the `aggregation` field in cc-metric-store config matches the metric semantics  |
+| Script runs but pushes 0 lines              | Source TSDB returns empty results                                                 | Verify the source query works independently (e.g., test PromQL in Prometheus UI)      |
 
 ## See Also
 
