@@ -8,7 +8,7 @@ weight: 1
 
 ## Prerequisites
 
-- Go 1.24.0 or higher
+- Go 1.25.0 or higher
 - Slurm with slurmdbd configured
 - cc-backend instance with API access
 - Access to the slurmctld node
@@ -18,7 +18,7 @@ weight: 1
 ### Requirements
 
 ```
-go 1.24.0+
+go 1.25.0+
 ```
 
 ### Dependencies

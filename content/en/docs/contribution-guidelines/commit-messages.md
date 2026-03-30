@@ -1,50 +1,79 @@
 ---
-title: Commit message naming conventions
-weight: 90
-description: Special keywords to reference tickets and control release notes
+title: Commit Message Conventions
+weight: 10
+description: Prefix tags for release notes, issue linking, and goreleaser integration
 tags: [Developer]
 ---
+
 ## Introduction
 
 ClusterCockpit uses [goreleaser](https://goreleaser.com/) for building and
-uploading releases. In this process the release notes including all notable
-changes are automatically generated based on special commit message tags.
-Moreover GitHub will parse special characters and words to link and close
-issues.
+uploading releases. Release notes are generated automatically from commit
+messages using the prefix tags described below. GitHub also parses special
+keywords to link commits and PRs to issues.
 
-## Reference issue tickets
+Before opening a pull request, use [interactive rebase]({{< ref "_index#interactive-rebase----cleaning-up-before-a-pr" >}})
+to clean up your branch history and ensure the final commit messages follow
+these conventions.
 
-It is good practice to always create a ticket for notable changes.
-This allows to comment and discuss about source code changes. Any commit that
-contributes to the ticket should reference the ticket id (in the commit message
-or description). This is achieved in GitHub by prefixing the ticket id with a
-number sign character (`#`):
+---
 
-```txt
+## Release Note Prefixes
+
+Commits carrying one of the following prefixes appear in the generated release
+notes:
+
+| Prefix | Appears under |
+|---|---|
+| `feat:` | New features |
+| `fix:` | Bug fixes |
+| `sec:` | Security fixes (ClusterCockpit-specific) |
+| `doc:` | Documentation updates |
+| `feat dep:` or `fix dep:` | Dependency additions or changes |
+
+Commits without a recognised prefix are not included in the release notes.
+
+**Examples:**
+
+```
+feat: add automatic job tagging
+fix: correct WAL rotation on partial flush (#423)
+sec: enforce API token expiry
+doc: update rebase workflow guide
+feat dep: upgrade to Go 1.22
+```
+
+---
+
+## Referencing Issues
+
+It is good practice to create a GitHub issue for any notable change so that
+the motivation and discussion are preserved. Reference an issue in any commit
+message or PR description using the `#<number>` syntax:
+
+```
 This change contributes to #235
 ```
 
-GitHub will detect if a pull request or commit uses special keywords to close a
-ticket:
+---
 
-- close, closes, closed
-- fix, fixes, fixed
-- resolve, resolves, resolved
+## Automatically Closing Issues
 
-The ticket will not be closed before the commit appears on the main branch.
-Example:
+GitHub closes an issue automatically when a PR containing one of the following
+keywords merges into the default branch:
 
-```txt
-This change fixes #423
+- `close`, `closes`, `closed`
+- `fix`, `fixes`, `fixed`
+- `resolve`, `resolves`, `resolved`
+
+The issue is not closed until the commit appears on `main`. Example:
+
+```
+fix: correct WAL rotation on partial flush
+
+Fixes #423
 ```
 
-## Control release notes with preconfigured commit message prefixes
-
-Commits with one of the following prefixes will appear in the release notes:
-
-- **feat:** Mark a commit to contain changes related to new features
-- **fix:** Mark a commit to contain changes related to bug fixes
-- **sec:** Mark a commit to contain changes related to security fixes
-- **doc:** Mark a commit to contain changes related to documentation updates
-- **[feat|fix] dep:** Mark a commit that is related to a dependency introduction
-  or change
+Place the closing keyword in the PR description rather than a WIP commit
+message, since commit messages are often rewritten with interactive rebase
+before the PR is merged.
