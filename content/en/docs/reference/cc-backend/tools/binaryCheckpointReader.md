@@ -7,6 +7,10 @@ tags: [Backend, Tools]
 weight: 5
 ---
 
+{{< alert >}}
+`binaryCheckpointReader` is part of the `cc-backend` repository and can be used to debug the content of binary checkpoint files.
+{{< /alert >}}
+
 The `binaryCheckpointReader` tool reads `.wal` or `.bin` checkpoint files produced
 by the metricstore WAL/snapshot system and dumps their contents to a
 human-readable `.txt` file. It is useful for debugging and inspecting checkpoint data.

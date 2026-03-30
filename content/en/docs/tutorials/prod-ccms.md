@@ -316,6 +316,10 @@ are replayed on top. The WAL is rotated after each successful snapshot. The
 are migrating from an older installation using JSON checkpoints, switch to `"wal"`
 after a clean restart.
 
+To inspect the contents of `.wal` or `.bin` checkpoint files for debugging, use
+the [`binaryCheckpointReader`]({{< ref "docs/reference/cc-backend/tools/binaryCheckpointReader" >}})
+tool included in `cc-backend`.
+
 ## Parquet Archive
 
 When `cleanup.mode` is `"archive"`, data that ages out of the in-memory
