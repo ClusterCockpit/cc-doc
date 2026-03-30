@@ -92,6 +92,8 @@ Subsequent settings within the primary sections might be optional.
   Default: No NATS API.
   - `subject-job-event`: Type string (required). NATS subject for job events (start_job, stop_job).
   - `subject-node-state`: Type string (required). NATS subject for node state updates.
+  - `job-concurrency`: Type integer (Optional). Number of concurrent worker goroutines for processing job events. Default: `8`.
+  - `node-concurrency`: Type integer (Optional). Number of concurrent worker goroutines for processing node state events. Default: `2`.
 - `nodestate-retention`: Type object (Optional). Configuration for automatic
   cleanup of old node state records from the database. Runs daily. Default: No
   retention (node states accumulate indefinitely).
@@ -120,6 +122,20 @@ Subsequent settings within the primary sections might be optional.
     `target-kind` `s3`.
   - `max-file-size-mb`: Type integer (Optional). Maximum Parquet file size in MB
     before splitting into a new file. Default: `128`.
+- `db-config`: Type object (Optional). SQLite database tuning options.
+  - `cache-size-mb`: Type integer (Optional). SQLite page cache size per connection
+    in MB. Default: `2048`.
+  - `soft-heap-limit-mb`: Type integer (Optional). Process-wide SQLite soft heap
+    limit in MB. Default: `16384`.
+  - `max-open-connections`: Type integer (Optional). Maximum number of open database
+    connections. Default: `4`.
+  - `max-idle-connections`: Type integer (Optional). Maximum number of idle database
+    connections. Default: `4`.
+  - `max-idle-time-minutes`: Type integer (Optional). Maximum idle time for a
+    connection in minutes. Default: `10`.
+  - `busy-timeout-ms`: Type integer (Optional). SQLite busy timeout in milliseconds.
+    When a write is blocked, SQLite retries with backoff for up to this duration
+    before returning `SQLITE_BUSY`. Default: `60000`.
 
 #### Section `auth`
 
@@ -180,6 +196,9 @@ Subsequent settings within the primary sections might be optional.
     Log, crash-safe). Default: `wal`.
   - `directory`: Type string (Optional). Path in which the checkpoints should be
     placed. Default: `./var/checkpoints`.
+  - `max-wal-size`: Type integer (Optional). Maximum size in bytes for a single
+    host's WAL file. When exceeded, the WAL is force-rotated to prevent unbounded
+    disk growth. Default: `0` (unlimited).
 - `cleanup`: Type object (Optional). Configuration for the cleanup process.
   The cleanup interval always equals the `retention-in-memory` interval.
   If not set, the `mode` defaults to `delete`.

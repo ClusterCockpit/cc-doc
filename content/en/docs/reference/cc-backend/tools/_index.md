@@ -24,6 +24,7 @@ This section documents the command-line tools included with ClusterCockpit for v
 ### Diagnostics
 
 - **[grepCCLog.pl](grepcclog)**: Analyze log files to identify non-archived jobs
+- **[binaryCheckpointReader](binarycheckpointreader)**: Read and dump `.wal` or `.bin` metricstore checkpoint files to human-readable text
 
 ### Data Generation for cc-metric-store
 

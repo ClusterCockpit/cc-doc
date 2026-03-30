@@ -114,14 +114,14 @@ setup, capped at 10.
 
 The `cc-metric-store` supports checkpoints and cleanup/archiving. Checkpoints
 are always performed on shutdown. To not lose data on a crash or other failure,
-checkpoints are written at regular intervals configured via
-`checkpoints.interval` (e.g. `"12h"`). The `checkpoints.file-format` option
+checkpoints are also written periodically — the checkpoint interval is derived
+from the `retention-in-memory` setting. The `checkpoints.file-format` option
 selects the persistence format: `"json"` (human-readable) or `"wal"` (binary
 Write-Ahead Log, crash-safe, default). See [Checkpoint
 Formats](#checkpoint-formats) below. Checkpoints that are not needed anymore can
 either be archived or deleted, controlled by the `cleanup.mode` setting
-(`archive` or `delete`). The cleanup runs at the interval specified in
-`cleanup.interval`.
+(`archive` or `delete`). The cleanup interval always equals the
+`retention-in-memory` interval.
 
 ## Checkpoint Formats
 
