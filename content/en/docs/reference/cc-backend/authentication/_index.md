@@ -5,6 +5,7 @@ categories: [cc-backend]
 tags: [Admin, Developer]
 weight: 5
 ---
+
 ## Introduction
 
 `cc-backend` supports the following authentication methods:
@@ -51,7 +52,7 @@ string.
 
 #### Example
 
-``` json
+```json
 "main": {
   "session-max-age": "24h",
 }
@@ -65,14 +66,14 @@ No configuration is required for local authentication.
 
 You can add an user on the command line using the flag `-add-user`:
 
-``` sh
+```sh
 ./cc-backend -add-user <username>:<roles>:<password>
 
 ```
 
 Example:
 
-``` sh
+```sh
 ./cc-backend -add-user fritz:admin,api:myPass
 ```
 
@@ -80,7 +81,7 @@ Roles can be admin, support, manager, api, and user.
 
 Users can be deleted using the flag `-del-user`:
 
-``` sh
+```sh
 ./cc-backend -del-user fritz
 ```
 
@@ -101,31 +102,31 @@ attributes of the `auth.ldap` JSON object:
   the protocol and not only the host name. Example: `ldaps://ldsrv.mydomain.com`.
 - `user-base`: Base DN of user tree root. Example: `ou=people,ou=users,dc=rz,dc=mydomain,dc=com`.
 - `search-dn`: DN for authenticating an LDAP admin account with general read
-rights. This is required for the sync on login and the sync options. Example:
-`cn=monitoring,ou=adm,ou=profile,ou=manager,dc=rz,dc=mydomain,dc=com`
+  rights. This is required for the sync on login and the sync options. Example:
+  `cn=monitoring,ou=adm,ou=profile,ou=manager,dc=rz,dc=mydomain,dc=com`
 - `user-bind`: Expression used to authenticate users via LDAP bind. Must contain
-`uid={username}`. Example:
-`uid={username},ou=people,ou=users,dc=rz,dc=mydomain,dc=com`.
-- `user-filter`:  Filter to extract users for syncing. Example: `(&(objectclass=posixAccount))`.
+  `uid={username}`. Example:
+  `uid={username},ou=people,ou=users,dc=rz,dc=mydomain,dc=com`.
+- `user-filter`: Filter to extract users for syncing. Example: `(&(objectclass=posixAccount))`.
 
 Optional configuration options are:
 
-- `username-attr`:  Attribute with full user name. Defaults to `gecos` if not provided.
-- `sync-interval`:  Interval used for syncing SQL user table with LDAP
-directory. Parsed using time.ParseDuration. The sync interval is always relative
-to the time `cc-backend` was started. Example: `24h`.
+- `username-attr`: Attribute with full user name. Defaults to `gecos` if not provided.
+- `sync-interval`: Interval used for syncing SQL user table with LDAP
+  directory. Parsed using time.ParseDuration. The sync interval is always relative
+  to the time `cc-backend` was started. Example: `24h`.
 - `sync-del-old-users`: Type boolean. Delete users in SQL database if not in
-LDAP directory anymore. This of course only applies to users that were added
-from LDAP.
+  LDAP directory anymore. This of course only applies to users that were added
+  from LDAP.
 - `sync-user-on-login`: Type boolean. Add non-existent user to database at login attempt
-if user exists in LDAP directory. This option enables that users can login at
-once after they are added to the LDAP directory. _Does not update user on recurring LDAP logins_.
+  if user exists in LDAP directory. This option enables that users can login at
+  once after they are added to the LDAP directory. _Does not update user on recurring LDAP logins_.
 - `update-user-on-login`: Type boolean. Update existent users in DB at login attempt
-if user exists in LDAP directory. This option updates changed source attributes, for example the name, if the database value differs. _Does not add users on first-time LDAP login_.
+  if user exists in LDAP directory. This option updates changed source attributes, for example the name, if the database value differs. _Does not add users on first-time LDAP login_.
 
 #### Example
 
-``` json
+```json
 "auth": {
   "ldap": {
     "url": "ldaps://ldsrv.mydomain.com",
@@ -150,28 +151,72 @@ triggered from the command line using the flag `-sync-ldap`.
 
 ## OpenID Connect authentication
 
-### Configuration
+### KeyCloak configuration
 
-To enable OpenID Connect authentication the following set of options are
-required below a top-level `auth.oidc` key:
+The OpenID Connect implementation is always tested against the latest KeyCloak
+(currently 26.5.6) provider. The KeyCloak admin UI frequently changes, if you
+are on an older version use web search to find the settings described below.
+
+Steps to setup KeyCloak:
+
+- Create a new realm. This will determine the provider URL.
+- Create a new OpenID Connect client
+  - Set a Client ID: This a arbitrary string, e.g. `cc`
+  - For `Capability config` settings set:
+    - Enable `Client authentication`
+    - Leave `Authentication flow` at `Standard flow`
+    - For `PKCE Method` choose `S256`
+  - For Login settings set:
+    - `Root URL`: This is the base URL of your cc-backend instance.
+    - `Valid redirect URLs`: Set this to `oidc-callback`.
+      - Add an additional URL including the full HTTP path, e.g. `http://monitoring.example.com/oidc-callback`
+      - If HTTPS is used, also add the HTTPS path, e.g. `https://monitoring.example.com/oidc-callback`
+    - `Web origins`: Set this also to the base URL of your cc-backend instance.
+
+{{< figure src="access-settings.png" alt="Keycloak Access settings" width="100%" class="ccfigure mw-lg"
+caption="Keycloak client Access settings" >}}
+
+Everything else can be left to the default.
+
+Do not forget to create users in your realm before testing.
+
+Per default all OpenID Connect authenticated users will have the user role only.
+If you want to also set elevated roles via OpenID Connect, you need to adapt the
+default configuration in KeyCloak. KeyCloak is a very flexible tool and there
+are many ways to set this up. One way is to setup a mapper that sets the
+`realm_access.roles` token claim and adds it to the ID token. This is not the
+default and has to be explicitly configured. And of course the
+ClusterCockpit roles have to be also assigned to the user.
+
+### `cc-backend` configuration
+
+To enable OpenID Connect authentication create a `oidc` object
+below the top-level `auth` key and set the following attributes:
 
 - `provider`: The base URL of your OpenID Connect provider. Example:
-`https://auth.example.com/realms/mycloud`.
+  `https://auth.example.com/realms/clustercockpit`.
 
 Optional configuration options are:
 
-- `sync-user-on-login`: Type boolean. Add non-existent user to DB at login attempt
-if user exists in KeyCloak realm. This option enables that users can login at
-once after they are added to the KeyCloak realm. _Does not update user on recurring OIDC logins_.
-- `update-user-on-login`: Type boolean. Update existent users in DB at login attempt
-if user exists in KeyCloak realm. This option updates changed source attributes, for example the name, if the database value differs. _Does not add users on first-time OIDC login_.
+- `sync-user-on-login`: Type boolean. Add non-existent user to DB at login
+  attempt if user exists in KeyCloak realm. This option enables that users can
+  login at once after they are added to the KeyCloak realm. _Does not update user
+  on recurring OIDC logins_.
+- `update-user-on-login`: Type boolean. Update existent users in DB at login
+  attempt if user exists in KeyCloak realm. This option updates changed source
+  attributes, for example the name, if the database value differs. _Does not add
+  users on first-time OIDC login_.
 
-#### Example
+#### Configuration Example
 
 ```json
-"oidc": {
-  "provider": "https://auth.server.com:8080/realms/nhr-cloud"
-},
+"auth": {
+  "oidc": {
+    "provider": "https://auth.server.com:8080/realms/clustercockpit",
+    "sync-user-on-login": true,
+    "update-user-on-login": true
+  },
+}
 ```
 
 ### Environment
@@ -179,46 +224,9 @@ if user exists in KeyCloak realm. This option updates changed source attributes,
 Furthermore the following environment variables have to be set (in the `.env`
 file):
 
-- `OID_CLIENT_ID`: Set this to the Client ID you configured in Keycloak (see below).
+- `OID_CLIENT_ID`: Set this to the Client ID you configured in Keycloak.
 - `OID_CLIENT_SECRET`: Set this to the Client ID secret available in your
-Keycloak Open ID Client configuration at the `Credentials` tab (see below).
-
-### Required settings in KeyCloak
-
-The OpenID Connect implementation was only tested against the KeyCloak
-provider.
-
-Steps to setup KeyCloak:
-
-- Create a new realm. This will determine the provider URL.
-- Create a new OpenID Connect client
-  - Set a Client ID
-    - The Client ID secret is automatically generated after the client has been created.
-  - Enable `client authentication`
-  - For Access settings set:
-    - `Root URL`: This is the base URL of your cc-backend instance.
-    - `Valid redirect URLs`: Set this to `oidc-callback`.
-      - Add an additional URL including the full HTTP path, e.g. `http://localhost:8088/oidc-callback`
-      - If HTTPS is used, also add the HTTPS path, e.g. `https://localhost:8088/oidc-callback`
-    - `Web origins`: Set this also to the base URL of your cc-backend instance.
-
-{{< figure src="access-settings.png" alt="Keycloak Access settings" width="100%" class="ccfigure mw-lg"
-    caption="Keycloak client Access settings"
-
->}}
-
-- Enable PKCE:
-  - Click on Advanced tab. Further click on Advanced Settings on the right side.
-  - Set the option `Proof Key for Code Exchange Code Challenge Method` to
-  `S256`.
-
-{{< figure src="pkce-settings.png" alt="Set PKCE Keycloak option" width="100%" class="ccfigure mw-lg"
-    caption="Keycloak advanced client settings for PKCE"
->}}
-
-Everything else can be left to the default.
-
-Do not forget to create users in your realm before testing.
+  Keycloak Open ID Client configuration at the `Credentials` tab.
 
 ### Usage
 
@@ -227,20 +235,25 @@ are available, an additional button for OpenID Connect Login is shown below the
 login mask. If pressed this button will redirect to the OpenID Connect login.
 
 {{< figure src="oidc-login.png" alt="OpenID Connect login mask" width="100%" class="ccfigure mw-lg"
-    caption="Login mask with OpenID Connect enabled"
->}}
+caption="Login mask with OpenID Connect enabled" >}}
 
 {{< alert title="Info" >}}
-If you are using a modified `login.tmpl` in `./var/`. check for the following condition, else, add it below the submit button:
+If you are using a modified `login.tmpl` in `./var/`, check for the following condition, else, add it below the submit button:
 
 ```html
 [... CONTENT ...]
-  <button type="submit" class="btn btn-success">Submit</button>
-  {{if .Infos.hasOpenIDConnect}}
-      <a class="btn btn-primary" href="/oidc-login">OpenID Connect Login</a>
-  {{end}}
-[...CONTENT...]
+<button type="submit" class="btn btn-success">Submit</button>
+{{if .Infos.hasOpenIDConnect}}
+<a class="btn btn-primary" href="/oidc-login">OpenID Connect Login</a>
+{{end}} [...CONTENT...]
 ```
+
+{{< /alert >}}
+
+{{< alert title="Info" >}}
+The logout buttom in the ClusterCockpit web frontend will only remove the
+ClusterCockpit session, not the SSO session. This is common practice as the SSO
+session may be shared across applications.
 {{< /alert >}}
 
 ## JWT token authentication
@@ -254,25 +267,29 @@ initiating a user session.
 Two variants exist:
 
 - [1] Session Authenticator: Passes JWT token in the HTTP header _Authorization_
-using the Bearer prefix or using the query key _login-token_.
+  using the Bearer prefix or using the query key _login-token_.
 
 Example for Authorization header:
 
-``` txt
+```txt
 Authorization: Bearer S0VLU0UhIExFQ0tFUiEK
 ```
 
 Example for query key used as form action in external application:
 
-``` html
-<form method="post" action="$CCROOT/jwt-login?login-token=S0VLU0UhIExFQ0tFUiEK" target="_blank">
+```html
+<form
+  method="post"
+  action="$CCROOT/jwt-login?login-token=S0VLU0UhIExFQ0tFUiEK"
+  target="_blank"
+>
   <button type="submit">Access CC</button>
 </form>
 ```
 
 - [2] Cookie Session Authenticator: Reads the JWT token from a named cookie provided by the request,
- which is deleted after the session was successfully initiated. This is a more secure
-alternative to the standard header based solution.
+  which is deleted after the session was successfully initiated. This is a more secure
+  alternative to the standard header based solution.
 
 ### JWT Configuration
 
@@ -302,7 +319,7 @@ Tokens are signed with: `Ed25519/EdDSA`
 To enable JWT authentication via cookie the following set of options are required as attributes of the `jwts` JSON object:
 
 - `cookie-name` (String): Specifies which cookie should be checked for a JWT token (if no authorization header is present)
-- `trusted-issuer` (String):  Specifies which issuer should be accepted when validating external JWTs (`iss`-claim)
+- `trusted-issuer` (String): Specifies which issuer should be accepted when validating external JWTs (`iss`-claim)
 
 In addition, the Cookie Session Authenticator method requires the following environment variable:
 
