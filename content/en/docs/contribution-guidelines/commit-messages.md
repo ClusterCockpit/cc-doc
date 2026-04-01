@@ -23,13 +23,11 @@ these conventions.
 Commits carrying one of the following prefixes appear in the generated release
 notes:
 
-| Prefix | Appears under |
-|---|---|
-| `feat:` | New features |
-| `fix:` | Bug fixes |
-| `sec:` | Security fixes (ClusterCockpit-specific) |
-| `doc:` | Documentation updates |
-| `feat dep:` or `fix dep:` | Dependency additions or changes |
+| Prefix  | Appears under         |
+| ------- | --------------------- |
+| `feat:` | New features          |
+| `fix:`  | Bug fixes             |
+| `doc:`  | Documentation updates |
 
 Commits without a recognised prefix are not included in the release notes.
 
@@ -38,9 +36,7 @@ Commits without a recognised prefix are not included in the release notes.
 ```
 feat: add automatic job tagging
 fix: correct WAL rotation on partial flush (#423)
-sec: enforce API token expiry
 doc: update rebase workflow guide
-feat dep: upgrade to Go 1.22
 ```
 
 ---

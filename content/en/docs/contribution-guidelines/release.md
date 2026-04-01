@@ -11,9 +11,9 @@ tags: [Developer]
 
 ClusterCockpit maintains two types of long-lived branches:
 
-| Branch | Purpose |
-|---|---|
-| `main` | Active development; all new features and fixes land here first |
+| Branch         | Purpose                                                                 |
+| -------------- | ----------------------------------------------------------------------- |
+| `main`         | Active development; all new features and fixes land here first          |
 | `release/v1.x` | Persistent branch for a minor release series; receives backported fixes |
 
 A `release/v1.x` branch is created once when cutting a new minor or major
@@ -37,7 +37,7 @@ Ensure all PRs intended for the release are merged and CI is green on `main`.
 
 ```bash
 git checkout main
-git pull --rebase
+git pull
 git checkout -b release/v1.x
 git push -u origin release/v1.x
 ```
@@ -64,7 +64,7 @@ On a Linux host with repository push access:
 ```bash
 git fetch origin
 git checkout release/v1.x
-git pull --rebase
+git pull
 git tag v1.x.0 -m "release v1.x.0"
 git push origin v1.x.0
 ```
@@ -105,7 +105,7 @@ a PR. Note the commit SHA(s) of the fix once merged.
 ```bash
 git fetch origin
 git checkout release/v1.x
-git pull --rebase
+git pull
 git checkout -b fix/backport-<issue>-<description>
 ```
 
@@ -140,7 +140,7 @@ After the backport PR is merged:
 ```bash
 git fetch origin
 git checkout release/v1.x
-git pull --rebase
+git pull
 git tag v1.x.1 -m "release v1.x.1"
 git push origin v1.x.1
 goreleaser release
