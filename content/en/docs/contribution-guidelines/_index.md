@@ -1,7 +1,7 @@
 ---
-title: Developer Workflow
+title: Developer git Workflow
 description: >
-  Contributing to ClusterCockpit using GitHub Flow with git rebase.
+  How the ClusterCockpit team is using GitHub Flow with git rebase.
 weight: 80
 tags: [Developer]
 ---
@@ -26,7 +26,6 @@ with `origin` in the commands below.
 
 ```bash
 git config --global pull.rebase true
-git config --global rebase.autoStash true
 ```
 
 ---
@@ -37,13 +36,11 @@ git config --global rebase.autoStash true
 <type>/<issue-number>-<short-description>
 ```
 
-| Prefix          | Use for                       |
-| --------------- | ----------------------------- |
-| `feat/`         | New features                  |
-| `fix/`          | Bug fixes                     |
-| `sec/`          | Security fixes                |
-| `doc/`          | Documentation                 |
-| `fix/backport-` | Backports to a release branch |
+| Prefix  | Use for       |
+| ------- | ------------- |
+| `feat/` | New features  |
+| `fix/`  | Bug fixes     |
+| `doc/`  | Documentation |
 
 Examples: `feat/123-auto-job-tagging`, `fix/backport-423-wal-rotation-v1.3`
 
@@ -56,7 +53,7 @@ Persistent release branches: `release/v1.x` (minor version only).
 1. **Sync** `main` before starting:
 
    ```bash
-   git fetch upstream && git rebase upstream/main
+   git pull
    ```
 
 2. **Branch** off `main`:
@@ -68,22 +65,24 @@ Persistent release branches: `release/v1.x` (minor version only).
 3. **Commit** freely — informal messages are fine during development; they will
    be cleaned up before the PR. Reference issue numbers where relevant.
 
-4. **Push**, and use `--force-with-lease` (never `--force`) after any rebase:
+4. **Push**, and use optionally `--force-with-lease` (never `--force`) after any
+   rebase:
 
    ```bash
    git push -u origin feat/123-my-feature
    git push --force-with-lease origin feat/123-my-feature  # after rebase
    ```
 
-5. **Rebase onto `main`** whenever the base branch has moved:
+5. **Rebase onto `main`** whenever the base branch has moved to ensure feature
+   branch is compatible with latest upstream main:
 
    ```bash
-   git fetch upstream && git rebase upstream/main
+   git fetch origin && git rebase origin/main
    ```
 
 ---
 
-## Interactive Rebase Before Opening a PR
+## Optional: Interactive Rebase Before Opening a PR
 
 Clean up the branch history so each commit is a logical unit with a proper
 prefix message before requesting review:
@@ -102,9 +101,6 @@ required prefixes. Push with `--force-with-lease` afterwards.
 
 - [ ] Rebased on current `main`, no merge commits in the branch
 - [ ] Commit messages follow prefix conventions
-- [ ] `make test` passes (see [Unit Tests]({{< ref "testing" >}}))
-- [ ] Frontend build passes if frontend files changed (see [Frontend Development Setup]({{< ref "frontend-testing" >}}))
-- [ ] No debug output or temporary code committed
 - [ ] Issue number referenced in a commit message or PR description
 - [ ] Docs updated if user-facing behaviour changed (see [Contributing to Documentation]({{< ref "documentation" >}}))
 
