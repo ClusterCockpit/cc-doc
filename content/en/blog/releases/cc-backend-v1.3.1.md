@@ -28,7 +28,7 @@ description: Bugfix Release
 - 4344c26 fix: make foorprint from statsSeries nullsafe
 
 Supports job archive version 1 and database version 6.
-Please check out the [Release Notes](https://github.com/ClusterCockpit/cc-backend/blob/master/ReleaseNotes.md) for further details on breaking changes.
+Please check out the [Release Notes](https://github.com/ClusterCockpit/cc-backend/blob/main/ReleaseNotes.md) for further details on breaking changes.
 
 ## Release notes
 

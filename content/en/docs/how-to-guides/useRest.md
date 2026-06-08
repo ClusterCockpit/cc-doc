@@ -56,7 +56,10 @@ Endpoints described here should be restricted to administrators only, as they in
 
 | Endpoint                           | Method      | Request Payload(s)    | Description                                                                                               |
 | ---------------------------------- | ----------- | --------------------- | --------------------------------------------------------------------------------------------------------- |
-| `/api/users/`                      | GET         | -                     | Lists all users                                                                                           |
+| `/api/users/`                      | GET         | URL-Query Params      | Lists all users (`not-just-user=true` to filter to privileged users only)                                 |
+| `/api/users/`                      | POST        | Form Data             | Creates a new user                                                                                        |
+| `/api/users/`                      | DELETE      | Form Data             | Deletes a user                                                                                            |
+| `/api/user/{id}`                   | POST        | Form Data             | Updates roles and projects for user `{id}` (reactivated in v1.5.4)                                       |
 | `/api/clusters/`                   | GET         | -                     | Lists all clusters                                                                                        |
 | `/api/tags/`                       | DELETE      | JSON Payload          | Removes array of tags (Type, Name, Scope) from DB. Private tags cannot be removed.                       |
 | `/api/jobs/start_job/`             | POST, PUT   | JSON Payload          | Starts a job                                                                                              |
@@ -71,6 +74,72 @@ Endpoints described here should be restricted to administrators only, as they in
 | `/api/jobs/delete_job/`            | DELETE      | JSON Payload          | Deletes job specified in payload                                                                          |
 | `/api/jobs/delete_job/{id}`        | DELETE      | $id, JSON Payload     | Deletes job specified by database id                                                                      |
 | `/api/jobs/delete_job_before/{ts}` | DELETE      | $ts                   | Deletes all jobs with stop time before the given unix timestamp                                           |
+
+---
+
+### User Management
+
+**List all users:**
+
+```bash
+curl -s "$CC_URL/api/users/?not-just-user=false" \
+  -H "Authorization: Bearer $TOKEN" \
+  -H "accept: application/json" | jq .
+```
+
+Pass `not-just-user=true` to return only users that have roles beyond the basic
+`user` role (e.g. managers, admins, API users).
+
+**Create a new user:**
+
+```bash
+curl -s -X POST "$CC_URL/api/users/" \
+  -H "Authorization: Bearer $TOKEN" \
+  -F "username=alice" \
+  -F "password=secret" \
+  -F "role=user" \
+  -F "name=Alice Example" \
+  -F "email=alice@example.com"
+```
+
+Available roles: `user`, `manager`, `support`, `admin`, `api`.
+For `manager` role, also pass `-F "project=myproject"`.
+API users do not require a password.
+
+**Delete a user:**
+
+```bash
+curl -s -X DELETE "$CC_URL/api/users/" \
+  -H "Authorization: Bearer $TOKEN" \
+  -F "username=alice"
+```
+
+**Update a user's roles or projects** (reactivated in v1.5.4):
+
+```bash
+# Add a role
+curl -s -X POST "$CC_URL/api/user/alice" \
+  -H "Authorization: Bearer $TOKEN" \
+  -F "add-role=api"
+
+# Remove a role
+curl -s -X POST "$CC_URL/api/user/alice" \
+  -H "Authorization: Bearer $TOKEN" \
+  -F "remove-role=api"
+
+# Add a project (for managers)
+curl -s -X POST "$CC_URL/api/user/alice" \
+  -H "Authorization: Bearer $TOKEN" \
+  -F "add-project=myproject"
+
+# Remove a project
+curl -s -X POST "$CC_URL/api/user/alice" \
+  -H "Authorization: Bearer $TOKEN" \
+  -F "remove-project=myproject"
+```
+
+Multiple fields can be combined in a single request, e.g. to simultaneously add
+a role and a project.
 
 ---
 

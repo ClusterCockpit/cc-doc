@@ -45,7 +45,7 @@ them over to ClusterCockpit via cookies, CC can be configured to accept them:
 
 1. `.env`: CC needs a public ed25519 key to verify foreign JWT signatures.
    Public keys in PEM format can be converted with the instructions in
-   [/tools/convert-pem-pubkey-for-cc](https://github.com/ClusterCockpit/cc-backend/blob/master/tools/convert-pem-pubkey/Readme.md)
+   [/tools/convert-pem-pubkey-for-cc](https://github.com/ClusterCockpit/cc-backend/blob/main/tools/convert-pem-pubkey/Readme.md)
    .
 
 ```bash
