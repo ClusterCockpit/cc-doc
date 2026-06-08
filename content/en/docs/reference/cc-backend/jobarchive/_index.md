@@ -9,7 +9,7 @@ weight: 5
 The job archive specifies an exchange format for job meta and performance metric
 data. It consists of two parts:
 
-- a [Json file format](https://github.com/ClusterCockpit/cc-backend/tree/master/pkg/schema/schemas)
+- a [Json file format](https://github.com/ClusterCockpit/cc-backend/tree/main/pkg/schema/schemas)
 - a Directory hierarchy / Key specification
 
 By using an open, portable and simple specification based on JSON objects it is

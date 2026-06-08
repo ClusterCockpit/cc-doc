@@ -67,7 +67,7 @@ This is a minor release of `cc-backend`, the API backend and frontend
 implementation of ClusterCockpit.
 
 Supports job archive version 2 and database version 8.
-Please check out the [Release Notes](https://github.com/ClusterCockpit/cc-backend/blob/master/ReleaseNotes.md) for further details on breaking changes.
+Please check out the [Release Notes](https://github.com/ClusterCockpit/cc-backend/blob/main/ReleaseNotes.md) for further details on breaking changes.
 
 ## Breaking changes
 

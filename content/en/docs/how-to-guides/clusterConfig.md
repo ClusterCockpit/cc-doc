@@ -339,7 +339,7 @@ Here is an example:
 ```
 
 Since it is tedious to write this by hand, we provide a
-[Perl script](https://raw.githubusercontent.com/ClusterCockpit/cc-backend/refs/heads/master/configs/generate-subcluster.pl)
+[Perl script](https://raw.githubusercontent.com/ClusterCockpit/cc-backend/refs/heads/main/configs/generate-subcluster.pl)
 as part of `cc-backend` that generates a subCluster template. This script only
 works if the `LIKWID` tools are installed and in the PATH. You also need the
 `LIKWID` library for cc-metric-store. You find instructions on how to install

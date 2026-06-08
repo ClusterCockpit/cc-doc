@@ -45,7 +45,7 @@ database to the latest version:
 ```
 
 The migration files are embedded in the binary and can also be viewed in the cc
-backend [source tree](https://github.com/ClusterCockpit/cc-backend/tree/master/internal/repository/migrations).
+backend [source tree](https://github.com/ClusterCockpit/cc-backend/tree/main/internal/repository/migrations).
 We use the [migrate library](https://github.com/golang-migrate/migrate).
 
 If something goes wrong, you can check the status and get the current schema
