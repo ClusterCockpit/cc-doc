@@ -40,7 +40,7 @@ To enable resampling, you must add the following toplevel configuration key:
 
 #### Configuration Parameters
 
-The `enable-resampling` object is optional. If configured, it enables dynamic downsampling of metric data using the following properties:
+The `resampling` object is optional. If configured, it enables dynamic downsampling of metric data using the following properties:
 
 * **`minimum-points`** (Integer)
     Specifies the minimum number of data points required to trigger resampling. This ensures short jobs are not unnecessarily downsampled.

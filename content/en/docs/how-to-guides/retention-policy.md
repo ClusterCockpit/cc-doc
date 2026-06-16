@@ -99,7 +99,8 @@ from the active database.
     "retention": {
       "policy": "move",
       "age": 365,
-      "location": "/mnt/archive/old-jobs",
+      "target-kind": "file",
+      "target-path": "/mnt/archive/old-jobs",
       "include-db": true
     }
   }
@@ -116,13 +117,22 @@ This configuration will:
 
 ### `archive.retention` section
 
-| Parameter     | Type    | Required            | Default | Description                                                                                                                                               |
-| ------------- | ------- | ------------------- | ------- | --------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `policy`      | string  | Yes                 | -       | Retention policy: `none`, `delete`, `copy`, or `move`                                                                                                     |
-| `age`         | integer | No                  | 7       | Age threshold in days. Jobs older than this are affected                                                                                                  |
-| `include-db`  | boolean | No                  | true    | Also remove jobs from the database (not just archive)                                                                                                     |
-| `omit-tagged` | string  | No                  | `none`  | Skip tagged jobs: `none` = apply to all jobs, `all` = skip any tagged job, `user` = skip jobs with user-created tags (auto-tagger tags are not user tags) |
-| `location`    | string  | For `move`/`copy`   | -       | Target directory for moved/copied jobs                                                                                                                    |
+| Parameter              | Type    | Required                    | Default | Description                                                                                                                                               |
+| ---------------------- | ------- | --------------------------- | ------- | --------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `policy`               | string  | Yes                         | -       | Retention policy: `none`, `delete`, `copy`, or `move`                                                                                                     |
+| `age`                  | integer | No                          | 7       | Age threshold in days. Jobs older than this are affected                                                                                                  |
+| `include-db`           | boolean | No                          | true    | Also remove jobs from the database (not just archive)                                                                                                     |
+| `omit-tagged`          | string  | No                          | `none`  | Skip tagged jobs: `none` = apply to all jobs, `all` = skip any tagged job, `user` = skip jobs with user-created tags (auto-tagger tags are not user tags) |
+| `format`               | string  | No                          | `json`  | Output format for `copy`/`move` policies: `json` (default) or `parquet`                                                                                  |
+| `target-kind`          | string  | For `move`/`copy`           | `file`  | Target storage kind: `file` or `s3`                                                                                                                       |
+| `target-path`          | string  | For `target-kind: file`     | -       | Filesystem path for moved/copied jobs                                                                                                                     |
+| `target-endpoint`      | string  | For `target-kind: s3`       | -       | S3 endpoint URL for target storage                                                                                                                        |
+| `target-bucket`        | string  | For `target-kind: s3`       | -       | S3 bucket name for target storage                                                                                                                         |
+| `target-access-key`    | string  | For `target-kind: s3`       | -       | S3 access key for target storage                                                                                                                          |
+| `target-secret-key`    | string  | For `target-kind: s3`       | -       | S3 secret key for target storage                                                                                                                          |
+| `target-region`        | string  | For `target-kind: s3`       | -       | S3 region for target storage                                                                                                                              |
+| `target-use-path-style`| boolean | No                          | -       | Use path-style S3 URLs for target (required for MinIO)                                                                                                    |
+| `max-file-size-mb`     | integer | No                          | 512     | Maximum Parquet file size in MB before splitting. Only for `format: parquet`                                                                              |
 
 ## Complete configuration examples
 
@@ -156,7 +166,8 @@ Keep 6 months active, move older data to long-term storage:
     "retention": {
       "policy": "move",
       "age": 180,
-      "location": "/mnt/slow-storage/archive",
+      "target-kind": "file",
+      "target-path": "/mnt/slow-storage/archive",
       "include-db": true
     }
   }
@@ -312,8 +323,8 @@ Jobs moved to the retention location can be restored:
 
 1. Target directory exists and is writable
 2. Sufficient disk space at target location
-3. File permissions allow `cc-backend` to write to `location`
-4. Path in `location` is absolute, not relative
+3. File permissions allow `cc-backend` to write to `target-path`
+4. Path in `target-path` is absolute, not relative
 
 ### Performance impact
 

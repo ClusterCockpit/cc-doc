@@ -46,24 +46,13 @@ This is NO JWT token. You can generate JWT tokens with cc-backend. Use this keyp
 
 ## Configuration
 
-Add the generated keys to ClusterCockpit's configuration:
-
-### Option 1: Environment Variables (.env file)
+Add the generated keys to the `.env` file in the project root. The environment
+variables read by `cc-backend` are `JWT_PUBLIC_KEY` and `JWT_PRIVATE_KEY` — note
+that these names differ from the prefix printed by the tool (`ED25519`):
 
 ```bash
-ED25519_PUBLIC_KEY="<base64-encoded-public-key>"
-ED25519_PRIVATE_KEY="<base64-encoded-private-key>"
-```
-
-### Option 2: Configuration File (config.json)
-
-```json
-{
-  "jwts": {
-    "publicKey": "<base64-encoded-public-key>",
-    "privateKey": "<base64-encoded-private-key>"
-  }
-}
+JWT_PUBLIC_KEY="<base64-encoded-public-key>"
+JWT_PRIVATE_KEY="<base64-encoded-private-key>"
 ```
 
 ## Example Workflow
@@ -76,9 +65,9 @@ go run . > keypair.txt
 # 2. View generated keys
 cat keypair.txt
 
-# 3. Add to .env file (manual or scripted)
-grep PUBLIC_KEY keypair.txt >> ../../.env
-grep PRIVATE_KEY keypair.txt >> ../../.env
+# 3. Add to .env file with the correct variable names
+echo "JWT_PUBLIC_KEY=$(grep 'PUBLIC_KEY' keypair.txt | cut -d'"' -f2)" >> ../../.env
+echo "JWT_PRIVATE_KEY=$(grep 'PRIVATE_KEY' keypair.txt | cut -d'"' -f2)" >> ../../.env
 
 # 4. Restart cc-backend to use new keys
 ```

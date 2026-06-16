@@ -6,1219 +6,304 @@ tags: [Backend]
 weight: 1
 ---
 
-A detailed description of each of the application configuration options can be found in the [config documentation]({{< ref "ccb-configuration" >}} "CC-Backend Configuration").
+A detailed description of each configuration option can be found in the
+[configuration reference]({{< ref "ccb-configuration" >}} "CC-Backend Configuration").
 
-The following schema in its raw form can be found in the [ClusterCockpit GitHub](https://github.com/ClusterCockpit/cc-backend/tree/main/pkg/schema/schemas) repository.
+The configuration is split into sections. Each section is validated against its
+own JSON schema defined in the corresponding Go package inside the
+[cc-backend repository](https://github.com/ClusterCockpit/cc-backend).
 
 {{< alert title="Manual Updates">}}
-Changes to the original JSON schema found in the repository are not automatically rendered in this reference documentation.</br></br>
-**Last Update:** 04.12.2024
+Changes to the original JSON schemas found in the repository are not
+automatically rendered in this reference documentation.</br></br>
+**Last Update:** 15.06.2026
 {{< /alert >}}
 
-## cc-backend configuration file schema
-
-- [1. Property `cc-backend configuration file schema > addr`](#addr)
-- [2. Property `cc-backend configuration file schema > apiAllowedIPs`](#apiAllowedIPs)
-  - [2.1. cc-backend configuration file schema > apiAllowedIPs > apiAllowedIPs items](#apiAllowedIPs_items)
-- [3. Property `cc-backend configuration file schema > user`](#user)
-- [4. Property `cc-backend configuration file schema > group`](#group)
-- [5. Property `cc-backend configuration file schema > disable-authentication`](#disable-authentication)
-- [6. Property `cc-backend configuration file schema > embed-static-files`](#embed-static-files)
-- [7. Property `cc-backend configuration file schema > static-files`](#static-files)
-- [8. Property `cc-backend configuration file schema > db-driver`](#db-driver)
-- [9. Property `cc-backend configuration file schema > db`](#db)
-- [10. Property `cc-backend configuration file schema > archive`](#archive)
-  - [10.1. Property `cc-backend configuration file schema > archive > kind`](#archive_kind)
-  - [10.2. Property `cc-backend configuration file schema > archive > path`](#archive_path)
-  - [10.3. Property `cc-backend configuration file schema > archive > compression`](#archive_compression)
-  - [10.4. Property `cc-backend configuration file schema > archive > retention`](#archive_retention)
-    - [10.4.1. Property `cc-backend configuration file schema > archive > retention > policy`](#archive_retention_policy)
-    - [10.4.2. Property `cc-backend configuration file schema > archive > retention > include-db`](#archive_retention_include-db)
-    - [10.4.3b. Property `cc-backend configuration file schema > archive > retention > omit-tagged`](#archive_retention_omit-tagged)
-    - [10.4.3. Property `cc-backend configuration file schema > archive > retention > age`](#archive_retention_age)
-    - [10.4.4. Property `cc-backend configuration file schema > archive > retention > location`](#archive_retention_location)
-- [11. Property `cc-backend configuration file schema > disable-archive`](#disable-archive)
-- [12. Property `cc-backend configuration file schema > validate`](#validate)
-- [13. Property `cc-backend configuration file schema > session-max-age`](#session-max-age)
-- [14. Property `cc-backend configuration file schema > https-cert-file`](#https-cert-file)
-- [15. Property `cc-backend configuration file schema > https-key-file`](#https-key-file)
-- [16. Property `cc-backend configuration file schema > redirect-http-to`](#redirect-http-to)
-- [17. Property `cc-backend configuration file schema > stop-jobs-exceeding-walltime`](#stop-jobs-exceeding-walltime)
-- [18. Property `cc-backend configuration file schema > short-running-jobs-duration`](#short-running-jobs-duration)
-- [19. Property `cc-backend configuration file schema > emission-constant`](#emission-constant)
-- [20. Property `cc-backend configuration file schema > cron-frequency`](#cron-frequency)
-  - [20.1. Property `cc-backend configuration file schema > cron-frequency > duration-worker`](#cron-frequency_duration-worker)
-  - [20.2. Property `cc-backend configuration file schema > cron-frequency > footprint-worker`](#cron-frequency_footprint-worker)
-- [21. Property `cc-backend configuration file schema > enable-resampling`](#enable-resampling)
-  - [21.1. Property `cc-backend configuration file schema > enable-resampling > trigger`](#enable-resampling_trigger)
-  - [21.2. Property `cc-backend configuration file schema > enable-resampling > resolutions`](#enable-resampling_resolutions)
-    - [21.2.1. cc-backend configuration file schema > enable-resampling > resolutions > resolutions items](#enable-resampling_resolutions_items)
-- [22. Property `cc-backend configuration file schema > jwts`](#jwts)
-  - [22.1. Property `cc-backend configuration file schema > jwts > max-age`](#jwts_max-age)
-  - [22.2. Property `cc-backend configuration file schema > jwts > cookieName`](#jwts_cookieName)
-  - [22.3. Property `cc-backend configuration file schema > jwts > validateUser`](#jwts_validateUser)
-  - [22.4. Property `cc-backend configuration file schema > jwts > trustedIssuer`](#jwts_trustedIssuer)
-  - [22.5. Property `cc-backend configuration file schema > jwts > syncUserOnLogin`](#jwts_syncUserOnLogin)
-- [23. Property `cc-backend configuration file schema > oidc`](#oidc)
-  - [23.1. The following properties are required](#autogenerated_heading_2)
-- [24. Property `cc-backend configuration file schema > ldap`](#ldap)
-  - [24.1. Property `cc-backend configuration file schema > ldap > url`](#ldap_url)
-  - [24.2. Property `cc-backend configuration file schema > ldap > user_base`](#ldap_user_base)
-  - [24.3. Property `cc-backend configuration file schema > ldap > search_dn`](#ldap_search_dn)
-  - [24.4. Property `cc-backend configuration file schema > ldap > user_bind`](#ldap_user_bind)
-  - [24.5. Property `cc-backend configuration file schema > ldap > user_filter`](#ldap_user_filter)
-  - [24.6. Property `cc-backend configuration file schema > ldap > username_attr`](#ldap_username_attr)
-  - [24.7. Property `cc-backend configuration file schema > ldap > sync_interval`](#ldap_sync_interval)
-  - [24.8. Property `cc-backend configuration file schema > ldap > sync_del_old_users`](#ldap_sync_del_old_users)
-  - [24.9. Property `cc-backend configuration file schema > ldap > syncUserOnLogin`](#ldap_syncUserOnLogin)
-- [25. Property `cc-backend configuration file schema > clusters`](#clusters)
-  - [25.1. cc-backend configuration file schema > clusters > clusters items](#clusters_items)
-    - [25.1.1. Property `cc-backend configuration file schema > clusters > clusters items > name`](#clusters_items_name)
-    - [25.1.2. Property `cc-backend configuration file schema > clusters > clusters items > metricDataRepository`](#clusters_items_metricDataRepository)
-      - [25.1.2.1. Property `cc-backend configuration file schema > clusters > clusters items > metricDataRepository > kind`](#clusters_items_metricDataRepository_kind)
-      - [25.1.2.2. Property `cc-backend configuration file schema > clusters > clusters items > metricDataRepository > url`](#clusters_items_metricDataRepository_url)
-      - [25.1.2.3. Property `cc-backend configuration file schema > clusters > clusters items > metricDataRepository > token`](#clusters_items_metricDataRepository_token)
-    - [25.1.3. Property `cc-backend configuration file schema > clusters > clusters items > filterRanges`](#clusters_items_filterRanges)
-      - [25.1.3.1. Property `cc-backend configuration file schema > clusters > clusters items > filterRanges > numNodes`](#clusters_items_filterRanges_numNodes)
-        - [25.1.3.1.1. Property `cc-backend configuration file schema > clusters > clusters items > filterRanges > numNodes > from`](#clusters_items_filterRanges_numNodes_from)
-        - [25.1.3.1.2. Property `cc-backend configuration file schema > clusters > clusters items > filterRanges > numNodes > to`](#clusters_items_filterRanges_numNodes_to)
-      - [25.1.3.2. Property `cc-backend configuration file schema > clusters > clusters items > filterRanges > duration`](#clusters_items_filterRanges_duration)
-        - [25.1.3.2.1. Property `cc-backend configuration file schema > clusters > clusters items > filterRanges > duration > from`](#clusters_items_filterRanges_duration_from)
-        - [25.1.3.2.2. Property `cc-backend configuration file schema > clusters > clusters items > filterRanges > duration > to`](#clusters_items_filterRanges_duration_to)
-      - [25.1.3.3. Property `cc-backend configuration file schema > clusters > clusters items > filterRanges > startTime`](#clusters_items_filterRanges_startTime)
-        - [25.1.3.3.1. Property `cc-backend configuration file schema > clusters > clusters items > filterRanges > startTime > from`](#clusters_items_filterRanges_startTime_from)
-        - [25.1.3.3.2. Property `cc-backend configuration file schema > clusters > clusters items > filterRanges > startTime > to`](#clusters_items_filterRanges_startTime_to)
-- [26. Property `cc-backend configuration file schema > ui-defaults`](#ui-defaults)
-  - [26.1. Property `cc-backend configuration file schema > ui-defaults > plot_general_colorBackground`](#ui-defaults_plot_general_colorBackground)
-  - [26.2. Property `cc-backend configuration file schema > ui-defaults > plot_general_lineWidth`](#ui-defaults_plot_general_lineWidth)
-  - [26.3. Property `cc-backend configuration file schema > ui-defaults > plot_list_jobsPerPage`](#ui-defaults_plot_list_jobsPerPage)
-  - [26.4. Property `cc-backend configuration file schema > ui-defaults > plot_view_plotsPerRow`](#ui-defaults_plot_view_plotsPerRow)
-  - [26.5. Property `cc-backend configuration file schema > ui-defaults > plot_view_showPolarplot`](#ui-defaults_plot_view_showPolarplot)
-  - [26.6. Property `cc-backend configuration file schema > ui-defaults > plot_view_showRoofline`](#ui-defaults_plot_view_showRoofline)
-  - [26.7. Property `cc-backend configuration file schema > ui-defaults > plot_view_showStatTable`](#ui-defaults_plot_view_showStatTable)
-  - [26.8. Property `cc-backend configuration file schema > ui-defaults > system_view_selectedMetric`](#ui-defaults_system_view_selectedMetric)
-  - [26.9. Property `cc-backend configuration file schema > ui-defaults > job_view_showFootprint`](#ui-defaults_job_view_showFootprint)
-  - [26.10. Property `cc-backend configuration file schema > ui-defaults > job_list_usePaging`](#ui-defaults_job_list_usePaging)
-  - [26.11. Property `cc-backend configuration file schema > ui-defaults > analysis_view_histogramMetrics`](#ui-defaults_analysis_view_histogramMetrics)
-    - [26.11.1. cc-backend configuration file schema > ui-defaults > analysis_view_histogramMetrics > analysis_view_histogramMetrics items](#ui-defaults_analysis_view_histogramMetrics_items)
-  - [26.12. Property `cc-backend configuration file schema > ui-defaults > analysis_view_scatterPlotMetrics`](#ui-defaults_analysis_view_scatterPlotMetrics)
-    - [26.12.1. cc-backend configuration file schema > ui-defaults > analysis_view_scatterPlotMetrics > analysis_view_scatterPlotMetrics items](#ui-defaults_analysis_view_scatterPlotMetrics_items)
-      - [26.12.1.1. cc-backend configuration file schema > ui-defaults > analysis_view_scatterPlotMetrics > analysis_view_scatterPlotMetrics items > analysis_view_scatterPlotMetrics items items](#ui-defaults_analysis_view_scatterPlotMetrics_items_items)
-  - [26.13. Property `cc-backend configuration file schema > ui-defaults > job_view_nodestats_selectedMetrics`](#ui-defaults_job_view_nodestats_selectedMetrics)
-    - [26.13.1. cc-backend configuration file schema > ui-defaults > job_view_nodestats_selectedMetrics > job_view_nodestats_selectedMetrics items](#ui-defaults_job_view_nodestats_selectedMetrics_items)
-  - [26.14. Property `cc-backend configuration file schema > ui-defaults > job_view_selectedMetrics`](#ui-defaults_job_view_selectedMetrics)
-    - [26.14.1. cc-backend configuration file schema > ui-defaults > job_view_selectedMetrics > job_view_selectedMetrics items](#ui-defaults_job_view_selectedMetrics_items)
-  - [26.15. Property `cc-backend configuration file schema > ui-defaults > plot_general_colorscheme`](#ui-defaults_plot_general_colorscheme)
-    - [26.15.1. cc-backend configuration file schema > ui-defaults > plot_general_colorscheme > plot_general_colorscheme items](#ui-defaults_plot_general_colorscheme_items)
-  - [26.16. Property `cc-backend configuration file schema > ui-defaults > plot_list_selectedMetrics`](#ui-defaults_plot_list_selectedMetrics)
-    - [26.16.1. cc-backend configuration file schema > ui-defaults > plot_list_selectedMetrics > plot_list_selectedMetrics items](#ui-defaults_plot_list_selectedMetrics_items)
-
-**Title:** cc-backend configuration file schema
-
-|                           |                  |
-| ------------------------- | ---------------- |
-| **Type**                  | `object`         |
-| **Required**              | No               |
-| **Additional properties** | Any type allowed |
-
-| Property                                                        | Pattern | Type             | Deprecated | Definition | Title/Description                                                                                                                                |
-| --------------------------------------------------------------- | ------- | ---------------- | ---------- | ---------- | ------------------------------------------------------------------------------------------------------------------------------------------------ |
-| - [addr](#addr)                                                 | No      | string           | No         | -          | Address where the http (or https) server will listen on (for example: 'localhost:80').                                                           |
-| - [apiAllowedIPs](#apiAllowedIPs)                               | No      | array of string  | No         | -          | Addresses from which secured API endpoints can be reached                                                                                        |
-| - [user](#user)                                                 | No      | string           | No         | -          | Drop root permissions once .env was read and the port was taken. Only applicable if using privileged port.                                       |
-| - [group](#group)                                               | No      | string           | No         | -          | Drop root permissions once .env was read and the port was taken. Only applicable if using privileged port.                                       |
-| - [disable-authentication](#disable-authentication)             | No      | boolean          | No         | -          | Disable authentication (for everything: API, Web-UI, ...).                                                                                       |
-| - [embed-static-files](#embed-static-files)                     | No      | boolean          | No         | -          | If all files in \`web/frontend/public\` should be served from within the binary itself (they are embedded) or not.                               |
-| - [static-files](#static-files)                                 | No      | string           | No         | -          | Folder where static assets can be found, if embed-static-files is false.                                                                         |
-| - [db-driver](#db-driver)                                       | No      | enum (of string) | No         | -          | sqlite3 or mysql (mysql will work for mariadb as well).                                                                                          |
-| - [db](#db)                                                     | No      | string           | No         | -          | For sqlite3 a filename, for mysql a DSN in this format: <https://github.com/go-sql-driver/mysql#dsn-data-source-name> (Without query parameters!). |
-| - [archive](#archive)                                           | No      | object           | No         | -          | Configuration keys for job-archive                                                                                                               |
-| - [disable-archive](#disable-archive)                           | No      | boolean          | No         | -          | Keep all metric data in the metric data repositories, do not write to the job-archive.                                                           |
-| - [validate](#validate)                                         | No      | boolean          | No         | -          | Validate all input json documents against json schema.                                                                                           |
-| - [session-max-age](#session-max-age)                           | No      | string           | No         | -          | Specifies for how long a session shall be valid as a string parsable by time.ParseDuration(). If 0 or empty, the session/token does not expire!  |
-| - [https-cert-file](#https-cert-file)                           | No      | string           | No         | -          | Filepath to SSL certificate. If also https-key-file is set use HTTPS using those certificates.                                                   |
-| - [https-key-file](#https-key-file)                             | No      | string           | No         | -          | Filepath to SSL key file. If also https-cert-file is set use HTTPS using those certificates.                                                     |
-| - [redirect-http-to](#redirect-http-to)                         | No      | string           | No         | -          | If not the empty string and addr does not end in :80, redirect every request incoming at port 80 to that url.                                    |
-| - [stop-jobs-exceeding-walltime](#stop-jobs-exceeding-walltime) | No      | integer          | No         | -          | If not zero, automatically mark jobs as stopped running X seconds longer than their walltime. Only applies if walltime is set for job.           |
-| - [short-running-jobs-duration](#short-running-jobs-duration)   | No      | integer          | No         | -          | Do not show running jobs shorter than X seconds.                                                                                                 |
-| - [emission-constant](#emission-constant)                       | No      | integer          | No         | -          | .                                                                                                                                                |
-| - [cron-frequency](#cron-frequency)                             | No      | object           | No         | -          | Frequency of cron job workers.                                                                                                                   |
-| - [enable-resampling](#enable-resampling)                       | No      | object           | No         | -          | Enable dynamic zoom in frontend metric plots.                                                                                                    |
-| + [jwts](#jwts)                                                 | No      | object           | No         | -          | For JWT token authentication.                                                                                                                    |
-| - [oidc](#oidc)                                                 | No      | object           | No         | -          | -                                                                                                                                                |
-| - [ldap](#ldap)                                                 | No      | object           | No         | -          | For LDAP Authentication and user synchronisation.                                                                                                |
-| + [clusters](#clusters)                                         | No      | array of object  | No         | -          | Configuration for the clusters to be displayed.                                                                                                  |
-| - [ui-defaults](#ui-defaults)                                   | No      | object           | No         | -          | Default configuration for web UI                                                                                                                 |
-
-## <a name="addr"></a>1. Property `cc-backend configuration file schema > addr`
-
-|              |          |
-| ------------ | -------- |
-| **Type**     | `string` |
-| **Required** | No       |
-
-**Description:** Address where the http (or https) server will listen on (for example: 'localhost:80').
-
-## <a name="apiAllowedIPs"></a>2. Property `cc-backend configuration file schema > apiAllowedIPs`
-
-|              |                   |
-| ------------ | ----------------- |
-| **Type**     | `array of string` |
-| **Required** | No                |
-
-**Description:** Addresses from which secured API endpoints can be reached
-
-|                      | Array restrictions |
-| -------------------- | ------------------ |
-| **Min items**        | N/A                |
-| **Max items**        | N/A                |
-| **Items unicity**    | False              |
-| **Additional items** | False              |
-| **Tuple validation** | See below          |
-
-| Each item of this array must be             | Description |
-| ------------------------------------------- | ----------- |
-| [apiAllowedIPs items](#apiAllowedIPs_items) | -           |
-
-### <a name="apiAllowedIPs_items"></a>2.1. cc-backend configuration file schema > apiAllowedIPs > apiAllowedIPs items
-
-|              |          |
-| ------------ | -------- |
-| **Type**     | `string` |
-| **Required** | No       |
-
-## <a name="user"></a>3. Property `cc-backend configuration file schema > user`
-
-|              |          |
-| ------------ | -------- |
-| **Type**     | `string` |
-| **Required** | No       |
-
-**Description:** Drop root permissions once .env was read and the port was taken. Only applicable if using privileged port.
-
-## <a name="group"></a>4. Property `cc-backend configuration file schema > group`
-
-|              |          |
-| ------------ | -------- |
-| **Type**     | `string` |
-| **Required** | No       |
-
-**Description:** Drop root permissions once .env was read and the port was taken. Only applicable if using privileged port.
-
-## <a name="disable-authentication"></a>5. Property `cc-backend configuration file schema > disable-authentication`
-
-|              |           |
-| ------------ | --------- |
-| **Type**     | `boolean` |
-| **Required** | No        |
-
-**Description:** Disable authentication (for everything: API, Web-UI, ...).
-
-## <a name="embed-static-files"></a>6. Property `cc-backend configuration file schema > embed-static-files`
-
-|              |           |
-| ------------ | --------- |
-| **Type**     | `boolean` |
-| **Required** | No        |
-
-**Description:** If all files in `web/frontend/public` should be served from within the binary itself (they are embedded) or not.
-
-## <a name="static-files"></a>7. Property `cc-backend configuration file schema > static-files`
-
-|              |          |
-| ------------ | -------- |
-| **Type**     | `string` |
-| **Required** | No       |
-
-**Description:** Folder where static assets can be found, if embed-static-files is false.
-
-## <a name="db-driver"></a>8. Property `cc-backend configuration file schema > db-driver`
-
-|              |                    |
-| ------------ | ------------------ |
-| **Type**     | `enum (of string)` |
-| **Required** | No                 |
-
-**Description:** sqlite3 or mysql (mysql will work for mariadb as well).
-
-Must be one of:
-
-- "sqlite3"
-- "mysql"
-
-## <a name="db"></a>9. Property `cc-backend configuration file schema > db`
-
-|              |          |
-| ------------ | -------- |
-| **Type**     | `string` |
-| **Required** | No       |
-
-**Description:** For sqlite3 a filename, for mysql a DSN in this format: <https://github.com/go-sql-driver/mysql#dsn-data-source-name> (Without query parameters!).
-
-## <a name="archive"></a>10. Property `cc-backend configuration file schema > archive`
-
-|                           |                  |
-| ------------------------- | ---------------- |
-| **Type**                  | `object`         |
-| **Required**              | No               |
-| **Additional properties** | Any type allowed |
-
-**Description:** Configuration keys for job-archive
-
-| Property                              | Pattern | Type             | Deprecated | Definition | Title/Description                                              |
-| ------------------------------------- | ------- | ---------------- | ---------- | ---------- | -------------------------------------------------------------- |
-| + [kind](#archive_kind)               | No      | enum (of string) | No         | -          | Backend type for job-archive                                   |
-| - [path](#archive_path)               | No      | string           | No         | -          | Path to job archive for file backend                           |
-| - [compression](#archive_compression) | No      | integer          | No         | -          | Setup automatic compression for jobs older than number of days |
-| - [retention](#archive_retention)     | No      | object           | No         | -          | Configuration keys for retention                               |
-
-### <a name="archive_kind"></a>10.1. Property `cc-backend configuration file schema > archive > kind`
-
-|              |                    |
-| ------------ | ------------------ |
-| **Type**     | `enum (of string)` |
-| **Required** | Yes                |
-
-**Description:** Backend type for job-archive
-
-Must be one of:
-
-- "file"
-- "s3"
-
-### <a name="archive_path"></a>10.2. Property `cc-backend configuration file schema > archive > path`
-
-|              |          |
-| ------------ | -------- |
-| **Type**     | `string` |
-| **Required** | No       |
-
-**Description:** Path to job archive for file backend
-
-### <a name="archive_compression"></a>10.3. Property `cc-backend configuration file schema > archive > compression`
-
-|              |           |
-| ------------ | --------- |
-| **Type**     | `integer` |
-| **Required** | No        |
-
-**Description:** Setup automatic compression for jobs older than number of days
-
-### <a name="archive_retention"></a>10.4. Property `cc-backend configuration file schema > archive > retention`
-
-|                           |                  |
-| ------------------------- | ---------------- |
-| **Type**                  | `object`         |
-| **Required**              | No               |
-| **Additional properties** | Any type allowed |
-
-**Description:** Configuration keys for retention
-
-| Property                                    | Pattern | Type             | Deprecated | Definition | Title/Description                                                       |
-| ------------------------------------------- | ------- | ---------------- | ---------- | ---------- | ----------------------------------------------------------------------- |
-| + [policy](#archive_retention_policy)       | No      | enum (of string) | No         | -          | Retention policy                                                        |
-| - [include-db](#archive_retention_include-db) | No      | boolean          | No         | -          | Also remove jobs from database                                          |
-| - [omit-tagged](#archive_retention_omit-tagged) | No    | enum (of string) | No         | -          | Skip tagged jobs from retention                                         |
-| - [age](#archive_retention_age)             | No      | integer          | No         | -          | Act on jobs with startTime older than age (in days)                     |
-| - [location](#archive_retention_location)   | No      | string           | No         | -          | The target directory for retention. Only applicable for retention move. |
-
-#### <a name="archive_retention_policy"></a>10.4.1. Property `cc-backend configuration file schema > archive > retention > policy`
-
-|              |                    |
-| ------------ | ------------------ |
-| **Type**     | `enum (of string)` |
-| **Required** | Yes                |
-
-**Description:** Retention policy
-
-Must be one of:
-
-- "none"
-- "delete"
-- "move"
-
-#### <a name="archive_retention_include-db"></a>10.4.2. Property `cc-backend configuration file schema > archive > retention > include-db`
-
-|              |           |
-| ------------ | --------- |
-| **Type**     | `boolean` |
-| **Required** | No        |
-
-**Description:** Also remove jobs from database
-
-#### <a name="archive_retention_omit-tagged"></a>10.4.3b. Property `cc-backend configuration file schema > archive > retention > omit-tagged`
-
-|              |                    |
-| ------------ | ------------------ |
-| **Type**     | `enum (of string)` |
-| **Required** | No                 |
-
-**Description:** Control which tagged jobs are excluded from the retention policy.
-
-Must be one of:
-
-- `"none"` — apply retention to all jobs (default)
-- `"all"` — skip any job that has at least one tag
-- `"user"` — skip jobs with user-created tags; auto-tagger tags of type `app` or `jobClass` are not considered user tags
-
-#### <a name="archive_retention_age"></a>10.4.3. Property `cc-backend configuration file schema > archive > retention > age`
-
-|              |           |
-| ------------ | --------- |
-| **Type**     | `integer` |
-| **Required** | No        |
-
-**Description:** Act on jobs with startTime older than age (in days)
-
-#### <a name="archive_retention_location"></a>10.4.4. Property `cc-backend configuration file schema > archive > retention > location`
-
-|              |          |
-| ------------ | -------- |
-| **Type**     | `string` |
-| **Required** | No       |
-
-**Description:** The target directory for retention. Only applicable for retention move.
-
-## <a name="disable-archive"></a>11. Property `cc-backend configuration file schema > disable-archive`
-
-|              |           |
-| ------------ | --------- |
-| **Type**     | `boolean` |
-| **Required** | No        |
-
-**Description:** Keep all metric data in the metric data repositories, do not write to the job-archive.
-
-## <a name="validate"></a>12. Property `cc-backend configuration file schema > validate`
-
-|              |           |
-| ------------ | --------- |
-| **Type**     | `boolean` |
-| **Required** | No        |
-
-**Description:** Validate all input json documents against json schema.
-
-## <a name="session-max-age"></a>13. Property `cc-backend configuration file schema > session-max-age`
-
-|              |          |
-| ------------ | -------- |
-| **Type**     | `string` |
-| **Required** | No       |
-
-**Description:** Specifies for how long a session shall be valid as a string parsable by time.ParseDuration(). If 0 or empty, the session/token does not expire!
-
-## <a name="https-cert-file"></a>14. Property `cc-backend configuration file schema > https-cert-file`
-
-|              |          |
-| ------------ | -------- |
-| **Type**     | `string` |
-| **Required** | No       |
-
-**Description:** Filepath to SSL certificate. If also https-key-file is set use HTTPS using those certificates.
-
-## <a name="https-key-file"></a>15. Property `cc-backend configuration file schema > https-key-file`
-
-|              |          |
-| ------------ | -------- |
-| **Type**     | `string` |
-| **Required** | No       |
-
-**Description:** Filepath to SSL key file. If also https-cert-file is set use HTTPS using those certificates.
-
-## <a name="redirect-http-to"></a>16. Property `cc-backend configuration file schema > redirect-http-to`
-
-|              |          |
-| ------------ | -------- |
-| **Type**     | `string` |
-| **Required** | No       |
-
-**Description:** If not the empty string and addr does not end in :80, redirect every request incoming at port 80 to that url.
-
-## <a name="stop-jobs-exceeding-walltime"></a>17. Property `cc-backend configuration file schema > stop-jobs-exceeding-walltime`
-
-|              |           |
-| ------------ | --------- |
-| **Type**     | `integer` |
-| **Required** | No        |
-
-**Description:** If not zero, automatically mark jobs as stopped running X seconds longer than their walltime. Only applies if walltime is set for job.
-
-## <a name="short-running-jobs-duration"></a>18. Property `cc-backend configuration file schema > short-running-jobs-duration`
-
-|              |           |
-| ------------ | --------- |
-| **Type**     | `integer` |
-| **Required** | No        |
-
-**Description:** Do not show running jobs shorter than X seconds.
-
-## <a name="emission-constant"></a>19. Property `cc-backend configuration file schema > emission-constant`
-
-|              |           |
-| ------------ | --------- |
-| **Type**     | `integer` |
-| **Required** | No        |
-
-**Description:** .
-
-## <a name="cron-frequency"></a>20. Property `cc-backend configuration file schema > cron-frequency`
-
-|                           |                  |
-| ------------------------- | ---------------- |
-| **Type**                  | `object`         |
-| **Required**              | No               |
-| **Additional properties** | Any type allowed |
-
-**Description:** Frequency of cron job workers.
-
-| Property                                               | Pattern | Type   | Deprecated | Definition | Title/Description                                  |
-| ------------------------------------------------------ | ------- | ------ | ---------- | ---------- | -------------------------------------------------- |
-| - [duration-worker](#cron-frequency_duration-worker)   | No      | string | No         | -          | Duration Update Worker [Defaults to '5m']          |
-| - [footprint-worker](#cron-frequency_footprint-worker) | No      | string | No         | -          | Metric-Footprint Update Worker [Defaults to '10m'] |
-
-### <a name="cron-frequency_duration-worker"></a>20.1. Property `cc-backend configuration file schema > cron-frequency > duration-worker`
-
-|              |          |
-| ------------ | -------- |
-| **Type**     | `string` |
-| **Required** | No       |
-
-**Description:** Duration Update Worker [Defaults to '5m']
-
-### <a name="cron-frequency_footprint-worker"></a>20.2. Property `cc-backend configuration file schema > cron-frequency > footprint-worker`
-
-|              |          |
-| ------------ | -------- |
-| **Type**     | `string` |
-| **Required** | No       |
-
-**Description:** Metric-Footprint Update Worker [Defaults to '10m']
-
-## <a name="enable-resampling"></a>21. Property `cc-backend configuration file schema > enable-resampling`
-
-|                           |                  |
-| ------------------------- | ---------------- |
-| **Type**                  | `object`         |
-| **Required**              | No               |
-| **Additional properties** | Any type allowed |
-
-**Description:** Enable dynamic zoom in frontend metric plots.
-
-| Property                                        | Pattern | Type             | Deprecated | Definition | Title/Description                                                  |
-| ----------------------------------------------- | ------- | ---------------- | ---------- | ---------- | ------------------------------------------------------------------ |
-| + [trigger](#enable-resampling_trigger)         | No      | integer          | No         | -          | Trigger next zoom level at less than this many visible datapoints. |
-| + [resolutions](#enable-resampling_resolutions) | No      | array of integer | No         | -          | Array of resampling target resolutions, in seconds.                |
-
-### <a name="enable-resampling_trigger"></a>21.1. Property `cc-backend configuration file schema > enable-resampling > trigger`
-
-|              |           |
-| ------------ | --------- |
-| **Type**     | `integer` |
-| **Required** | Yes       |
-
-**Description:** Trigger next zoom level at less than this many visible datapoints.
-
-### <a name="enable-resampling_resolutions"></a>21.2. Property `cc-backend configuration file schema > enable-resampling > resolutions`
-
-|              |                    |
-| ------------ | ------------------ |
-| **Type**     | `array of integer` |
-| **Required** | Yes                |
-
-**Description:** Array of resampling target resolutions, in seconds.
-
-|                      | Array restrictions |
-| -------------------- | ------------------ |
-| **Min items**        | N/A                |
-| **Max items**        | N/A                |
-| **Items unicity**    | False              |
-| **Additional items** | False              |
-| **Tuple validation** | See below          |
-
-| Each item of this array must be                           | Description |
-| --------------------------------------------------------- | ----------- |
-| [resolutions items](#enable-resampling_resolutions_items) | -           |
-
-#### <a name="enable-resampling_resolutions_items"></a>21.2.1. cc-backend configuration file schema > enable-resampling > resolutions > resolutions items
-
-|              |           |
-| ------------ | --------- |
-| **Type**     | `integer` |
-| **Required** | No        |
-
-## <a name="jwts"></a>22. Property `cc-backend configuration file schema > jwts`
-
-|                           |                  |
-| ------------------------- | ---------------- |
-| **Type**                  | `object`         |
-| **Required**              | Yes              |
-| **Additional properties** | Any type allowed |
-
-**Description:** For JWT token authentication.
-
-| Property                                   | Pattern | Type    | Deprecated | Definition | Title/Description                                                                                      |
-| ------------------------------------------ | ------- | ------- | ---------- | ---------- | ------------------------------------------------------------------------------------------------------ |
-| + [max-age](#jwts_max-age)                 | No      | string  | No         | -          | Configure how long a token is valid. As string parsable by time.ParseDuration()                        |
-| - [cookieName](#jwts_cookieName)           | No      | string  | No         | -          | Cookie that should be checked for a JWT token.                                                         |
-| - [validateUser](#jwts_validateUser)       | No      | boolean | No         | -          | Deny login for users not in database (but defined in JWT). Overwrite roles in JWT with database roles. |
-| - [trustedIssuer](#jwts_trustedIssuer)     | No      | string  | No         | -          | Issuer that should be accepted when validating external JWTs                                           |
-| - [syncUserOnLogin](#jwts_syncUserOnLogin) | No      | boolean | No         | -          | Add non-existent user to DB at login attempt with values provided in JWT.                              |
-
-### <a name="jwts_max-age"></a>22.1. Property `cc-backend configuration file schema > jwts > max-age`
-
-|              |          |
-| ------------ | -------- |
-| **Type**     | `string` |
-| **Required** | Yes      |
-
-**Description:** Configure how long a token is valid. As string parsable by time.ParseDuration()
-
-### <a name="jwts_cookieName"></a>22.2. Property `cc-backend configuration file schema > jwts > cookieName`
-
-|              |          |
-| ------------ | -------- |
-| **Type**     | `string` |
-| **Required** | No       |
-
-**Description:** Cookie that should be checked for a JWT token.
-
-### <a name="jwts_validateUser"></a>22.3. Property `cc-backend configuration file schema > jwts > validateUser`
-
-|              |           |
-| ------------ | --------- |
-| **Type**     | `boolean` |
-| **Required** | No        |
-
-**Description:** Deny login for users not in database (but defined in JWT). Overwrite roles in JWT with database roles.
-
-### <a name="jwts_trustedIssuer"></a>22.4. Property `cc-backend configuration file schema > jwts > trustedIssuer`
-
-|              |          |
-| ------------ | -------- |
-| **Type**     | `string` |
-| **Required** | No       |
-
-**Description:** Issuer that should be accepted when validating external JWTs
-
-### <a name="jwts_syncUserOnLogin"></a>22.5. Property `cc-backend configuration file schema > jwts > syncUserOnLogin`
-
-|              |           |
-| ------------ | --------- |
-| **Type**     | `boolean` |
-| **Required** | No        |
-
-**Description:** Add non-existent user to DB at login attempt with values provided in JWT.
-
-## <a name="oidc"></a>23. Property `cc-backend configuration file schema > oidc`
-
-|                           |                  |
-| ------------------------- | ---------------- |
-| **Type**                  | `object`         |
-| **Required**              | No               |
-| **Additional properties** | Any type allowed |
-
-### <a name="autogenerated_heading_2"></a>23.1. The following properties are required
-
-- provider
-
-## <a name="ldap"></a>24. Property `cc-backend configuration file schema > ldap`
-
-|                           |                  |
-| ------------------------- | ---------------- |
-| **Type**                  | `object`         |
-| **Required**              | No               |
-| **Additional properties** | Any type allowed |
-
-**Description:** For LDAP Authentication and user synchronisation.
-
-| Property                                         | Pattern | Type    | Deprecated | Definition | Title/Description                                                                                |
-| ------------------------------------------------ | ------- | ------- | ---------- | ---------- | ------------------------------------------------------------------------------------------------ |
-| + [url](#ldap_url)                               | No      | string  | No         | -          | URL of LDAP directory server.                                                                    |
-| + [user_base](#ldap_user_base)                   | No      | string  | No         | -          | Base DN of user tree root.                                                                       |
-| + [search_dn](#ldap_search_dn)                   | No      | string  | No         | -          | DN for authenticating LDAP admin account with general read rights.                               |
-| + [user_bind](#ldap_user_bind)                   | No      | string  | No         | -          | Expression used to authenticate users via LDAP bind. Must contain uid={username}.                |
-| + [user_filter](#ldap_user_filter)               | No      | string  | No         | -          | Filter to extract users for syncing.                                                             |
-| - [username_attr](#ldap_username_attr)           | No      | string  | No         | -          | Attribute with full username. Default: gecos                                                     |
-| - [sync_interval](#ldap_sync_interval)           | No      | string  | No         | -          | Interval used for syncing local user table with LDAP directory. Parsed using time.ParseDuration. |
-| - [sync_del_old_users](#ldap_sync_del_old_users) | No      | boolean | No         | -          | Delete obsolete users in database.                                                               |
-| - [syncUserOnLogin](#ldap_syncUserOnLogin)       | No      | boolean | No         | -          | Add non-existent user to DB at login attempt if user exists in Ldap directory                    |
-
-### <a name="ldap_url"></a>24.1. Property `cc-backend configuration file schema > ldap > url`
-
-|              |          |
-| ------------ | -------- |
-| **Type**     | `string` |
-| **Required** | Yes      |
-
-**Description:** URL of LDAP directory server.
-
-### <a name="ldap_user_base"></a>24.2. Property `cc-backend configuration file schema > ldap > user_base`
-
-|              |          |
-| ------------ | -------- |
-| **Type**     | `string` |
-| **Required** | Yes      |
-
-**Description:** Base DN of user tree root.
-
-### <a name="ldap_search_dn"></a>24.3. Property `cc-backend configuration file schema > ldap > search_dn`
-
-|              |          |
-| ------------ | -------- |
-| **Type**     | `string` |
-| **Required** | Yes      |
-
-**Description:** DN for authenticating LDAP admin account with general read rights.
-
-### <a name="ldap_user_bind"></a>24.4. Property `cc-backend configuration file schema > ldap > user_bind`
-
-|              |          |
-| ------------ | -------- |
-| **Type**     | `string` |
-| **Required** | Yes      |
-
-**Description:** Expression used to authenticate users via LDAP bind. Must contain uid={username}.
-
-### <a name="ldap_user_filter"></a>24.5. Property `cc-backend configuration file schema > ldap > user_filter`
-
-|              |          |
-| ------------ | -------- |
-| **Type**     | `string` |
-| **Required** | Yes      |
-
-**Description:** Filter to extract users for syncing.
-
-### <a name="ldap_username_attr"></a>24.6. Property `cc-backend configuration file schema > ldap > username_attr`
-
-|              |          |
-| ------------ | -------- |
-| **Type**     | `string` |
-| **Required** | No       |
-
-**Description:** Attribute with full username. Default: gecos
-
-### <a name="ldap_sync_interval"></a>24.7. Property `cc-backend configuration file schema > ldap > sync_interval`
-
-|              |          |
-| ------------ | -------- |
-| **Type**     | `string` |
-| **Required** | No       |
-
-**Description:** Interval used for syncing local user table with LDAP directory. Parsed using time.ParseDuration.
-
-### <a name="ldap_sync_del_old_users"></a>24.8. Property `cc-backend configuration file schema > ldap > sync_del_old_users`
-
-|              |           |
-| ------------ | --------- |
-| **Type**     | `boolean` |
-| **Required** | No        |
-
-**Description:** Delete obsolete users in database.
-
-### <a name="ldap_syncUserOnLogin"></a>24.9. Property `cc-backend configuration file schema > ldap > syncUserOnLogin`
-
-|              |           |
-| ------------ | --------- |
-| **Type**     | `boolean` |
-| **Required** | No        |
-
-**Description:** Add non-existent user to DB at login attempt if user exists in Ldap directory
-
-## <a name="clusters"></a>25. Property `cc-backend configuration file schema > clusters`
-
-|              |                   |
-| ------------ | ----------------- |
-| **Type**     | `array of object` |
-| **Required** | Yes               |
-
-**Description:** Configuration for the clusters to be displayed.
-
-|                      | Array restrictions |
-| -------------------- | ------------------ |
-| **Min items**        | N/A                |
-| **Max items**        | N/A                |
-| **Items unicity**    | False              |
-| **Additional items** | False              |
-| **Tuple validation** | See below          |
-
-| Each item of this array must be   | Description |
-| --------------------------------- | ----------- |
-| [clusters items](#clusters_items) | -           |
-
-### <a name="clusters_items"></a>25.1. cc-backend configuration file schema > clusters > clusters items
-
-|                           |                  |
-| ------------------------- | ---------------- |
-| **Type**                  | `object`         |
-| **Required**              | No               |
-| **Additional properties** | Any type allowed |
-
-| Property                                                       | Pattern | Type   | Deprecated | Definition | Title/Description                                                                                |
-| -------------------------------------------------------------- | ------- | ------ | ---------- | ---------- | ------------------------------------------------------------------------------------------------ |
-| + [name](#clusters_items_name)                                 | No      | string | No         | -          | The name of the cluster.                                                                         |
-| + [metricDataRepository](#clusters_items_metricDataRepository) | No      | object | No         | -          | Type of the metric data repository for this cluster                                              |
-| + [filterRanges](#clusters_items_filterRanges)                 | No      | object | No         | -          | This option controls the slider ranges for the UI controls of numNodes, duration, and startTime. |
-
-#### <a name="clusters_items_name"></a>25.1.1. Property `cc-backend configuration file schema > clusters > clusters items > name`
-
-|              |          |
-| ------------ | -------- |
-| **Type**     | `string` |
-| **Required** | Yes      |
-
-**Description:** The name of the cluster.
-
-#### <a name="clusters_items_metricDataRepository"></a>25.1.2. Property `cc-backend configuration file schema > clusters > clusters items > metricDataRepository`
-
-|                           |                  |
-| ------------------------- | ---------------- |
-| **Type**                  | `object`         |
-| **Required**              | Yes              |
-| **Additional properties** | Any type allowed |
-
-**Description:** Type of the metric data repository for this cluster
-
-| Property                                              | Pattern | Type             | Deprecated | Definition | Title/Description |
-| ----------------------------------------------------- | ------- | ---------------- | ---------- | ---------- | ----------------- |
-| + [kind](#clusters_items_metricDataRepository_kind)   | No      | enum (of string) | No         | -          | -                 |
-| + [url](#clusters_items_metricDataRepository_url)     | No      | string           | No         | -          | -                 |
-| - [token](#clusters_items_metricDataRepository_token) | No      | string           | No         | -          | -                 |
-
-##### <a name="clusters_items_metricDataRepository_kind"></a>25.1.2.1. Property `cc-backend configuration file schema > clusters > clusters items > metricDataRepository > kind`
-
-|              |                    |
-| ------------ | ------------------ |
-| **Type**     | `enum (of string)` |
-| **Required** | Yes                |
-
-Must be one of:
-
-- "influxdb"
-- "prometheus"
-- "cc-metric-store"
-- "test"
-
-##### <a name="clusters_items_metricDataRepository_url"></a>25.1.2.2. Property `cc-backend configuration file schema > clusters > clusters items > metricDataRepository > url`
-
-|              |          |
-| ------------ | -------- |
-| **Type**     | `string` |
-| **Required** | Yes      |
-
-##### <a name="clusters_items_metricDataRepository_token"></a>25.1.2.3. Property `cc-backend configuration file schema > clusters > clusters items > metricDataRepository > token`
-
-|              |          |
-| ------------ | -------- |
-| **Type**     | `string` |
-| **Required** | No       |
-
-#### <a name="clusters_items_filterRanges"></a>25.1.3. Property `cc-backend configuration file schema > clusters > clusters items > filterRanges`
-
-|                           |                  |
-| ------------------------- | ---------------- |
-| **Type**                  | `object`         |
-| **Required**              | Yes              |
-| **Additional properties** | Any type allowed |
-
-**Description:** This option controls the slider ranges for the UI controls of numNodes, duration, and startTime.
-
-| Property                                              | Pattern | Type   | Deprecated | Definition | Title/Description                   |
-| ----------------------------------------------------- | ------- | ------ | ---------- | ---------- | ----------------------------------- |
-| + [numNodes](#clusters_items_filterRanges_numNodes)   | No      | object | No         | -          | UI slider range for number of nodes |
-| + [duration](#clusters_items_filterRanges_duration)   | No      | object | No         | -          | UI slider range for duration        |
-| + [startTime](#clusters_items_filterRanges_startTime) | No      | object | No         | -          | UI slider range for start time      |
-
-##### <a name="clusters_items_filterRanges_numNodes"></a>25.1.3.1. Property `cc-backend configuration file schema > clusters > clusters items > filterRanges > numNodes`
-
-|                           |                  |
-| ------------------------- | ---------------- |
-| **Type**                  | `object`         |
-| **Required**              | Yes              |
-| **Additional properties** | Any type allowed |
-
-**Description:** UI slider range for number of nodes
-
-| Property                                             | Pattern | Type    | Deprecated | Definition | Title/Description |
-| ---------------------------------------------------- | ------- | ------- | ---------- | ---------- | ----------------- |
-| + [from](#clusters_items_filterRanges_numNodes_from) | No      | integer | No         | -          | -                 |
-| + [to](#clusters_items_filterRanges_numNodes_to)     | No      | integer | No         | -          | -                 |
-
-###### <a name="clusters_items_filterRanges_numNodes_from"></a>25.1.3.1.1. Property `cc-backend configuration file schema > clusters > clusters items > filterRanges > numNodes > from`
-
-|              |           |
-| ------------ | --------- |
-| **Type**     | `integer` |
-| **Required** | Yes       |
-
-###### <a name="clusters_items_filterRanges_numNodes_to"></a>25.1.3.1.2. Property `cc-backend configuration file schema > clusters > clusters items > filterRanges > numNodes > to`
-
-|              |           |
-| ------------ | --------- |
-| **Type**     | `integer` |
-| **Required** | Yes       |
-
-##### <a name="clusters_items_filterRanges_duration"></a>25.1.3.2. Property `cc-backend configuration file schema > clusters > clusters items > filterRanges > duration`
-
-|                           |                  |
-| ------------------------- | ---------------- |
-| **Type**                  | `object`         |
-| **Required**              | Yes              |
-| **Additional properties** | Any type allowed |
-
-**Description:** UI slider range for duration
-
-| Property                                             | Pattern | Type    | Deprecated | Definition | Title/Description |
-| ---------------------------------------------------- | ------- | ------- | ---------- | ---------- | ----------------- |
-| + [from](#clusters_items_filterRanges_duration_from) | No      | integer | No         | -          | -                 |
-| + [to](#clusters_items_filterRanges_duration_to)     | No      | integer | No         | -          | -                 |
-
-###### <a name="clusters_items_filterRanges_duration_from"></a>25.1.3.2.1. Property `cc-backend configuration file schema > clusters > clusters items > filterRanges > duration > from`
-
-|              |           |
-| ------------ | --------- |
-| **Type**     | `integer` |
-| **Required** | Yes       |
-
-###### <a name="clusters_items_filterRanges_duration_to"></a>25.1.3.2.2. Property `cc-backend configuration file schema > clusters > clusters items > filterRanges > duration > to`
-
-|              |           |
-| ------------ | --------- |
-| **Type**     | `integer` |
-| **Required** | Yes       |
-
-##### <a name="clusters_items_filterRanges_startTime"></a>25.1.3.3. Property `cc-backend configuration file schema > clusters > clusters items > filterRanges > startTime`
-
-|                           |                  |
-| ------------------------- | ---------------- |
-| **Type**                  | `object`         |
-| **Required**              | Yes              |
-| **Additional properties** | Any type allowed |
-
-**Description:** UI slider range for start time
-
-| Property                                              | Pattern | Type   | Deprecated | Definition | Title/Description |
-| ----------------------------------------------------- | ------- | ------ | ---------- | ---------- | ----------------- |
-| + [from](#clusters_items_filterRanges_startTime_from) | No      | string | No         | -          | -                 |
-| + [to](#clusters_items_filterRanges_startTime_to)     | No      | null   | No         | -          | -                 |
-
-###### <a name="clusters_items_filterRanges_startTime_from"></a>25.1.3.3.1. Property `cc-backend configuration file schema > clusters > clusters items > filterRanges > startTime > from`
-
-|              |             |
-| ------------ | ----------- |
-| **Type**     | `string`    |
-| **Required** | Yes         |
-| **Format**   | `date-time` |
-
-###### <a name="clusters_items_filterRanges_startTime_to"></a>25.1.3.3.2. Property `cc-backend configuration file schema > clusters > clusters items > filterRanges > startTime > to`
-
-|              |        |
-| ------------ | ------ |
-| **Type**     | `null` |
-| **Required** | Yes    |
-
-## <a name="ui-defaults"></a>26. Property `cc-backend configuration file schema > ui-defaults`
-
-|                           |                  |
-| ------------------------- | ---------------- |
-| **Type**                  | `object`         |
-| **Required**              | No               |
-| **Additional properties** | Any type allowed |
-
-**Description:** Default configuration for web UI
-
-| Property                                                                                | Pattern | Type            | Deprecated | Definition | Title/Description                                                 |
-| --------------------------------------------------------------------------------------- | ------- | --------------- | ---------- | ---------- | ----------------------------------------------------------------- |
-| + [plot_general_colorBackground](#ui-defaults_plot_general_colorBackground)             | No      | boolean         | No         | -          | Color plot background according to job average threshold limits   |
-| + [plot_general_lineWidth](#ui-defaults_plot_general_lineWidth)                         | No      | integer         | No         | -          | Initial linewidth                                                 |
-| + [plot_list_jobsPerPage](#ui-defaults_plot_list_jobsPerPage)                           | No      | integer         | No         | -          | Jobs shown per page in job lists                                  |
-| + [plot_view_plotsPerRow](#ui-defaults_plot_view_plotsPerRow)                           | No      | integer         | No         | -          | Number of plots per row in single job view                        |
-| + [plot_view_showPolarplot](#ui-defaults_plot_view_showPolarplot)                       | No      | boolean         | No         | -          | Option to toggle polar plot in single job view                    |
-| + [plot_view_showRoofline](#ui-defaults_plot_view_showRoofline)                         | No      | boolean         | No         | -          | Option to toggle roofline plot in single job view                 |
-| + [plot_view_showStatTable](#ui-defaults_plot_view_showStatTable)                       | No      | boolean         | No         | -          | Option to toggle the node statistic table in single job view      |
-| + [system_view_selectedMetric](#ui-defaults_system_view_selectedMetric)                 | No      | string          | No         | -          | Initial metric shown in system view                               |
-| + [job_view_showFootprint](#ui-defaults_job_view_showFootprint)                         | No      | boolean         | No         | -          | Option to toggle footprint ui in single job view                  |
-| + [job_list_usePaging](#ui-defaults_job_list_usePaging)                                 | No      | boolean         | No         | -          | Option to switch from continous scroll to paging                  |
-| + [analysis_view_histogramMetrics](#ui-defaults_analysis_view_histogramMetrics)         | No      | array of string | No         | -          | Metrics to show as job count histograms in analysis view          |
-| + [analysis_view_scatterPlotMetrics](#ui-defaults_analysis_view_scatterPlotMetrics)     | No      | array of array  | No         | -          | Initial scatter plto configuration in analysis view               |
-| + [job_view_nodestats_selectedMetrics](#ui-defaults_job_view_nodestats_selectedMetrics) | No      | array of string | No         | -          | Initial metrics shown in node statistics table of single job view |
-| + [job_view_selectedMetrics](#ui-defaults_job_view_selectedMetrics)                     | No      | array of string | No         | -          | -                                                                 |
-| + [plot_general_colorscheme](#ui-defaults_plot_general_colorscheme)                     | No      | array of string | No         | -          | Initial color scheme                                              |
-| + [plot_list_selectedMetrics](#ui-defaults_plot_list_selectedMetrics)                   | No      | array of string | No         | -          | Initial metric plots shown in jobs lists                          |
-
-### <a name="ui-defaults_plot_general_colorBackground"></a>26.1. Property `cc-backend configuration file schema > ui-defaults > plot_general_colorBackground`
-
-|              |           |
-| ------------ | --------- |
-| **Type**     | `boolean` |
-| **Required** | Yes       |
-
-**Description:** Color plot background according to job average threshold limits
-
-### <a name="ui-defaults_plot_general_lineWidth"></a>26.2. Property `cc-backend configuration file schema > ui-defaults > plot_general_lineWidth`
-
-|              |           |
-| ------------ | --------- |
-| **Type**     | `integer` |
-| **Required** | Yes       |
-
-**Description:** Initial linewidth
-
-### <a name="ui-defaults_plot_list_jobsPerPage"></a>26.3. Property `cc-backend configuration file schema > ui-defaults > plot_list_jobsPerPage`
-
-|              |           |
-| ------------ | --------- |
-| **Type**     | `integer` |
-| **Required** | Yes       |
-
-**Description:** Jobs shown per page in job lists
-
-### <a name="ui-defaults_plot_view_plotsPerRow"></a>26.4. Property `cc-backend configuration file schema > ui-defaults > plot_view_plotsPerRow`
-
-|              |           |
-| ------------ | --------- |
-| **Type**     | `integer` |
-| **Required** | Yes       |
-
-**Description:** Number of plots per row in single job view
-
-### <a name="ui-defaults_plot_view_showPolarplot"></a>26.5. Property `cc-backend configuration file schema > ui-defaults > plot_view_showPolarplot`
-
-|              |           |
-| ------------ | --------- |
-| **Type**     | `boolean` |
-| **Required** | Yes       |
-
-**Description:** Option to toggle polar plot in single job view
-
-### <a name="ui-defaults_plot_view_showRoofline"></a>26.6. Property `cc-backend configuration file schema > ui-defaults > plot_view_showRoofline`
-
-|              |           |
-| ------------ | --------- |
-| **Type**     | `boolean` |
-| **Required** | Yes       |
-
-**Description:** Option to toggle roofline plot in single job view
-
-### <a name="ui-defaults_plot_view_showStatTable"></a>26.7. Property `cc-backend configuration file schema > ui-defaults > plot_view_showStatTable`
-
-|              |           |
-| ------------ | --------- |
-| **Type**     | `boolean` |
-| **Required** | Yes       |
-
-**Description:** Option to toggle the node statistic table in single job view
-
-### <a name="ui-defaults_system_view_selectedMetric"></a>26.8. Property `cc-backend configuration file schema > ui-defaults > system_view_selectedMetric`
-
-|              |          |
-| ------------ | -------- |
-| **Type**     | `string` |
-| **Required** | Yes      |
-
-**Description:** Initial metric shown in system view
-
-### <a name="ui-defaults_job_view_showFootprint"></a>26.9. Property `cc-backend configuration file schema > ui-defaults > job_view_showFootprint`
-
-|              |           |
-| ------------ | --------- |
-| **Type**     | `boolean` |
-| **Required** | Yes       |
-
-**Description:** Option to toggle footprint ui in single job view
-
-### <a name="ui-defaults_job_list_usePaging"></a>26.10. Property `cc-backend configuration file schema > ui-defaults > job_list_usePaging`
-
-|              |           |
-| ------------ | --------- |
-| **Type**     | `boolean` |
-| **Required** | Yes       |
-
-**Description:** Option to switch from continous scroll to paging
-
-### <a name="ui-defaults_analysis_view_histogramMetrics"></a>26.11. Property `cc-backend configuration file schema > ui-defaults > analysis_view_histogramMetrics`
-
-|              |                   |
-| ------------ | ----------------- |
-| **Type**     | `array of string` |
-| **Required** | Yes               |
-
-**Description:** Metrics to show as job count histograms in analysis view
-
-|                      | Array restrictions |
-| -------------------- | ------------------ |
-| **Min items**        | N/A                |
-| **Max items**        | N/A                |
-| **Items unicity**    | False              |
-| **Additional items** | False              |
-| **Tuple validation** | See below          |
-
-| Each item of this array must be                                                           | Description |
-| ----------------------------------------------------------------------------------------- | ----------- |
-| [analysis_view_histogramMetrics items](#ui-defaults_analysis_view_histogramMetrics_items) | -           |
-
-#### <a name="ui-defaults_analysis_view_histogramMetrics_items"></a>26.11.1. cc-backend configuration file schema > ui-defaults > analysis_view_histogramMetrics > analysis_view_histogramMetrics items
-
-|              |          |
-| ------------ | -------- |
-| **Type**     | `string` |
-| **Required** | No       |
-
-### <a name="ui-defaults_analysis_view_scatterPlotMetrics"></a>26.12. Property `cc-backend configuration file schema > ui-defaults > analysis_view_scatterPlotMetrics`
-
-|              |                  |
-| ------------ | ---------------- |
-| **Type**     | `array of array` |
-| **Required** | Yes              |
-
-**Description:** Initial scatter plto configuration in analysis view
-
-|                      | Array restrictions |
-| -------------------- | ------------------ |
-| **Min items**        | N/A                |
-| **Max items**        | N/A                |
-| **Items unicity**    | False              |
-| **Additional items** | False              |
-| **Tuple validation** | See below          |
-
-| Each item of this array must be                                                               | Description |
-| --------------------------------------------------------------------------------------------- | ----------- |
-| [analysis_view_scatterPlotMetrics items](#ui-defaults_analysis_view_scatterPlotMetrics_items) | -           |
-
-#### <a name="ui-defaults_analysis_view_scatterPlotMetrics_items"></a>26.12.1. cc-backend configuration file schema > ui-defaults > analysis_view_scatterPlotMetrics > analysis_view_scatterPlotMetrics items
-
-|              |                   |
-| ------------ | ----------------- |
-| **Type**     | `array of string` |
-| **Required** | No                |
-
-|                      | Array restrictions |
-| -------------------- | ------------------ |
-| **Min items**        | 1                  |
-| **Max items**        | N/A                |
-| **Items unicity**    | False              |
-| **Additional items** | False              |
-| **Tuple validation** | See below          |
-
-| Each item of this array must be                                                                           | Description |
-| --------------------------------------------------------------------------------------------------------- | ----------- |
-| [analysis_view_scatterPlotMetrics items items](#ui-defaults_analysis_view_scatterPlotMetrics_items_items) | -           |
-
-##### <a name="ui-defaults_analysis_view_scatterPlotMetrics_items_items"></a>26.12.1.1. cc-backend configuration file schema > ui-defaults > analysis_view_scatterPlotMetrics > analysis_view_scatterPlotMetrics items > analysis_view_scatterPlotMetrics items items
-
-|              |          |
-| ------------ | -------- |
-| **Type**     | `string` |
-| **Required** | No       |
-
-### <a name="ui-defaults_job_view_nodestats_selectedMetrics"></a>26.13. Property `cc-backend configuration file schema > ui-defaults > job_view_nodestats_selectedMetrics`
-
-|              |                   |
-| ------------ | ----------------- |
-| **Type**     | `array of string` |
-| **Required** | Yes               |
-
-**Description:** Initial metrics shown in node statistics table of single job view
-
-|                      | Array restrictions |
-| -------------------- | ------------------ |
-| **Min items**        | N/A                |
-| **Max items**        | N/A                |
-| **Items unicity**    | False              |
-| **Additional items** | False              |
-| **Tuple validation** | See below          |
-
-| Each item of this array must be                                                                   | Description |
-| ------------------------------------------------------------------------------------------------- | ----------- |
-| [job_view_nodestats_selectedMetrics items](#ui-defaults_job_view_nodestats_selectedMetrics_items) | -           |
-
-#### <a name="ui-defaults_job_view_nodestats_selectedMetrics_items"></a>26.13.1. cc-backend configuration file schema > ui-defaults > job_view_nodestats_selectedMetrics > job_view_nodestats_selectedMetrics items
-
-|              |          |
-| ------------ | -------- |
-| **Type**     | `string` |
-| **Required** | No       |
-
-### <a name="ui-defaults_job_view_selectedMetrics"></a>26.14. Property `cc-backend configuration file schema > ui-defaults > job_view_selectedMetrics`
-
-|              |                   |
-| ------------ | ----------------- |
-| **Type**     | `array of string` |
-| **Required** | Yes               |
-
-|                      | Array restrictions |
-| -------------------- | ------------------ |
-| **Min items**        | N/A                |
-| **Max items**        | N/A                |
-| **Items unicity**    | False              |
-| **Additional items** | False              |
-| **Tuple validation** | See below          |
-
-| Each item of this array must be                                               | Description |
-| ----------------------------------------------------------------------------- | ----------- |
-| [job_view_selectedMetrics items](#ui-defaults_job_view_selectedMetrics_items) | -           |
-
-#### <a name="ui-defaults_job_view_selectedMetrics_items"></a>26.14.1. cc-backend configuration file schema > ui-defaults > job_view_selectedMetrics > job_view_selectedMetrics items
-
-|              |          |
-| ------------ | -------- |
-| **Type**     | `string` |
-| **Required** | No       |
-
-### <a name="ui-defaults_plot_general_colorscheme"></a>26.15. Property `cc-backend configuration file schema > ui-defaults > plot_general_colorscheme`
-
-|              |                   |
-| ------------ | ----------------- |
-| **Type**     | `array of string` |
-| **Required** | Yes               |
-
-**Description:** Initial color scheme
-
-|                      | Array restrictions |
-| -------------------- | ------------------ |
-| **Min items**        | N/A                |
-| **Max items**        | N/A                |
-| **Items unicity**    | False              |
-| **Additional items** | False              |
-| **Tuple validation** | See below          |
-
-| Each item of this array must be                                               | Description |
-| ----------------------------------------------------------------------------- | ----------- |
-| [plot_general_colorscheme items](#ui-defaults_plot_general_colorscheme_items) | -           |
-
-#### <a name="ui-defaults_plot_general_colorscheme_items"></a>26.15.1. cc-backend configuration file schema > ui-defaults > plot_general_colorscheme > plot_general_colorscheme items
-
-|              |          |
-| ------------ | -------- |
-| **Type**     | `string` |
-| **Required** | No       |
-
-### <a name="ui-defaults_plot_list_selectedMetrics"></a>26.16. Property `cc-backend configuration file schema > ui-defaults > plot_list_selectedMetrics`
-
-|              |                   |
-| ------------ | ----------------- |
-| **Type**     | `array of string` |
-| **Required** | Yes               |
-
-**Description:** Initial metric plots shown in jobs lists
-
-|                      | Array restrictions |
-| -------------------- | ------------------ |
-| **Min items**        | N/A                |
-| **Max items**        | N/A                |
-| **Items unicity**    | False              |
-| **Additional items** | False              |
-| **Tuple validation** | See below          |
-
-| Each item of this array must be                                                 | Description |
-| ------------------------------------------------------------------------------- | ----------- |
-| [plot_list_selectedMetrics items](#ui-defaults_plot_list_selectedMetrics_items) | -           |
-
-#### <a name="ui-defaults_plot_list_selectedMetrics_items"></a>26.16.1. cc-backend configuration file schema > ui-defaults > plot_list_selectedMetrics > plot_list_selectedMetrics items
-
-|              |          |
-| ------------ | -------- |
-| **Type**     | `string` |
-| **Required** | No       |
+## Section `main`
+
+*Source: `internal/config/schema.go`*
+
+| Property | Type | Required | Description |
+| -------- | ---- | -------- | ----------- |
+| `addr` | string | No | Address where the HTTP(S) server listens (e.g. `"0.0.0.0:8080"`). Default: `localhost:8080`. |
+| `api-allowed-ips` | array of string | No | IPv4 addresses from which secured API endpoints can be reached. Default: no restriction. |
+| `user` | string | No | Drop root permissions after port is taken. Only useful for privileged ports. |
+| `group` | string | No | Drop root permissions after port is taken. Only useful for privileged ports. |
+| `disable-authentication` | boolean | No | Disable authentication for API and Web-UI. Default: `false`. |
+| `embed-static-files` | boolean | No | Serve static files from within the binary. Default: `true`. |
+| `static-files` | string | No | Path to static assets when `embed-static-files` is `false`. |
+| `db` | string | No | Path to the SQLite database file. Default: `./var/job.db`. |
+| `enable-job-taggers` | boolean | No | Enable automatic application and job-class taggers. Default: `false`. |
+| `validate` | boolean | No | Validate all input JSON documents against JSON schemas. Default: `false`. |
+| `session-max-age` | string | No | Maximum session lifetime as a `time.ParseDuration` string. Empty = never expires. Default: `168h`. |
+| `https-cert-file` | string | No | Path to TLS certificate file. HTTPS is enabled when both cert and key are set. |
+| `https-key-file` | string | No | Path to TLS key file. HTTPS is enabled when both cert and key are set. |
+| `redirect-http-to` | string | No | Redirect port-80 requests to this URL when `addr` does not end in `:80`. |
+| `stop-jobs-exceeding-walltime` | integer | No | Automatically stop jobs running more than this many seconds past their walltime. `0` = disabled. |
+| `short-running-jobs-duration` | integer | No | Hide running jobs shorter than this many seconds. Default: `300`. |
+| `emission-constant` | integer | No | CO₂ emission factor in g/kWh. When set, the UI shows estimated CO₂ per job. |
+| `machine-state-dir` | string | No | Directory for MachineState files (persists machine state across restarts). |
+| `systemd-unit` | string | No | Systemd unit name for the log viewer integration. Default: `clustercockpit`. |
+| `resampling` | object | No | Enable dynamic downsampling of metric time-series. See sub-properties below. |
+| `api-subjects` | object | No | NATS subjects for job/node events. Disables REST start/stop endpoints when set. See sub-properties below. |
+| `nodestate-retention` | object | No | Automatic cleanup of old node-state rows. See sub-properties below. |
+| `db-config` | object | No | SQLite tuning options. See sub-properties below. |
+
+### `resampling`
+
+| Property | Type | Required | Description |
+| -------- | ---- | -------- | ----------- |
+| `minimum-points` | integer | No | Minimum data points required to trigger resampling. |
+| `trigger` | integer | **Yes** | Trigger next zoom level when visible points fall below this value. |
+| `resolutions` | array of integer | **Yes** | Resampling target resolutions in seconds (e.g. `[600, 300, 60]`). |
+
+### `api-subjects`
+
+| Property | Type | Required | Description |
+| -------- | ---- | -------- | ----------- |
+| `subject-job-event` | string | **Yes** | NATS subject for job events (`start_job`, `stop_job`). |
+| `subject-node-state` | string | **Yes** | NATS subject for node state updates. |
+| `job-concurrency` | integer | No | Concurrent goroutines for job event processing. Default: `8`. |
+| `node-concurrency` | integer | No | Concurrent goroutines for node state processing. Default: `2`. |
+
+### `nodestate-retention`
+
+| Property | Type | Required | Description |
+| -------- | ---- | -------- | ----------- |
+| `policy` | string | **Yes** | `delete` — remove old rows; `move` — archive to Parquet then delete. |
+| `age` | integer | No | Retention age in hours. Rows older than this are affected. Default: `24`. |
+| `target-kind` | string | No | Target storage for `move`: `file` or `s3`. Default: `file`. |
+| `target-path` | string | No | Filesystem path for Parquet files (`target-kind: file`). |
+| `target-endpoint` | string | No | S3 endpoint URL (`target-kind: s3`). |
+| `target-bucket` | string | No | S3 bucket name (`target-kind: s3`). |
+| `target-access-key` | string | No | S3 access key (`target-kind: s3`). |
+| `target-secret-key` | string | No | S3 secret key (`target-kind: s3`). |
+| `target-region` | string | No | S3 region (`target-kind: s3`). |
+| `target-use-path-style` | boolean | No | Use path-style S3 URLs — required for MinIO (`target-kind: s3`). |
+| `max-file-size-mb` | integer | No | Maximum Parquet file size in MB before splitting. Default: `128`. |
+
+### `db-config`
+
+| Property | Type | Required | Description |
+| -------- | ---- | -------- | ----------- |
+| `cache-size-mb` | integer | No | SQLite page cache size per connection in MB. Default: `2048`. |
+| `soft-heap-limit-mb` | integer | No | Process-wide SQLite soft heap limit in MB. Default: `16384`. |
+| `max-open-connections` | integer | No | Maximum open database connections. Default: `4`. |
+| `max-idle-connections` | integer | No | Maximum idle database connections. Default: `4`. |
+| `max-idle-time-minutes` | integer | No | Maximum idle time per connection in minutes. Default: `10`. |
+| `busy-timeout-ms` | integer | No | SQLite busy timeout in ms. SQLite retries on contention for this duration before returning `SQLITE_BUSY`. Default: `60000`. |
 
 ---
 
-Generated using [json-schema-for-humans](https://github.com/coveooss/json-schema-for-humans) on 2024-12-04 at 16:45:59 +0100
+## Section `auth`
+
+*Source: `internal/auth/schema.go`*
+
+### `auth.jwts`
+
+| Property | Type | Required | Description |
+| -------- | ---- | -------- | ----------- |
+| `max-age` | string | **Yes** | Token validity as a `time.ParseDuration` string. |
+| `cookie-name` | string | No | Cookie name to check for a JWT token. |
+| `validate-user` | boolean | No | Deny login for users not in the database; overwrite JWT roles with DB roles. |
+| `trusted-issuer` | string | No | Accept JWTs from this external issuer. |
+| `sync-user-on-login` | boolean | No | Add unknown users to the DB on login using JWT claims. |
+| `update-user-on-login` | boolean | No | Update existing user in DB on login with JWT claims (name, roles, projects). |
+
+### `auth.ldap`
+
+| Property | Type | Required | Description |
+| -------- | ---- | -------- | ----------- |
+| `url` | string | **Yes** | LDAP directory server URL. |
+| `user-base` | string | **Yes** | Base DN of the user tree root. |
+| `search-dn` | string | **Yes** | DN for LDAP admin account with read rights. |
+| `user-bind` | string | **Yes** | LDAP bind expression. Must contain `uid={username}`. |
+| `user-filter` | string | **Yes** | LDAP filter for user synchronization. |
+| `username-attr` | string | No | LDAP attribute for full user name. Default: `gecos`. |
+| `uid-attr` | string | No | LDAP attribute used as login username. Default: `uid`. |
+| `sync-interval` | string | No | Interval for syncing user table with LDAP as a `time.ParseDuration` string. |
+| `sync-del-old-users` | boolean | No | Delete users from DB that no longer exist in LDAP. |
+| `sync-user-on-login` | boolean | No | Add unknown users to the DB on login if they exist in LDAP. |
+| `update-user-on-login` | boolean | No | Update existing user in DB on login with LDAP values (name, roles, projects). |
+
+### `auth.oidc`
+
+| Property | Type | Required | Description |
+| -------- | ---- | -------- | ----------- |
+| `provider` | string | **Yes** | OpenID Connect provider URL. |
+| `sync-user-on-login` | boolean | No | Add unknown users to the DB on login with OIDC claims. |
+| `update-user-on-login` | boolean | No | Update existing user in DB on login with OIDC claims (name, roles, projects). |
+
+---
+
+## Section `metric-store`
+
+*Source: `pkg/metricstore/configSchema.go`*
+
+| Property | Type | Required | Description |
+| -------- | ---- | -------- | ----------- |
+| `retention-in-memory` | string | **Yes** | How long to keep metrics in memory as a `time.ParseDuration` string (e.g. `"48h"`). |
+| `memory-cap` | integer | **Yes** | Upper memory cap for the metric store in GB. |
+| `num-workers` | integer | No | Concurrent workers for checkpoint/archive operations. Default: `min(NumCPU/2+1, 10)`. |
+| `checkpoint-interval` | string | No | Interval between checkpoints as a `time.ParseDuration` string. Default: `"12h"`. |
+| `checkpoints` | object | No | Checkpoint storage options. See sub-properties below. |
+| `cleanup` | object | No | Cleanup/archival options. See sub-properties below. |
+| `nats-subscriptions` | array of object | No | NATS subjects to subscribe to for metric data ingestion. See sub-properties below. |
+
+### `metric-store.checkpoints`
+
+| Property | Type | Required | Description |
+| -------- | ---- | -------- | ----------- |
+| `file-format` | string | No | `wal` (binary snapshot + WAL, crash-safe) or `json` (human-readable). Default: `wal`. |
+| `directory` | string | No | Directory for checkpoint files. Default: `./var/checkpoints`. |
+| `max-wal-size` | integer | No | Maximum WAL file size in bytes per host. `0` = unlimited. Default: `0`. |
+
+### `metric-store.cleanup`
+
+| Property | Type | Required | Description |
+| -------- | ---- | -------- | ----------- |
+| `mode` | string | No | `delete` (default) or `archive`. |
+| `directory` | string | Required when `mode: archive` | Target directory for archived metric data. |
+
+### `metric-store.nats-subscriptions` items
+
+| Property | Type | Required | Description |
+| -------- | ---- | -------- | ----------- |
+| `subscribe-to` | string | **Yes** | NATS subject name to subscribe to. |
+| `cluster-tag` | string | No | Default cluster tag for lines that carry no cluster tag. |
+
+---
+
+## Section `cron`
+
+*Source: `internal/taskmanager/taskManager.go`*
+
+| Property | Type | Required | Description |
+| -------- | ---- | -------- | ----------- |
+| `commit-job-worker` | string | No | Frequency of the commit-job worker. Default: `"2m"`. |
+| `duration-worker` | string | No | Frequency of the duration worker. Default: `"5m"`. |
+| `footprint-worker` | string | No | Frequency of the footprint worker. Default: `"10m"`. |
+
+---
+
+## Section `archive`
+
+*Source: `pkg/archive/ConfigSchema.go`*
+
+| Property | Type | Required | Description |
+| -------- | ---- | -------- | ----------- |
+| `kind` | string | **Yes** | Archive backend: `file`, `s3`, or `sqlite`. |
+| `path` | string | No | Job-archive path for `file` backend. Default: `./var/job-archive`. |
+| `db-path` | string | No | SQLite database file path for `sqlite` backend. |
+| `endpoint` | string | No | S3 endpoint URL for `s3` backend (required for MinIO and S3-compatible services). |
+| `access-key` | string | No | S3 access key ID for `s3` backend. |
+| `secret-key` | string | No | S3 secret access key for `s3` backend. |
+| `bucket` | string | No | S3 bucket name for `s3` backend. |
+| `region` | string | No | S3 region for `s3` backend. |
+| `use-path-style` | boolean | No | Use path-style S3 URLs for `s3` backend (required for MinIO). |
+| `compression` | integer | No | Compress jobs older than this many days. Default: `7`. |
+| `retention` | object | No | Retention policy configuration. See sub-properties below. |
+
+### `archive.retention`
+
+| Property | Type | Required | Description |
+| -------- | ---- | -------- | ----------- |
+| `policy` | string | **Yes** | `none`, `delete`, `copy`, or `move`. |
+| `format` | string | No | Output format for `copy`/`move`: `json` (default) or `parquet`. |
+| `include-db` | boolean | No | Also remove jobs from the database. Default: `true`. |
+| `omit-tagged` | string | No | `none` = process all jobs (default); `all` = skip any tagged job; `user` = skip user-tagged jobs (auto-tagger tags `app`/`jobClass` are not user tags). |
+| `age` | integer | No | Process jobs with `startTime` older than this many days. Default: `7`. |
+| `target-kind` | string | No | Target storage for `copy`/`move`: `file` or `s3`. Default: `file`. |
+| `target-path` | string | No | Filesystem path for target storage (`target-kind: file`). |
+| `target-endpoint` | string | No | S3 endpoint URL for target (`target-kind: s3`). |
+| `target-bucket` | string | No | S3 bucket name for target (`target-kind: s3`). |
+| `target-access-key` | string | No | S3 access key for target (`target-kind: s3`). |
+| `target-secret-key` | string | No | S3 secret key for target (`target-kind: s3`). |
+| `target-region` | string | No | S3 region for target (`target-kind: s3`). |
+| `target-use-path-style` | boolean | No | Use path-style S3 URLs for target — required for MinIO (`target-kind: s3`). |
+| `max-file-size-mb` | integer | No | Maximum Parquet file size in MB before splitting. Default: `512`. Only for `format: parquet`. |
+
+---
+
+## Section `nats`
+
+*Source: cc-lib (external library)*
+
+| Property | Type | Required | Description |
+| -------- | ---- | -------- | ----------- |
+| `address` | string | **Yes** | NATS server address (e.g. `"nats://localhost:4222"`). |
+| `username` | string | No | Username for NATS authentication. |
+| `password` | string | No | Password for NATS authentication. |
+| `creds-file-path` | string | No | Path to NATS credentials file. |
+
+---
+
+## Section `metric-store-external`
+
+*Source: `internal/metricdispatch/configSchema.go`*
+
+An array of external cc-metric-store instances for reading metric data. Each
+entry maps a scope (cluster name or `*` wildcard) to an external metric store.
+
+| Property | Type | Required | Description |
+| -------- | ---- | -------- | ----------- |
+| `scope` | string | **Yes** | Cluster name or `*` as a default fallback. |
+| `url` | string | **Yes** | URL of the external cc-metric-store endpoint (e.g. `"http://host:8082"`). |
+| `token` | string | **Yes** | JWT authentication token for the external metric store. |
+
+---
+
+## Section `ui`
+
+*Source: `web/configSchema.go`*
+
+### `ui.job-list`
+
+| Property | Type | Required | Description |
+| -------- | ---- | -------- | ----------- |
+| `use-paging` | boolean | No | Use classic paging instead of continuous scrolling by default. |
+| `show-footprint` | boolean | No | Show footprint bars as first column by default. |
+
+### `ui.node-list`
+
+| Property | Type | Required | Description |
+| -------- | ---- | -------- | ----------- |
+| `use-paging` | boolean | No | Use classic paging instead of continuous scrolling by default. |
+
+### `ui.job-view`
+
+| Property | Type | Required | Description |
+| -------- | ---- | -------- | ----------- |
+| `show-polar-plot` | boolean | No | Show the job metric footprint polar plot by default. |
+| `show-footprint` | boolean | No | Show the annotated job metric footprint bars by default. |
+| `show-roofline` | boolean | No | Show the job roofline plot by default. |
+| `show-stat-table` | boolean | No | Show the job metric statistics table by default. |
+
+### `ui.metric-config`
+
+Global initial metric selections for all clusters (overridable per cluster/subcluster).
+
+| Property | Type | Required | Description |
+| -------- | ---- | -------- | ----------- |
+| `job-list-metrics` | array of string | No | Default metrics shown in job lists for new users. |
+| `job-view-plot-metrics` | array of string | No | Default metrics shown as plots in job view for new users. |
+| `job-view-table-metrics` | array of string | No | Default metrics shown in the job view statistics table for new users. |
+| `clusters` | array of object | No | Per-cluster overrides. Each entry has `name` (required) and optional `job-list-metrics`, `job-view-plot-metrics`, `job-view-table-metrics`, and `sub-clusters`. |
+
+#### `ui.metric-config.clusters[].sub-clusters` items
+
+| Property | Type | Required | Description |
+| -------- | ---- | -------- | ----------- |
+| `name` | string | **Yes** | Subcluster name. |
+| `job-list-metrics` | array of string | No | Overrides global job-list metrics for this subcluster. |
+| `job-view-plot-metrics` | array of string | No | Overrides global job-view plot metrics for this subcluster. |
+| `job-view-table-metrics` | array of string | No | Overrides global job-view table metrics for this subcluster. |
+
+### `ui.plot-configuration`
+
+| Property | Type | Required | Description |
+| -------- | ---- | -------- | ----------- |
+| `color-background` | boolean | No | Color metric plot backgrounds by threshold limits by default. |
+| `plots-per-row` | integer | No | Number of plots per row in job, node, and analysis views. |
+| `line-width` | integer | No | Initial plot line thickness. |
+| `color-scheme` | array of string | No | Initial color scheme for metric plots. |
