@@ -15,12 +15,14 @@ Because tokens are signed using public/private key pairs, the signature also
 certifies that only the party holding the private key is the one that signed it.
 JWT tokens in ClusterCockpit are not encrypted, means all information is clear
 text. Expiration of the generated tokens can be configured in config.json using
-the `max-age` option in the jwts object. Example:
+the `max-age` option in the `auth.jwts` object. Example:
 
 ```json
-"jwts": {
+"auth": {
+  "jwts": {
     "max-age": "168h"
-},
+  }
+}
 ```
 
 The party that generates and signs JWT tokens has to be in possession of the

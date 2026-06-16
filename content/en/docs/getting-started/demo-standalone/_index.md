@@ -31,66 +31,38 @@ directory, initialize the sqlite database, `config.json` and `.env` files:
 ./cc-backend -init
 ```
 
-Open `config.json` in an editor of your choice to edit the existing clusters
-name and add a second cluster. Name the clusters `fritz` and `alex`. The file
-should look as below afterwards:
+The `./cc-backend -init` command creates a `config.json` with sensible defaults.
+The cluster configurations (`fritz` and `alex`) are embedded in the job archive
+you will download below — no manual cluster configuration is needed in
+`config.json`. The generated file should look similar to:
 
-```json {linenos=table,hl_lines=[9,31]}
+```json
 {
+  "main": {
     "addr": "127.0.0.1:8080",
-    "archive": {
-        "kind": "file",
-        "path": "./var/job-archive"
+    "short-running-jobs-duration": 300,
+    "resampling": {
+      "minimum-points": 600,
+      "trigger": 300,
+      "resolutions": [240, 60]
     },
+    "api-allowed-ips": ["*"],
+    "emission-constant": 317
+  },
+  "cron": {
+    "commit-job-worker": "1m",
+    "duration-worker": "5m",
+    "footprint-worker": "10m"
+  },
+  "archive": {
+    "kind": "file",
+    "path": "./var/job-archive"
+  },
+  "auth": {
     "jwts": {
-        "session-max-age": "24h",
-    },
-    "clusters": [
-        {
-            "name": "fritz",
-            "metricDataRepository": {
-                "kind": "cc-metric-store",
-                "url": "http://localhost:8082",
-                "token": ""
-            },
-            "filterRanges": {
-                "numNodes": {
-                    "from": 1,
-                    "to": 64
-                },
-                "duration": {
-                    "from": 0,
-                    "to": 86400
-                },
-                "startTime": {
-                    "from": "2023-01-01T00:00:00Z",
-                    "to": null
-                }
-            }
-        },
-        {
-            "name": "alex",
-            "metricDataRepository": {
-                "kind": "cc-metric-store",
-                "url": "http://localhost:8082",
-                "token": ""
-            },
-            "filterRanges": {
-                "numNodes": {
-                    "from": 1,
-                    "to": 64
-                },
-                "duration": {
-                    "from": 0,
-                    "to": 86400
-                },
-                "startTime": {
-                    "from": "2023-01-01T00:00:00Z",
-                    "to": null
-                }
-            }
-        }
-    ]
+      "max-age": "2000h"
+    }
+  }
 }
 ```
 

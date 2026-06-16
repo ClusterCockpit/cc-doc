@@ -60,10 +60,12 @@ CROSS_LOGIN_JWT_PUBLIC_KEY="+51iXX8BdLFocrppRxIw52xCOf8xFSH/eNilN5IHVGc="
    rejected and roles set via JWT will be ignored.
 
 ```json
-"jwts": {
-    "cookieName": "access_cc",
-    "forceJWTValidationViaDatabase": true,
-    "trustedExternalIssuer": "auth.example.com"
+"auth": {
+  "jwts": {
+    "cookie-name": "access_cc",
+    "validate-user": true,
+    "trusted-issuer": "auth.example.com"
+  }
 }
 ```
 

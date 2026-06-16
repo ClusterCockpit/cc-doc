@@ -166,7 +166,7 @@ The Login function:
   * Return public cross login key
   * Otherwise return standard public key
 * Check if claims are valid
-* Depending on the option `validateUser` the roles are
+* Depending on the option `validate-user` the roles are
   extracted from JWT token or taken from user object fetched from database
 * Ask browser to delete the JWT cookie
 * In case user does not exist in the database and the option `SyncUserOnLogin`
@@ -193,7 +193,7 @@ Implemented in JWTAuthenticator:
   prefix
 * Parse token and check if it is valid. The Parse routine will also check if the
   token is expired.
-* If the option `validateUser` is set it will ensure the
+* If the option `validate-user` is set it will ensure the
   user object exists in the database and takes the roles from the database user
 * Otherwise the roles are extracted from the roles claim
 * Returns a valid user object with AuthType set to AuthToken
