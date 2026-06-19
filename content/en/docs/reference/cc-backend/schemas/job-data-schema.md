@@ -6,11 +6,11 @@ tags: [Backend]
 weight: 3
 ---
 
-The following schema in its raw form can be found in the [ClusterCockpit GitHub](https://github.com/ClusterCockpit/cc-backend/tree/main/pkg/schema/schemas) repository.
+The following schema in its raw form can be found in the [ClusterCockpit GitHub](https://github.com/ClusterCockpit/cc-lib/tree/main/schema/schemas) repository.
 
 {{< alert title="Manual Updates">}}
   Changes to the original JSON schema found in the repository are not automatically rendered in this reference documentation.</br></br>
-  **Last Update:** 04.12.2024
+  **Last Update:** 19.06.2026
 {{< /alert >}}
 
 ## Job metric data list
@@ -83,32 +83,40 @@ The following schema in its raw form can be found in the [ClusterCockpit GitHub]
   - [17.1. Property `Job metric data list > eth_read_bw > node`](#eth_read_bw_node)
 - [18. Property `Job metric data list > eth_write_bw`](#eth_write_bw)
   - [18.1. Property `Job metric data list > eth_write_bw > node`](#eth_write_bw_node)
-- [19. Property `Job metric data list > filesystems`](#filesystems)
-  - [19.1. Job metric data list > filesystems > filesystems items](#filesystems_items)
-    - [19.1.1. Property `Job metric data list > filesystems > filesystems items > name`](#filesystems_items_name)
-    - [19.1.2. Property `Job metric data list > filesystems > filesystems items > type`](#filesystems_items_type)
-    - [19.1.3. Property `Job metric data list > filesystems > filesystems items > read_bw`](#filesystems_items_read_bw)
-      - [19.1.3.1. Property `Job metric data list > filesystems > filesystems items > read_bw > node`](#filesystems_items_read_bw_node)
-    - [19.1.4. Property `Job metric data list > filesystems > filesystems items > write_bw`](#filesystems_items_write_bw)
-      - [19.1.4.1. Property `Job metric data list > filesystems > filesystems items > write_bw > node`](#filesystems_items_write_bw_node)
-    - [19.1.5. Property `Job metric data list > filesystems > filesystems items > read_req`](#filesystems_items_read_req)
-      - [19.1.5.1. Property `Job metric data list > filesystems > filesystems items > read_req > node`](#filesystems_items_read_req_node)
-    - [19.1.6. Property `Job metric data list > filesystems > filesystems items > write_req`](#filesystems_items_write_req)
-      - [19.1.6.1. Property `Job metric data list > filesystems > filesystems items > write_req > node`](#filesystems_items_write_req_node)
-    - [19.1.7. Property `Job metric data list > filesystems > filesystems items > inodes`](#filesystems_items_inodes)
-      - [19.1.7.1. Property `Job metric data list > filesystems > filesystems items > inodes > node`](#filesystems_items_inodes_node)
-    - [19.1.8. Property `Job metric data list > filesystems > filesystems items > accesses`](#filesystems_items_accesses)
-      - [19.1.8.1. Property `Job metric data list > filesystems > filesystems items > accesses > node`](#filesystems_items_accesses_node)
-    - [19.1.9. Property `Job metric data list > filesystems > filesystems items > fsync`](#filesystems_items_fsync)
-      - [19.1.9.1. Property `Job metric data list > filesystems > filesystems items > fsync > node`](#filesystems_items_fsync_node)
-    - [19.1.10. Property `Job metric data list > filesystems > filesystems items > create`](#filesystems_items_create)
-      - [19.1.10.1. Property `Job metric data list > filesystems > filesystems items > create > node`](#filesystems_items_create_node)
-    - [19.1.11. Property `Job metric data list > filesystems > filesystems items > open`](#filesystems_items_open)
-      - [19.1.11.1. Property `Job metric data list > filesystems > filesystems items > open > node`](#filesystems_items_open_node)
-    - [19.1.12. Property `Job metric data list > filesystems > filesystems items > close`](#filesystems_items_close)
-      - [19.1.12.1. Property `Job metric data list > filesystems > filesystems items > close > node`](#filesystems_items_close_node)
-    - [19.1.13. Property `Job metric data list > filesystems > filesystems items > seek`](#filesystems_items_seek)
-      - [19.1.13.1. Property `Job metric data list > filesystems > filesystems items > seek > node`](#filesystems_items_seek_node)
+- [19. Property `Job metric data list > ic_rcv_packets`](#ic_rcv_packets)
+  - [19.1. Property `Job metric data list > ic_rcv_packets > node`](#ic_rcv_packets_node)
+- [20. Property `Job metric data list > ic_send_packets`](#ic_send_packets)
+  - [20.1. Property `Job metric data list > ic_send_packets > node`](#ic_send_packets_node)
+- [21. Property `Job metric data list > ic_read_bw`](#ic_read_bw)
+  - [21.1. Property `Job metric data list > ic_read_bw > node`](#ic_read_bw_node)
+- [22. Property `Job metric data list > ic_write_bw`](#ic_write_bw)
+  - [22.1. Property `Job metric data list > ic_write_bw > node`](#ic_write_bw_node)
+- [23. Property `Job metric data list > filesystems`](#filesystems)
+  - [23.1. Job metric data list > filesystems > filesystems items](#filesystems_items)
+    - [23.1.1. Property `Job metric data list > filesystems > filesystems items > name`](#filesystems_items_name)
+    - [23.1.2. Property `Job metric data list > filesystems > filesystems items > type`](#filesystems_items_type)
+    - [23.1.3. Property `Job metric data list > filesystems > filesystems items > read_bw`](#filesystems_items_read_bw)
+      - [23.1.3.1. Property `Job metric data list > filesystems > filesystems items > read_bw > node`](#filesystems_items_read_bw_node)
+    - [23.1.4. Property `Job metric data list > filesystems > filesystems items > write_bw`](#filesystems_items_write_bw)
+      - [23.1.4.1. Property `Job metric data list > filesystems > filesystems items > write_bw > node`](#filesystems_items_write_bw_node)
+    - [23.1.5. Property `Job metric data list > filesystems > filesystems items > read_req`](#filesystems_items_read_req)
+      - [23.1.5.1. Property `Job metric data list > filesystems > filesystems items > read_req > node`](#filesystems_items_read_req_node)
+    - [23.1.6. Property `Job metric data list > filesystems > filesystems items > write_req`](#filesystems_items_write_req)
+      - [23.1.6.1. Property `Job metric data list > filesystems > filesystems items > write_req > node`](#filesystems_items_write_req_node)
+    - [23.1.7. Property `Job metric data list > filesystems > filesystems items > inodes`](#filesystems_items_inodes)
+      - [23.1.7.1. Property `Job metric data list > filesystems > filesystems items > inodes > node`](#filesystems_items_inodes_node)
+    - [23.1.8. Property `Job metric data list > filesystems > filesystems items > accesses`](#filesystems_items_accesses)
+      - [23.1.8.1. Property `Job metric data list > filesystems > filesystems items > accesses > node`](#filesystems_items_accesses_node)
+    - [23.1.9. Property `Job metric data list > filesystems > filesystems items > fsync`](#filesystems_items_fsync)
+      - [23.1.9.1. Property `Job metric data list > filesystems > filesystems items > fsync > node`](#filesystems_items_fsync_node)
+    - [23.1.10. Property `Job metric data list > filesystems > filesystems items > create`](#filesystems_items_create)
+      - [23.1.10.1. Property `Job metric data list > filesystems > filesystems items > create > node`](#filesystems_items_create_node)
+    - [23.1.11. Property `Job metric data list > filesystems > filesystems items > open`](#filesystems_items_open)
+      - [23.1.11.1. Property `Job metric data list > filesystems > filesystems items > open > node`](#filesystems_items_open_node)
+    - [23.1.12. Property `Job metric data list > filesystems > filesystems items > close`](#filesystems_items_close)
+      - [23.1.12.1. Property `Job metric data list > filesystems > filesystems items > close > node`](#filesystems_items_close_node)
+    - [23.1.13. Property `Job metric data list > filesystems > filesystems items > seek`](#filesystems_items_seek)
+      - [23.1.13.1. Property `Job metric data list > filesystems > filesystems items > seek > node`](#filesystems_items_seek_node)
 
 **Title:** Job metric data list
 
@@ -140,6 +148,10 @@ The following schema in its raw form can be found in the [ClusterCockpit GitHub]
 | - [clock](#clock )                             | No      | object          | No         | -          | Average core frequency                                      |
 | - [eth_read_bw](#eth_read_bw )                 | No      | object          | No         | -          | Ethernet read bandwidth                                     |
 | - [eth_write_bw](#eth_write_bw )               | No      | object          | No         | -          | Ethernet write bandwidth                                    |
+| - [ic_rcv_packets](#ic_rcv_packets )           | No      | object          | No         | -          | Interconnect received packets                               |
+| - [ic_send_packets](#ic_send_packets )         | No      | object          | No         | -          | Interconnect sent packets                                   |
+| - [ic_read_bw](#ic_read_bw )                   | No      | object          | No         | -          | Interconnect read bandwidth                                 |
+| - [ic_write_bw](#ic_write_bw )                 | No      | object          | No         | -          | Interconnect write bandwidth                                |
 | + [filesystems](#filesystems )                 | No      | array of object | No         | -          | Array of filesystems                                        |
 
 ## <a name="mem_used"></a>1. Property `Job metric data list > mem_used`
@@ -976,7 +988,107 @@ The following schema in its raw form can be found in the [ClusterCockpit GitHub]
 
 **Description:** 😅 ERROR in schema generation, a referenced schema could not be loaded, no documentation here unfortunately 🏜️
 
-## <a name="filesystems"></a>19. Property `Job metric data list > filesystems`
+## <a name="ic_rcv_packets"></a>19. Property `Job metric data list > ic_rcv_packets`
+
+|                           |                  |
+| ------------------------- | ---------------- |
+| **Type**                  | `object`         |
+| **Required**              | No               |
+| **Additional properties** | Any type allowed |
+
+**Description:** Interconnect received packets
+
+| Property                          | Pattern | Type   | Deprecated | Definition                               | Title/Description                                                                                             |
+| --------------------------------- | ------- | ------ | ---------- | ---------------------------------------- | ------------------------------------------------------------------------------------------------------------- |
+| + [node](#ic_rcv_packets_node )   | No      | object | No         | In embedfs://job-metric-data.schema.json | 😅 ERROR in schema generation, a referenced schema could not be loaded, no documentation here unfortunately 🏜️ |
+
+### <a name="ic_rcv_packets_node"></a>19.1. Property `Job metric data list > ic_rcv_packets > node`
+
+|                           |                                       |
+| ------------------------- | ------------------------------------- |
+| **Type**                  | `object`                              |
+| **Required**              | Yes                                   |
+| **Additional properties** | Any type allowed                      |
+| **Defined in**            | embedfs://job-metric-data.schema.json |
+
+**Description:** 😅 ERROR in schema generation, a referenced schema could not be loaded, no documentation here unfortunately 🏜️
+
+## <a name="ic_send_packets"></a>20. Property `Job metric data list > ic_send_packets`
+
+|                           |                  |
+| ------------------------- | ---------------- |
+| **Type**                  | `object`         |
+| **Required**              | No               |
+| **Additional properties** | Any type allowed |
+
+**Description:** Interconnect sent packets
+
+| Property                           | Pattern | Type   | Deprecated | Definition                               | Title/Description                                                                                             |
+| ---------------------------------- | ------- | ------ | ---------- | ---------------------------------------- | ------------------------------------------------------------------------------------------------------------- |
+| + [node](#ic_send_packets_node )   | No      | object | No         | In embedfs://job-metric-data.schema.json | 😅 ERROR in schema generation, a referenced schema could not be loaded, no documentation here unfortunately 🏜️ |
+
+### <a name="ic_send_packets_node"></a>20.1. Property `Job metric data list > ic_send_packets > node`
+
+|                           |                                       |
+| ------------------------- | ------------------------------------- |
+| **Type**                  | `object`                              |
+| **Required**              | Yes                                   |
+| **Additional properties** | Any type allowed                      |
+| **Defined in**            | embedfs://job-metric-data.schema.json |
+
+**Description:** 😅 ERROR in schema generation, a referenced schema could not be loaded, no documentation here unfortunately 🏜️
+
+## <a name="ic_read_bw"></a>21. Property `Job metric data list > ic_read_bw`
+
+|                           |                  |
+| ------------------------- | ---------------- |
+| **Type**                  | `object`         |
+| **Required**              | No               |
+| **Additional properties** | Any type allowed |
+
+**Description:** Interconnect read bandwidth
+
+| Property                        | Pattern | Type   | Deprecated | Definition                               | Title/Description                                                                                             |
+| ------------------------------- | ------- | ------ | ---------- | ---------------------------------------- | ------------------------------------------------------------------------------------------------------------- |
+| + [node](#ic_read_bw_node )     | No      | object | No         | In embedfs://job-metric-data.schema.json | 😅 ERROR in schema generation, a referenced schema could not be loaded, no documentation here unfortunately 🏜️ |
+
+### <a name="ic_read_bw_node"></a>21.1. Property `Job metric data list > ic_read_bw > node`
+
+|                           |                                       |
+| ------------------------- | ------------------------------------- |
+| **Type**                  | `object`                              |
+| **Required**              | Yes                                   |
+| **Additional properties** | Any type allowed                      |
+| **Defined in**            | embedfs://job-metric-data.schema.json |
+
+**Description:** 😅 ERROR in schema generation, a referenced schema could not be loaded, no documentation here unfortunately 🏜️
+
+## <a name="ic_write_bw"></a>22. Property `Job metric data list > ic_write_bw`
+
+|                           |                  |
+| ------------------------- | ---------------- |
+| **Type**                  | `object`         |
+| **Required**              | No               |
+| **Additional properties** | Any type allowed |
+
+**Description:** Interconnect write bandwidth
+
+| Property                         | Pattern | Type   | Deprecated | Definition                               | Title/Description                                                                                             |
+| -------------------------------- | ------- | ------ | ---------- | ---------------------------------------- | ------------------------------------------------------------------------------------------------------------- |
+| + [node](#ic_write_bw_node )     | No      | object | No         | In embedfs://job-metric-data.schema.json | 😅 ERROR in schema generation, a referenced schema could not be loaded, no documentation here unfortunately 🏜️ |
+
+### <a name="ic_write_bw_node"></a>22.1. Property `Job metric data list > ic_write_bw > node`
+
+|                           |                                       |
+| ------------------------- | ------------------------------------- |
+| **Type**                  | `object`                              |
+| **Required**              | Yes                                   |
+| **Additional properties** | Any type allowed                      |
+| **Defined in**            | embedfs://job-metric-data.schema.json |
+
+**Description:** 😅 ERROR in schema generation, a referenced schema could not be loaded, no documentation here unfortunately 🏜️
+
+## <a name="filesystems"></a>23. Property `Job metric data list > filesystems`
 
 |              |                   |
 | ------------ | ----------------- |
@@ -997,7 +1109,7 @@ The following schema in its raw form can be found in the [ClusterCockpit GitHub]
 | --------------------------------------- | ----------- |
 | [filesystems items](#filesystems_items) | -           |
 
-### <a name="filesystems_items"></a>19.1. Job metric data list > filesystems > filesystems items
+### <a name="filesystems_items"></a>23.1. Job metric data list > filesystems > filesystems items
 
 |                           |                  |
 | ------------------------- | ---------------- |
@@ -1021,14 +1133,14 @@ The following schema in its raw form can be found in the [ClusterCockpit GitHub]
 | - [close](#filesystems_items_close )         | No      | object           | No         | -          | File system close           |
 | - [seek](#filesystems_items_seek )           | No      | object           | No         | -          | File system seek            |
 
-#### <a name="filesystems_items_name"></a>19.1.1. Property `Job metric data list > filesystems > filesystems items > name`
+#### <a name="filesystems_items_name"></a>23.1.1. Property `Job metric data list > filesystems > filesystems items > name`
 
 |              |          |
 | ------------ | -------- |
 | **Type**     | `string` |
 | **Required** | Yes      |
 
-#### <a name="filesystems_items_type"></a>19.1.2. Property `Job metric data list > filesystems > filesystems items > type`
+#### <a name="filesystems_items_type"></a>23.1.2. Property `Job metric data list > filesystems > filesystems items > type`
 
 |              |                    |
 | ------------ | ------------------ |
@@ -1044,7 +1156,7 @@ Must be one of:
 * "hdd"
 * "beegfs"
 
-#### <a name="filesystems_items_read_bw"></a>19.1.3. Property `Job metric data list > filesystems > filesystems items > read_bw`
+#### <a name="filesystems_items_read_bw"></a>23.1.3. Property `Job metric data list > filesystems > filesystems items > read_bw`
 
 |                           |                  |
 | ------------------------- | ---------------- |
@@ -1058,7 +1170,7 @@ Must be one of:
 | ------------------------------------------ | ------- | ------ | ---------- | ---------------------------------------- | ------------------------------------------------------------------------------------------------------------- |
 | + [node](#filesystems_items_read_bw_node ) | No      | object | No         | In embedfs://job-metric-data.schema.json | 😅 ERROR in schema generation, a referenced schema could not be loaded, no documentation here unfortunately 🏜️ |
 
-##### <a name="filesystems_items_read_bw_node"></a>19.1.3.1. Property `Job metric data list > filesystems > filesystems items > read_bw > node`
+##### <a name="filesystems_items_read_bw_node"></a>23.1.3.1. Property `Job metric data list > filesystems > filesystems items > read_bw > node`
 
 |                           |                                       |
 | ------------------------- | ------------------------------------- |
@@ -1069,7 +1181,7 @@ Must be one of:
 
 **Description:** 😅 ERROR in schema generation, a referenced schema could not be loaded, no documentation here unfortunately 🏜️
 
-#### <a name="filesystems_items_write_bw"></a>19.1.4. Property `Job metric data list > filesystems > filesystems items > write_bw`
+#### <a name="filesystems_items_write_bw"></a>23.1.4. Property `Job metric data list > filesystems > filesystems items > write_bw`
 
 |                           |                  |
 | ------------------------- | ---------------- |
@@ -1083,7 +1195,7 @@ Must be one of:
 | ------------------------------------------- | ------- | ------ | ---------- | ---------------------------------------- | ------------------------------------------------------------------------------------------------------------- |
 | + [node](#filesystems_items_write_bw_node ) | No      | object | No         | In embedfs://job-metric-data.schema.json | 😅 ERROR in schema generation, a referenced schema could not be loaded, no documentation here unfortunately 🏜️ |
 
-##### <a name="filesystems_items_write_bw_node"></a>19.1.4.1. Property `Job metric data list > filesystems > filesystems items > write_bw > node`
+##### <a name="filesystems_items_write_bw_node"></a>23.1.4.1. Property `Job metric data list > filesystems > filesystems items > write_bw > node`
 
 |                           |                                       |
 | ------------------------- | ------------------------------------- |
@@ -1094,7 +1206,7 @@ Must be one of:
 
 **Description:** 😅 ERROR in schema generation, a referenced schema could not be loaded, no documentation here unfortunately 🏜️
 
-#### <a name="filesystems_items_read_req"></a>19.1.5. Property `Job metric data list > filesystems > filesystems items > read_req`
+#### <a name="filesystems_items_read_req"></a>23.1.5. Property `Job metric data list > filesystems > filesystems items > read_req`
 
 |                           |                  |
 | ------------------------- | ---------------- |
@@ -1108,7 +1220,7 @@ Must be one of:
 | ------------------------------------------- | ------- | ------ | ---------- | ---------------------------------------- | ------------------------------------------------------------------------------------------------------------- |
 | + [node](#filesystems_items_read_req_node ) | No      | object | No         | In embedfs://job-metric-data.schema.json | 😅 ERROR in schema generation, a referenced schema could not be loaded, no documentation here unfortunately 🏜️ |
 
-##### <a name="filesystems_items_read_req_node"></a>19.1.5.1. Property `Job metric data list > filesystems > filesystems items > read_req > node`
+##### <a name="filesystems_items_read_req_node"></a>23.1.5.1. Property `Job metric data list > filesystems > filesystems items > read_req > node`
 
 |                           |                                       |
 | ------------------------- | ------------------------------------- |
@@ -1119,7 +1231,7 @@ Must be one of:
 
 **Description:** 😅 ERROR in schema generation, a referenced schema could not be loaded, no documentation here unfortunately 🏜️
 
-#### <a name="filesystems_items_write_req"></a>19.1.6. Property `Job metric data list > filesystems > filesystems items > write_req`
+#### <a name="filesystems_items_write_req"></a>23.1.6. Property `Job metric data list > filesystems > filesystems items > write_req`
 
 |                           |                  |
 | ------------------------- | ---------------- |
@@ -1133,7 +1245,7 @@ Must be one of:
 | -------------------------------------------- | ------- | ------ | ---------- | ---------------------------------------- | ------------------------------------------------------------------------------------------------------------- |
 | + [node](#filesystems_items_write_req_node ) | No      | object | No         | In embedfs://job-metric-data.schema.json | 😅 ERROR in schema generation, a referenced schema could not be loaded, no documentation here unfortunately 🏜️ |
 
-##### <a name="filesystems_items_write_req_node"></a>19.1.6.1. Property `Job metric data list > filesystems > filesystems items > write_req > node`
+##### <a name="filesystems_items_write_req_node"></a>23.1.6.1. Property `Job metric data list > filesystems > filesystems items > write_req > node`
 
 |                           |                                       |
 | ------------------------- | ------------------------------------- |
@@ -1144,7 +1256,7 @@ Must be one of:
 
 **Description:** 😅 ERROR in schema generation, a referenced schema could not be loaded, no documentation here unfortunately 🏜️
 
-#### <a name="filesystems_items_inodes"></a>19.1.7. Property `Job metric data list > filesystems > filesystems items > inodes`
+#### <a name="filesystems_items_inodes"></a>23.1.7. Property `Job metric data list > filesystems > filesystems items > inodes`
 
 |                           |                  |
 | ------------------------- | ---------------- |
@@ -1158,7 +1270,7 @@ Must be one of:
 | ----------------------------------------- | ------- | ------ | ---------- | ---------------------------------------- | ------------------------------------------------------------------------------------------------------------- |
 | + [node](#filesystems_items_inodes_node ) | No      | object | No         | In embedfs://job-metric-data.schema.json | 😅 ERROR in schema generation, a referenced schema could not be loaded, no documentation here unfortunately 🏜️ |
 
-##### <a name="filesystems_items_inodes_node"></a>19.1.7.1. Property `Job metric data list > filesystems > filesystems items > inodes > node`
+##### <a name="filesystems_items_inodes_node"></a>23.1.7.1. Property `Job metric data list > filesystems > filesystems items > inodes > node`
 
 |                           |                                       |
 | ------------------------- | ------------------------------------- |
@@ -1169,7 +1281,7 @@ Must be one of:
 
 **Description:** 😅 ERROR in schema generation, a referenced schema could not be loaded, no documentation here unfortunately 🏜️
 
-#### <a name="filesystems_items_accesses"></a>19.1.8. Property `Job metric data list > filesystems > filesystems items > accesses`
+#### <a name="filesystems_items_accesses"></a>23.1.8. Property `Job metric data list > filesystems > filesystems items > accesses`
 
 |                           |                  |
 | ------------------------- | ---------------- |
@@ -1183,7 +1295,7 @@ Must be one of:
 | ------------------------------------------- | ------- | ------ | ---------- | ---------------------------------------- | ------------------------------------------------------------------------------------------------------------- |
 | + [node](#filesystems_items_accesses_node ) | No      | object | No         | In embedfs://job-metric-data.schema.json | 😅 ERROR in schema generation, a referenced schema could not be loaded, no documentation here unfortunately 🏜️ |
 
-##### <a name="filesystems_items_accesses_node"></a>19.1.8.1. Property `Job metric data list > filesystems > filesystems items > accesses > node`
+##### <a name="filesystems_items_accesses_node"></a>23.1.8.1. Property `Job metric data list > filesystems > filesystems items > accesses > node`
 
 |                           |                                       |
 | ------------------------- | ------------------------------------- |
@@ -1194,7 +1306,7 @@ Must be one of:
 
 **Description:** 😅 ERROR in schema generation, a referenced schema could not be loaded, no documentation here unfortunately 🏜️
 
-#### <a name="filesystems_items_fsync"></a>19.1.9. Property `Job metric data list > filesystems > filesystems items > fsync`
+#### <a name="filesystems_items_fsync"></a>23.1.9. Property `Job metric data list > filesystems > filesystems items > fsync`
 
 |                           |                  |
 | ------------------------- | ---------------- |
@@ -1208,7 +1320,7 @@ Must be one of:
 | ---------------------------------------- | ------- | ------ | ---------- | ---------------------------------------- | ------------------------------------------------------------------------------------------------------------- |
 | + [node](#filesystems_items_fsync_node ) | No      | object | No         | In embedfs://job-metric-data.schema.json | 😅 ERROR in schema generation, a referenced schema could not be loaded, no documentation here unfortunately 🏜️ |
 
-##### <a name="filesystems_items_fsync_node"></a>19.1.9.1. Property `Job metric data list > filesystems > filesystems items > fsync > node`
+##### <a name="filesystems_items_fsync_node"></a>23.1.9.1. Property `Job metric data list > filesystems > filesystems items > fsync > node`
 
 |                           |                                       |
 | ------------------------- | ------------------------------------- |
@@ -1219,7 +1331,7 @@ Must be one of:
 
 **Description:** 😅 ERROR in schema generation, a referenced schema could not be loaded, no documentation here unfortunately 🏜️
 
-#### <a name="filesystems_items_create"></a>19.1.10. Property `Job metric data list > filesystems > filesystems items > create`
+#### <a name="filesystems_items_create"></a>23.1.10. Property `Job metric data list > filesystems > filesystems items > create`
 
 |                           |                  |
 | ------------------------- | ---------------- |
@@ -1233,7 +1345,7 @@ Must be one of:
 | ----------------------------------------- | ------- | ------ | ---------- | ---------------------------------------- | ------------------------------------------------------------------------------------------------------------- |
 | + [node](#filesystems_items_create_node ) | No      | object | No         | In embedfs://job-metric-data.schema.json | 😅 ERROR in schema generation, a referenced schema could not be loaded, no documentation here unfortunately 🏜️ |
 
-##### <a name="filesystems_items_create_node"></a>19.1.10.1. Property `Job metric data list > filesystems > filesystems items > create > node`
+##### <a name="filesystems_items_create_node"></a>23.1.10.1. Property `Job metric data list > filesystems > filesystems items > create > node`
 
 |                           |                                       |
 | ------------------------- | ------------------------------------- |
@@ -1244,7 +1356,7 @@ Must be one of:
 
 **Description:** 😅 ERROR in schema generation, a referenced schema could not be loaded, no documentation here unfortunately 🏜️
 
-#### <a name="filesystems_items_open"></a>19.1.11. Property `Job metric data list > filesystems > filesystems items > open`
+#### <a name="filesystems_items_open"></a>23.1.11. Property `Job metric data list > filesystems > filesystems items > open`
 
 |                           |                  |
 | ------------------------- | ---------------- |
@@ -1258,7 +1370,7 @@ Must be one of:
 | --------------------------------------- | ------- | ------ | ---------- | ---------------------------------------- | ------------------------------------------------------------------------------------------------------------- |
 | + [node](#filesystems_items_open_node ) | No      | object | No         | In embedfs://job-metric-data.schema.json | 😅 ERROR in schema generation, a referenced schema could not be loaded, no documentation here unfortunately 🏜️ |
 
-##### <a name="filesystems_items_open_node"></a>19.1.11.1. Property `Job metric data list > filesystems > filesystems items > open > node`
+##### <a name="filesystems_items_open_node"></a>23.1.11.1. Property `Job metric data list > filesystems > filesystems items > open > node`
 
 |                           |                                       |
 | ------------------------- | ------------------------------------- |
@@ -1269,7 +1381,7 @@ Must be one of:
 
 **Description:** 😅 ERROR in schema generation, a referenced schema could not be loaded, no documentation here unfortunately 🏜️
 
-#### <a name="filesystems_items_close"></a>19.1.12. Property `Job metric data list > filesystems > filesystems items > close`
+#### <a name="filesystems_items_close"></a>23.1.12. Property `Job metric data list > filesystems > filesystems items > close`
 
 |                           |                  |
 | ------------------------- | ---------------- |
@@ -1283,7 +1395,7 @@ Must be one of:
 | ---------------------------------------- | ------- | ------ | ---------- | ---------------------------------------- | ------------------------------------------------------------------------------------------------------------- |
 | + [node](#filesystems_items_close_node ) | No      | object | No         | In embedfs://job-metric-data.schema.json | 😅 ERROR in schema generation, a referenced schema could not be loaded, no documentation here unfortunately 🏜️ |
 
-##### <a name="filesystems_items_close_node"></a>19.1.12.1. Property `Job metric data list > filesystems > filesystems items > close > node`
+##### <a name="filesystems_items_close_node"></a>23.1.12.1. Property `Job metric data list > filesystems > filesystems items > close > node`
 
 |                           |                                       |
 | ------------------------- | ------------------------------------- |
@@ -1294,7 +1406,7 @@ Must be one of:
 
 **Description:** 😅 ERROR in schema generation, a referenced schema could not be loaded, no documentation here unfortunately 🏜️
 
-#### <a name="filesystems_items_seek"></a>19.1.13. Property `Job metric data list > filesystems > filesystems items > seek`
+#### <a name="filesystems_items_seek"></a>23.1.13. Property `Job metric data list > filesystems > filesystems items > seek`
 
 |                           |                  |
 | ------------------------- | ---------------- |
@@ -1308,7 +1420,7 @@ Must be one of:
 | --------------------------------------- | ------- | ------ | ---------- | ---------------------------------------- | ------------------------------------------------------------------------------------------------------------- |
 | + [node](#filesystems_items_seek_node ) | No      | object | No         | In embedfs://job-metric-data.schema.json | 😅 ERROR in schema generation, a referenced schema could not be loaded, no documentation here unfortunately 🏜️ |
 
-##### <a name="filesystems_items_seek_node"></a>19.1.13.1. Property `Job metric data list > filesystems > filesystems items > seek > node`
+##### <a name="filesystems_items_seek_node"></a>23.1.13.1. Property `Job metric data list > filesystems > filesystems items > seek > node`
 
 |                           |                                       |
 | ------------------------- | ------------------------------------- |
