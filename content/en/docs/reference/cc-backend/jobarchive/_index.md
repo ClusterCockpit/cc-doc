@@ -9,7 +9,7 @@ weight: 5
 The job archive specifies an exchange format for job meta and performance metric
 data. It consists of two parts:
 
-- a [Json file format](https://github.com/ClusterCockpit/cc-backend/tree/main/pkg/schema/schemas)
+- a [Json file format](https://github.com/ClusterCockpit/cc-lib/tree/main/schema/schemas)
 - a Directory hierarchy / Key specification
 
 By using an open, portable and simple specification based on JSON objects it is
@@ -55,6 +55,8 @@ and column value there.
 
 For the job ID 1034871 on cluster `large` with start time `1768978339` the key
 is `./large/1034/871/1768978339`.
+
+The final path component is the Unix epoch start timestamp (in seconds). This disambiguates jobs whose ID suffix collides — for example after a job-ID counter reset or a cluster migration where IDs are reused.
 
 ## Create a Job archive from scratch
 
